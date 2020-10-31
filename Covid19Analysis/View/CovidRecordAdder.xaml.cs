@@ -51,11 +51,6 @@ namespace Covid19Analysis.View
             };
         }
 
-        private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-
-        }
-
         private void stateTextBox_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
             args.Cancel = args.NewText.Any(char.IsDigit);

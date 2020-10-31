@@ -8,8 +8,7 @@
     Title="Add COVID-19 Record"
     PrimaryButtonText="Add Record"
     SecondaryButtonText="Cancel"
-    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
-    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
 
     <Grid Margin="0,0,-15,-11">
 
