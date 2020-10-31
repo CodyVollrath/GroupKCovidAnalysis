@@ -1,0 +1,32 @@
+﻿<ContentDialog
+    x:Class="Covid19Analysis.View.DuplicateDialogBox"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Duplicate Day Found"
+    PrimaryButtonText="Replace"
+    SecondaryButtonText="Keep"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" HorizontalAlignment="Left" Margin="0,10,0,0" Text="Choose to keep or replace the duplicate day" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        
+        <Grid Grid.Row="1" Margin="0,24,0,0">
+            <TextBlock Text="Covid Record: " Grid.ColumnSpan="2"></TextBlock>
+            <TextBlock x:Name="covidRecordTextBlock" Text="" Margin="90,0,4,9"/>
+        </Grid>
+
+        <Grid Grid.Row="2" Margin="0,16,0,0">
+            <CheckBox x:Name="performActionForAll" Content="Do this for all items" Grid.ColumnSpan="2" Width="273"/>
+        </Grid>
+    </Grid>
+
+</ContentDialog>
