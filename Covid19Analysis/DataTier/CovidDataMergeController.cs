@@ -19,6 +19,12 @@ namespace Covid19Analysis.DataTier
         /// <value>The new covid data collection.</value>
         public CovidDataCollection NewCovidDataCollection { get; }
 
+        /// <summary>
+        /// Gets the state filter.
+        /// </summary>
+        /// <value>
+        /// The state filter.
+        /// </value>
         public string StateFilter { get; }
 
         #endregion
