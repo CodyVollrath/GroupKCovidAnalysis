@@ -14,6 +14,7 @@
             </CommandBar.Content>
             <AppBarButton x:Name="saveFile" Icon ="Save" Label="Save File" Click="saveFile_ClickAsync"/>
             <AppBarButton x:Name="errorLog" Icon = "Page"  Label = "Read Errors" Click="errorLog_Click"/>
+            <AppBarButton Icon="Page" Label="Display Summary" Click="displaySummary_ClickAsync"/>
             <AppBarButton Icon="OpenFile" Label="Load File" Click="loadFile_ClickAsync"/>
         </CommandBar>
 

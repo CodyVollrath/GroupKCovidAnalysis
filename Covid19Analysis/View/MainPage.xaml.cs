@@ -117,6 +117,14 @@ namespace Covid19Analysis.View
             showSaveSuccessfulPrompt(isFileSaved);
         }
 
+        private void displaySummary_ClickAsync(object sender, RoutedEventArgs e)
+        {
+            if (this.covidDataAssembler.IsCovidDataLoaded)
+            {
+                this.summaryTextBox.Text = this.covidDataAssembler.Summary;
+            }
+        }
+
         #endregion
 
         #region Elements on UI Events
