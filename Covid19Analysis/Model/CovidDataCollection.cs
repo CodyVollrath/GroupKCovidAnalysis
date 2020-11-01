@@ -106,8 +106,9 @@ namespace Covid19Analysis.Model
         /// <summary>Creates a filtered collection by state.</summary>
         /// <param name="stateFilter">The state filter.</param>
         /// <returns>the filtered collection by state if state is valid, and the original CovidData if state is invalid</returns>
-        public List<CovidRecord> CreateAFilteredCollection(string  stateFilter)
+        public List<CovidRecord> CreateAFilteredCollection(string stateFilter)
         {
+            stateFilter = stateFilter ?? throw new ArgumentNullException(nameof(stateFilter));
             var collectionOfStates = this.CovidRecords.Select(record => record.State);
             var isStateNotPresent = !collectionOfStates.Contains(stateFilter.ToUpper());
             var isStateNotValid = !FormatValidator.IsStateLabelValid(stateFilter) || isStateNotPresent;

@@ -27,7 +27,7 @@ namespace Covid19Analysis.OutputFormatter
 
         /// <Summary>
         /// Initializes a new instance of the <a onclick="return false;" href="CovidDataStateSummary" originaltag="see">CovidDataStateSummary</a> class.
-        /// <para>If the stateFilter is null, then the collection will not be filtered</para>
+        /// <para>If the stateFilter is empty, then the collection will not be filtered</para>
         /// <code>Precondition: collection != null</code>
         /// <code>Postcondition: CovidRecords == collection AND StateFilter == stateFilter </code>
         /// </Summary>
@@ -37,7 +37,7 @@ namespace Covid19Analysis.OutputFormatter
         public CovidDataSummary(CovidDataCollection collection, string stateFilter)
         {
             this.CovidRecords = collection ?? throw new ArgumentNullException(nameof(collection));
-            this.StateFilter = stateFilter;
+            this.StateFilter = stateFilter ?? throw new ArgumentNullException();
             var filteredCollection = collection.CreateAFilteredCollection(stateFilter);
             this.CovidRecords.ReplaceAllWithNewCovidCollection(filteredCollection);
             this.covidStatistics = new CovidDataStatistics(this.CovidRecords);

@@ -60,13 +60,13 @@ namespace Covid19Analysis.OutputFormatter
         /// <summary>
         /// Initializes a new instance of the <a onclick="return false;" href="CovidDataAssembler" originaltag="see">CovidDataAssembler</a> class.
         /// <para>By default the filter is set to GA</para>
-        /// <para>If set to null all states represented in the table will be represented</para>
+        /// <para>If stateFilter is empty then all states represented in the table will be represented</para>
         /// <code>Postcondition: StateFilter == stateFilter AND Summary == null AND IsCovidDataLoaded == false</code>
         /// </summary>
         /// <param name="stateFilter">The state filter.</param>
         public CovidDataAssembler(string stateFilter = Assets.GeorgiaFilterValue)
         {
-            this.StateFilter = stateFilter;
+            this.StateFilter = stateFilter ?? throw new ArgumentNullException(nameof(stateFilter));
             this.Reset();
         }
 
