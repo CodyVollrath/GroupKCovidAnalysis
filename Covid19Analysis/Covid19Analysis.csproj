@@ -127,6 +127,10 @@
     <Compile Include="OutputFormatter\CovidDataSummary.cs" />
     <Compile Include="OutputFormatter\CovidDataMonthlySummary.cs" />
     <Compile Include="Resources\CovidDataLines.cs" />
+    <Compile Include="ViewModel\CovidDataListViewModel.cs" />
+    <Compile Include="View\CovidListViewPage.xaml.cs">
+      <DependentUpon>CovidListViewPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\CovidRecordAdder.xaml.cs">
       <DependentUpon>CovidRecordAdder.xaml</DependentUpon>
     </Compile>
@@ -165,6 +169,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="View\CovidListViewPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\CovidRecordAdder.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -183,7 +191,9 @@
       <Version>6.2.8</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Converter\" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

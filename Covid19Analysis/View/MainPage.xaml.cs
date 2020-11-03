@@ -186,6 +186,11 @@ namespace Covid19Analysis.View
 
             this.updateCovidData();
         }
+        
+        private void listViewToggle_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(CovidListViewPage));
+        }
 
         #endregion
 

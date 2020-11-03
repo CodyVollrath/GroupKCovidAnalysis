@@ -34,9 +34,7 @@
                 <SymbolIcon Symbol="Add"/>
                 <TextBlock Text="Add Covid Record"></TextBlock>
             </StackPanel>
-
         </Button>
-
-
+        <Button x:Name="listViewToggle" Content="List View" Margin="525,424,0,0" VerticalAlignment="Top" Width="83" Click="listViewToggle_Click"/>
     </Grid>
 </Page>
