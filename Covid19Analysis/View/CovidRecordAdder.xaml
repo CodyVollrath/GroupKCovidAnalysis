@@ -12,22 +12,26 @@
 
     <Grid Margin="0,0,-15,-11">
 
-        <TextBlock Text="Date:" Margin="0,10,324,124"/>
-        <DatePicker x:Name="covidRecordDate" Margin="37,2,0,0" VerticalAlignment="Top" Height="33" DateChanged="covidRecordDate_DateChanged"/>
-        <TextBlock Text="State:" Margin="0,47,316,92" RenderTransformOrigin="0.503,0.168"></TextBlock>
-        <TextBox x:Name="stateTextBox" Margin="37,40,320,224" RenderTransformOrigin="0.516,0.531" Text="GA" MaxLength="2" BeforeTextChanging="stateTextBox_BeforeTextChanging" LostFocus="stateTextBox_LostFocus"/>
+        <TextBlock Text="Date:" Margin="0,10,339,272"/>
+        <DatePicker x:Name="covidRecordDate" Margin="93,3,0,0" VerticalAlignment="Top" Height="32" DateChanged="covidRecordDate_DateChanged" Width="298"/>
+        <TextBlock Text="State:" Margin="0,47,334,225" RenderTransformOrigin="0.503,0.168"></TextBlock>
+        <TextBox x:Name="stateTextBox" Margin="157,40,200,224" RenderTransformOrigin="0.516,0.531" Text="GA" MaxLength="2" BeforeTextChanging="stateTextBox_BeforeTextChanging" LostFocus="stateTextBox_LostFocus"/>
 
-        <TextBlock Text="Positive Cases:" Margin="0,81,268,59"></TextBlock>
-        <TextBox x:Name="positiveCasesTextBox" Height="32" VerticalAlignment="Top" Margin="105,81,172,0" Text="0" MaxLength="9" BeforeTextChanging="positiveCasesTextBox_BeforeTextChanging" LostFocus="positiveCasesTextBox_LostFocus"></TextBox>
+        <TextBlock Text="Positive Cases:" Margin="0,81,330,188"></TextBlock>
+        <TextBox x:Name="positiveCasesTextBox" Height="32" VerticalAlignment="Top" Margin="157,82,120,0" Text="0" MaxLength="9" BeforeTextChanging="positiveCasesTextBox_BeforeTextChanging" LostFocus="positiveCasesTextBox_LostFocus"></TextBox>
 
         <TextBlock Text="Negative Cases:" Margin="0,126,323,145"></TextBlock>
-        <TextBox x:Name="negativeCasesTextBox" Height="32" VerticalAlignment="Top" Margin="105,119,172,0" Text="0" MaxLength="9" BeforeTextChanging="negativeCasesTextBox_BeforeTextChanging" LostFocus="negativeCasesTextBox_LostFocus"></TextBox>
+        <TextBox x:Name="negativeCasesTextBox" Height="32" VerticalAlignment="Top" Margin="157,119,120,0" Text="0" MaxLength="9" BeforeTextChanging="negativeCasesTextBox_BeforeTextChanging" LostFocus="negativeCasesTextBox_LostFocus"></TextBox>
 
-        <TextBlock Text="Deaths:" Margin="-1,172,328,102"></TextBlock>
-        <TextBox x:Name="deathsTextBox" Height="32" VerticalAlignment="Top" Margin="105,165,172,0" Text="0" MaxLength="9" BeforeTextChanging="deathsTextBox_BeforeTextChanging" LostFocus="deathsTextBox_LostFocus"></TextBox>
+        <TextBlock Text="Deaths:" Margin="4,256,339,18"></TextBlock>
+        <TextBox x:Name="deathsTextBox" Height="32" VerticalAlignment="Top" Margin="157,249,120,0" Text="0" MaxLength="9" BeforeTextChanging="deathsTextBox_BeforeTextChanging" LostFocus="deathsTextBox_LostFocus"></TextBox>
 
-        <TextBlock Text="Hospitalizations:" Margin="0,212,280,63"></TextBlock>
-        <TextBox x:Name="hospitalizationsTextBox" Height="32" VerticalAlignment="Top" Margin="105,211,172,0" Text="0" MaxLength="9" BeforeTextChanging="hospitalizationsTextBox_BeforeTextChanging" LostFocus="hospitalizationsTextBox_LostFocus"></TextBox>
+        <TextBlock Text="Hospitalizations:" Margin="4,172,276,103"></TextBlock>
+        <TextBox x:Name="hospitalizationsTextBox" Height="32" VerticalAlignment="Top" Margin="157,165,120,0" Text="0" MaxLength="9" BeforeTextChanging="hospitalizationsTextBox_BeforeTextChanging" LostFocus="hospitalizationsTextBox_LostFocus"></TextBox>
+
+
+        <TextBlock HorizontalAlignment="Left" Margin="4,212,0,0" Text="Currently Hospitalized" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBox x:Name="hospitalizedCurrentlyTextBox" Height="32" VerticalAlignment="Top" Margin="157,205,120,0" Text="0" MaxLength="9" BeforeTextChanging="hospitalizedCurrentlyTextBox_BeforeTextChanging" LostFocus="hospitalizedCurrentlyTextBox_LostFocus"></TextBox>
     </Grid>
 
 </ContentDialog>

@@ -39,15 +39,17 @@ namespace Covid19Analysis.View
             var state = this.stateTextBox.Text;
             var positiveCases = Format.FormatStringToInteger(this.positiveCasesTextBox.Text);
             var negativeCases = Format.FormatStringToInteger(this.negativeCasesTextBox.Text);
-            var deaths = Format.FormatStringToInteger(this.deathsTextBox.Text);
+            var currentlyHospitalized = Format.FormatStringToInteger(this.hospitalizedCurrentlyTextBox.Text);
             var hospitalizations = Format.FormatStringToInteger(this.hospitalizationsTextBox.Text);
+            var deaths = Format.FormatStringToInteger(this.deathsTextBox.Text);
 
             this.CreatedRecord = new CovidRecord(date, state)
             {
                 PositiveTests = positiveCases,
                 NegativeTests = negativeCases,
-                Deaths = deaths,
-                Hospitalizations = hospitalizations
+                HospitalizedCurrently = currentlyHospitalized,
+                Hospitalizations = hospitalizations,
+                Deaths = deaths
             };
         }
 
@@ -74,6 +76,11 @@ namespace Covid19Analysis.View
         }
 
         private void hospitalizationsTextBox_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
+        {
+            args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
+        }
+
+        private void hospitalizedCurrentlyTextBox_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
             args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
         }
@@ -108,6 +115,15 @@ namespace Covid19Analysis.View
                 this.hospitalizationsTextBox.Text = "0";
             }
         }
+
+        private void hospitalizedCurrentlyTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (this.hospitalizedCurrentlyTextBox.Text.Equals(string.Empty))
+            {
+                this.hospitalizedCurrentlyTextBox.Text = "0";
+            }
+        }
+
         private void stateTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             if (this.stateTextBox.Text.Equals(string.Empty) || this.stateTextBox.Text.Length != 2)
@@ -123,10 +139,6 @@ namespace Covid19Analysis.View
                 this.IsPrimaryButtonEnabled = true;
             }
         }
-
-
         #endregion
-
-
     }
 }

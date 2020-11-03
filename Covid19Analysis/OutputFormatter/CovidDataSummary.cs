@@ -123,6 +123,20 @@ namespace Covid19Analysis.OutputFormatter
             return CovidDataLines.GetCovidLineForValueAndDate(Assets.HighestHospitalizationsLabel, highestHospitalizations, date);
         }
 
+
+        /// <summary>Gets the highest current hospitalizations with date.</summary>
+        /// <returns>A formatted string with the highest current hospitalizations</returns>
+        public string GetHighestCurrentHospitalizationsWithDate()
+        {
+            var highestCurrentHospitalizationsRecord =
+                this.covidStatistics.FindRecordWithHighestCurrentHospitalizations();
+            var highestCurrentHospitalizations =
+                Format.FormatIntegerAsFormattedString(highestCurrentHospitalizationsRecord.HospitalizedCurrently);
+            var date = highestCurrentHospitalizationsRecord.Date.ToString(Assets.DateStringFormatted);
+            return CovidDataLines.GetCovidLineForValueAndDate(Assets.HighestCurrentHospitalizationsLabel,
+                highestCurrentHospitalizations, date);
+        }
+
         /// <Summary>Gets the highest percentage of positive tests with date.</Summary>
         /// <returns>A formatted string with the highest percentage of positive  test and date</returns>
         public string GetHighestPercentageOfTestsPerDayWithDate()

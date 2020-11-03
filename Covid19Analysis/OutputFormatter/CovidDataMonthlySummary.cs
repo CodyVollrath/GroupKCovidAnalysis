@@ -121,6 +121,8 @@ namespace Covid19Analysis.OutputFormatter
             reportOfTheMonth += this.getLowestPositiveTestWithDays(monthGroup);
             reportOfTheMonth += this.getHighestTotalTestsWithDays(monthGroup);
             reportOfTheMonth += this.getLowestTotalTestsWithDays(monthGroup);
+            reportOfTheMonth += this.getHighestCurrentlyHospitalizedWithDays(monthGroup);
+            reportOfTheMonth += this.getLowestCurrentlyHospitalizedWithDays(monthGroup);
             reportOfTheMonth += this.getAveragePositiveTests();
             reportOfTheMonth += this.getAverageTotalTests();
             return $"{reportOfTheMonth}";
@@ -201,6 +203,44 @@ namespace Covid19Analysis.OutputFormatter
                 lowestTotalTestsFormatted = Assets.NoPositiveData;
             }
             return CovidDataLines.GetCovidLineForValueAndDaysOfMonth(Assets.LowestTotalTestsLabel, lowestTotalTestsFormatted, daysOutput);
+        }
+
+        private string getHighestCurrentlyHospitalizedWithDays(IEnumerable<CovidRecord> collection)
+        {
+            var covidRecords = collection.ToArray();
+            var highestHospitalizedCurrently = this.covidStatistics.FindRecordWithHighestCurrentHospitalizations().HospitalizedCurrently;
+
+            var daysOccurred =
+                (from record in covidRecords where record.HospitalizedCurrently == highestHospitalizedCurrently select record.Date).ToList();
+
+            var daysOutput = Format.GetListOfDaysWithOrdinals(daysOccurred);
+            var highestPositivesFormatted = Format.FormatIntegerAsFormattedString(highestHospitalizedCurrently);
+
+            return CovidDataLines.GetCovidLineForValueAndDaysOfMonth(Assets.HighestCurrentHospitalizationsLabel, highestPositivesFormatted, daysOutput);
+        }
+
+        private string getLowestCurrentlyHospitalizedWithDays(IEnumerable<CovidRecord> collection)
+        {
+            var daysOutput = string.Empty;
+            string lowestCurrentlyHospitalized;
+            try
+            {
+                var covidRecords = collection.ToArray();
+                var firstDateOfPositiveTest = this.getDateOfFirstPositiveTest();
+                var lowestHospitalizedCurrently = this.covidStatistics.FindRecordWithLowestCurrentHospitalizations(firstDateOfPositiveTest).HospitalizedCurrently;
+
+                var daysOccurred =
+                    (from record in covidRecords where record.HospitalizedCurrently == lowestHospitalizedCurrently select record.Date)
+                    .ToList();
+
+                daysOutput = Format.GetListOfDaysWithOrdinals(daysOccurred);
+                lowestCurrentlyHospitalized = Format.FormatIntegerAsFormattedString(lowestHospitalizedCurrently);
+            }
+            catch (Exception)
+            {
+                lowestCurrentlyHospitalized = Assets.NoPositiveData;
+            }
+            return CovidDataLines.GetCovidLineForValueAndDaysOfMonth(Assets.LowestCurrentHospitalizationsLabel, lowestCurrentlyHospitalized, daysOutput);
         }
 
         private string getAveragePositiveTests()

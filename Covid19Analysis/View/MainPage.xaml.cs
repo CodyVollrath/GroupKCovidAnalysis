@@ -195,24 +195,25 @@ namespace Covid19Analysis.View
 
         private void displayCovidData(string textContent)
         {
-            try
+            this.applyThresholds();
+            this.applyBinSize();
+            if (this.covidDataAssembler.IsCovidDataLoaded)
             {
-                this.applyThresholds();
-                this.applyBinSize();
-                if (this.covidDataAssembler.IsCovidDataLoaded)
-                {
-                    this.promptMergeOrReplaceDialog(textContent);
-                }
-                else
-                {
-                    this.loadCovidData(textContent);
-                }
+                this.promptMergeOrReplaceDialog(textContent);
+            }
+            else
+            {
+                this.loadCovidData(textContent);
+            }
+/*            try
+            {
+
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception);
                 this.summaryTextBox.Text = Assets.NoCovidDataText;
-            }
+            }*/
         }
 
         private async void promptMergeOrReplaceDialog(string textContent)

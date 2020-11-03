@@ -37,6 +37,11 @@ namespace Covid19Analysis.Model
         /// <value>The total tests.</value>
         public int TotalTests => this.PositiveTests + this.NegativeTests;
 
+
+        /// <summary>Gets or sets the current number of people hospitalized .</summary>
+        /// <value>The hospitalized currently.</value>
+        public int HospitalizedCurrently { get; set; }
+
         /// <Summary>Gets the deaths.</Summary>
         /// <value>The deaths.</value>
         public int Deaths { get; set; }

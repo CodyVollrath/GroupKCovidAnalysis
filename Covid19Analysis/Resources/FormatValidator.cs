@@ -12,11 +12,11 @@ namespace Covid19Analysis.Resources
         #region Date Formats
 
         /// <Summary>
-        /// Determines if a date is formatted in yyyyMMdd
+        /// Determines if a date is formatted in MM/dd/yyyy
         /// </Summary>
         /// <param name="dateString">The date string.</param>
         /// <returns>
-        /// <c>true</c> if dateString is of yyyyMMdd format; otherwise, <c>false</c>.
+        /// <c>true</c> if dateString is of MM/dd/yyyy format; otherwise, <c>false</c>.
         /// </returns>
         public static bool IsDateStringValid(string dateString)
         {
@@ -24,10 +24,9 @@ namespace Covid19Analysis.Resources
             {
                 return false;
             }
-            var dateValidator = new Regex("\\d{4}\\d{2}\\d{2}");
             var isValidDateTime = DateTime.TryParseExact(dateString, Assets.DateStringUnformatted,
                 CultureInfo.InvariantCulture, DateTimeStyles.None, out _);
-            return dateValidator.IsMatch(dateString) && isValidDateTime;
+            return isValidDateTime;
         }
 
         #endregion
@@ -39,13 +38,19 @@ namespace Covid19Analysis.Resources
         /// </Summary>
         /// <param name="numericString">The numeric string.</param>
         /// <returns>
-        ///   <c>true</c> if numericString is a number; otherwise, <c>false</c>.</returns>
+        ///   <c>true</c> if numericString is a number or is empty or null; otherwise, <c>false</c>.</returns>
         public static bool IsNumericStringValid(string numericString)
         {
             if (numericString == null)
             {
-                return false;
+                return true;
             }
+
+            if (numericString.Equals(string.Empty))
+            {
+                return true;
+            }
+
             var numberValidator = new Regex("[-]?\\d+");
             return numberValidator.IsMatch(numericString);
         }

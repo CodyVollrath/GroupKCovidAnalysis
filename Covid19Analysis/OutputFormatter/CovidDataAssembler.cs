@@ -230,6 +230,7 @@ namespace Covid19Analysis.OutputFormatter
             this.Summary += stateSummary.GetHighestTotalTestsWithDate();
             this.Summary += stateSummary.GetHighestDeathsWithDate();
             this.Summary += stateSummary.GetHighestHospitalizationsWithDate();
+            this.Summary += stateSummary.GetHighestCurrentHospitalizationsWithDate();
 
             this.Summary += stateSummary.GetHighestPercentageOfTestsPerDayWithDate();
             this.Summary += stateSummary.GetAveragePositiveTestsSinceFirstPositiveTest();

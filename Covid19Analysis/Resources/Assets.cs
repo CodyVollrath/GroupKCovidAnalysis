@@ -10,8 +10,8 @@ namespace Covid19Analysis.Resources
         public const string CsvDelimiter = ",";
 
 
-        /// <summary>The date string unformatted - yyyyMMdd</summary>
-        public const string DateStringUnformatted = "yyyyMMdd";
+        /// <summary>The date string unformatted - M/d/yyyy</summary>
+        public const string DateStringUnformatted = "M/d/yyyy";
 
         /// <Summary>
         /// The date string formatted - MM/dd/yyyy
@@ -48,11 +48,13 @@ namespace Covid19Analysis.Resources
         public const string HighestNegativeTestsLabel = "Highest # negative tests";
         public const string HighestDeathsLabel = "Highest # deaths:";
         public const string HighestHospitalizationsLabel = "Highest # Hospitalizations:";
+        public const string HighestCurrentHospitalizationsLabel = "Highest # Current Hospitalizations:";
         public const string HighestPercentageOfPositiveCasesLabel = "Highest percentage of positive cases:";
         public const string HighestPositiveTestsLabel = "Highest # positive tests:";
         public const string HighestTotalTestsLabel = "Highest # total tests:";
         public const string LowestPositiveTestsLabel = "Lowest  # positive tests:";
         public const string LowestTotalTestsLabel = "Lowest  # total tests:";
+        public const string LowestCurrentHospitalizationsLabel = "Lowest # Current Hospitalizations:";
         public static readonly string[] HeadersForData = new string[] {"date", "state", "positiveIncrease", "negativeIncrease", "deathIncrease", "hospitalizedIncrease" };
 
         #endregion
@@ -66,14 +68,16 @@ namespace Covid19Analysis.Resources
         public const int ColumnNumberForState = 1;
         public const int ColumnNumberForPositives = 2;
         public const int ColumnNumberForNegatives = 3;
-        public const int ColumnNumberForDeaths = 4;
+        public const int ColumnNumberForHospitalizedCurrently = 4;
         public const int ColumnNumberForHospitalizations = 5;
+        public const int ColumnNumberForDeaths = 6;
+        
         #endregion
 
         #region Numeric Constants
         public const int DefaultGreaterThanThreshHold = 2500;
         public const int DefaultLessThanThreshold = 1000;
-        public const int NumberOfFields = 6;
+        public const int NumberOfFields = 7;
         public const int BeginningRowNumber = 2;
         public const int ColumnStartOfNumericData = 2;
         public const int RangeWidth = 500;

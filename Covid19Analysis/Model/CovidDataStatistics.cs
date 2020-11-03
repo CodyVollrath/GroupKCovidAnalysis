@@ -112,6 +112,25 @@ namespace Covid19Analysis.Model
         }
 
 
+        /// <summary>Finds the record with highest current hospitalizations.</summary>
+        /// <returns>The CovidRecord with the highest number of current hospitalizations</returns>
+        public CovidRecord FindRecordWithHighestCurrentHospitalizations()
+        {
+            var highestCurrentHospitalizationsRecord =
+                this.CovidRecords.OrderByDescending(record => record.HospitalizedCurrently).First();
+            return highestCurrentHospitalizationsRecord;
+        }
+
+
+        /// <summary>Finds the record with lowest current hospitalizations since a date.</summary>
+        /// <param name="sinceDate">The since date.</param>
+        /// <returns>The CovidRecord with the current lowest hospitalizations since a date entered</returns>
+        public CovidRecord FindRecordWithLowestCurrentHospitalizations(DateTime sinceDate)
+        {
+            var lowestHospitalizationsCurrently = this.CovidRecords.Where(record => record.Date >= sinceDate).OrderBy(record => record.HospitalizedCurrently).First();
+            return lowestHospitalizationsCurrently;
+        }
+
         /// <summary>Finds the record with highest percentage of positive tests.</summary>
         /// <returns>The CovidRecord with highest percentage of positive tests</returns>
         public CovidRecord FindRecordWithHighestPercentageOfPositiveTests()

@@ -93,8 +93,9 @@ namespace Covid19Analysis.DataTier
             {
                 PositiveTests = Format.FormatStringToInteger(fields[Assets.ColumnNumberForPositives]),
                 NegativeTests = Format.FormatStringToInteger(fields[Assets.ColumnNumberForNegatives]),
-                Deaths = Format.FormatStringToInteger(fields[Assets.ColumnNumberForDeaths]),
-                Hospitalizations = Format.FormatStringToInteger(fields[Assets.ColumnNumberForHospitalizations])
+                HospitalizedCurrently = Format.FormatStringToInteger(fields[Assets.ColumnNumberForHospitalizedCurrently]),
+                Hospitalizations = Format.FormatStringToInteger(fields[Assets.ColumnNumberForHospitalizations]),
+                Deaths = Format.FormatStringToInteger(fields[Assets.ColumnNumberForDeaths])
             };
             return covidRecord;
         }

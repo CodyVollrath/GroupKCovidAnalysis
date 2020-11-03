@@ -20,7 +20,7 @@ namespace Covid19Analysis.Resources
         public static DateTime FormatAsDateTime(string dateString)
         {
             dateString = dateString ?? throw new ArgumentNullException(nameof(dateString));
-            return DateTime.ParseExact(dateString, "yyyyMMdd",CultureInfo.InvariantCulture);
+            return DateTime.ParseExact(dateString, Assets.DateStringUnformatted, CultureInfo.InvariantCulture);
         }
 
         public static string GetMonthAndYearFromDateTime(DateTime date)
@@ -72,13 +72,28 @@ namespace Covid19Analysis.Resources
         /// <returns>The integer representation of that string</returns>
         public static int FormatStringToInteger(string numericValue)
         {
-            numericValue = numericValue ?? throw new ArgumentNullException(nameof(numericValue));
             if (!FormatValidator.IsNumericStringValid(numericValue))
             {
                 throw new ArgumentException($"{nameof(numericValue)} is not a valid number");
             }
 
-            return int.Parse(numericValue);
+            if (numericValue == null)
+            {
+                return 0;
+            }
+
+            if (numericValue.Equals(string.Empty))
+            {
+                return 0;
+            }
+
+            var number = int.Parse(numericValue);
+            if (number < 0)
+            {
+                number = 0;
+            }
+
+            return number;
         }
 
         /// <Summary>Formats the integer to a double.</Summary>
