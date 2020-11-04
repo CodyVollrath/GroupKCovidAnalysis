@@ -84,19 +84,31 @@ namespace Covid19Analysis.DataTier
         private static CovidRecord createCovidRecord(string record)
         {
             var fields = record.Split(Assets.CsvDelimiter);
+            CovidRecord covidRecord;
             if (!doesRecordHaveNoErrors(fields))
             {
                 return null;
             }
 
-            var covidRecord = new CovidRecord(Format.FormatAsDateTime(fields[Assets.ColumnNumberForDate]), fields[Assets.ColumnNumberForState])
+            try
             {
-                PositiveTests = Format.FormatStringToInteger(fields[Assets.ColumnNumberForPositives]),
-                NegativeTests = Format.FormatStringToInteger(fields[Assets.ColumnNumberForNegatives]),
-                HospitalizedCurrently = Format.FormatStringToInteger(fields[Assets.ColumnNumberForHospitalizedCurrently]),
-                Hospitalizations = Format.FormatStringToInteger(fields[Assets.ColumnNumberForHospitalizations]),
-                Deaths = Format.FormatStringToInteger(fields[Assets.ColumnNumberForDeaths])
-            };
+                covidRecord = new CovidRecord(Format.FormatAsDateTime(fields[Assets.ColumnNumberForDate]),
+                    fields[Assets.ColumnNumberForState]) {
+                    PositiveTests = Format.FormatStringToInteger(fields[Assets.ColumnNumberForPositives]),
+                    NegativeTests = Format.FormatStringToInteger(fields[Assets.ColumnNumberForNegatives]),
+                    HospitalizedCurrently =
+                        Format.FormatStringToInteger(fields[Assets.ColumnNumberForHospitalizedCurrently]),
+                    Hospitalizations = Format.FormatStringToInteger(fields[Assets.ColumnNumberForHospitalizations]),
+                    Deaths = Format.FormatStringToInteger(fields[Assets.ColumnNumberForDeaths])
+                };
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                covidRecord = null;
+            }
+
+
             return covidRecord;
         }
 
