@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Windows.Storage;
 using Covid19Analysis.DataTier;
 using Covid19Analysis.Model;
 using Covid19Analysis.Resources;
+using Covid19Analysis.ViewModel;
 
 namespace Covid19Analysis.OutputFormatter
 {
