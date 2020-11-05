@@ -5,6 +5,7 @@ using Covid19Analysis.Resources;
 
 namespace Covid19Analysis.DataTier
 {
+
     /// <summary>This class writes the contents of a CovidDataCollection to a csv file</summary>
     public class CovidDataSaver
     {
@@ -22,18 +23,15 @@ namespace Covid19Analysis.DataTier
 
         #region Constructors
 
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="CovidDataSaver" /> class.
-        ///     <code>Precondition: file != null AND covidData != null</code>
-        ///     <code>Postcondition: File == file AND CovidData = covidData</code>
+        /// <summary>Initializes a new instance of the <see cref="CovidDataSaver" /> class.
+        /// <code>Precondition: file != null AND covidData != null</code>
+        /// <code>Postcondition: File == file AND CovidData = covidData</code>
         /// </summary>
         /// <param name="file">The storage file.</param>
         /// <param name="covidData">The covid data collection.</param>
-        /// <exception cref="ArgumentNullException">
-        ///     file
-        ///     or
-        ///     covidData
-        /// </exception>
+        /// <exception cref="ArgumentNullException">file
+        /// or
+        /// covidData</exception>
         public CovidDataSaver(StorageFile file, CovidDataCollection covidData)
         {
             this.File = file ?? throw new ArgumentNullException(nameof(file));
@@ -42,8 +40,7 @@ namespace Covid19Analysis.DataTier
 
         #endregion
 
-        #region Methods
-
+        #region Public Methods
         /// <summary>Writes the covid data to the storage file.</summary>
         public async void WriteCovidDataToFile()
         {
@@ -52,11 +49,9 @@ namespace Covid19Analysis.DataTier
             contents += this.getCovidDataRecords();
             await FileIO.WriteTextAsync(this.File, contents);
         }
-
         #endregion
 
         #region Private Helpers
-
         private string getCovidDataHeaders()
         {
             var headers = string.Empty;
@@ -64,7 +59,6 @@ namespace Covid19Analysis.DataTier
             {
                 headers += $"{header},";
             }
-
             headers = headers.Remove(headers.Length - 1, 1) + Environment.NewLine;
             return headers;
         }
@@ -75,13 +69,10 @@ namespace Covid19Analysis.DataTier
             foreach (var record in this.CovidData)
             {
                 var date = record.Date.ToString(Assets.DateStringUnformatted);
-                covidDataRecords +=
-                    $"{date},{record.State},{record.PositiveTests},{record.NegativeTests},{record.Deaths},{record.Hospitalizations}{Environment.NewLine}";
+                covidDataRecords += $"{date},{record.State},{record.PositiveTests},{record.NegativeTests},{record.HospitalizedCurrently},{record.Hospitalizations},{record.Deaths}{Environment.NewLine}";
             }
-
             return covidDataRecords;
         }
-
         #endregion
     }
 }

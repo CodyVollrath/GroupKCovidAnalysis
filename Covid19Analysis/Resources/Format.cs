@@ -15,12 +15,13 @@ namespace Covid19Analysis.Resources
         ///     <code>Precondition: dateString != null</code>
         /// </Summary>
         /// <param name="dateString">The date string.</param>
+        /// <param name="format">The format to format the date time by</param>
         /// <returns>The date time object</returns>
         /// <exception cref="ArgumentNullException">dateString</exception>
-        public static DateTime FormatAsDateTime(string dateString)
+        public static DateTime FormatAsDateTime(string dateString, string format = Assets.DateStringUnformatted)
         {
             dateString = dateString ?? throw new ArgumentNullException(nameof(dateString));
-            return DateTime.ParseExact(dateString, Assets.DateStringUnformatted, CultureInfo.InvariantCulture);
+            return DateTime.ParseExact(dateString, format, CultureInfo.InvariantCulture);
         }
 
         public static string GetMonthAndYearFromDateTime(DateTime date)
