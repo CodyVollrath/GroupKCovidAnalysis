@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Windows.Storage;
 using Covid19Analysis.DataTier;
 using Covid19Analysis.Model;
 using Covid19Analysis.Resources;
-
+using Covid19Analysis.ViewModel;
 namespace Covid19Analysis.OutputFormatter
 {
     /// <summary>This class assembles COVID data output from all summaries and accumulates them together.</summary>
@@ -45,7 +47,15 @@ namespace Covid19Analysis.OutputFormatter
         ///     All covid data.
         /// </value>
         public CovidDataCollection AllCovidData { get; private set; }
+        /// <summary>Gets the filtered covid data collection.</summary>
+        /// <value>The filtered covid data collection.</value>
+        public CovidDataCollection FilteredCovidDataCollection { get; private set; }
+        #endregion
+        #region Private Members
 
+        private CovidDataErrorLogger covidErrorLogger;
+
+        private CovidDataMergeController mergeController;
         #endregion
 
         #region Constructors
@@ -74,7 +84,7 @@ namespace Covid19Analysis.OutputFormatter
             this.Summary = string.Empty;
             this.IsCovidDataLoaded = false;
             this.covidErrorLogger = null;
-            this.filteredCovidDataCollection = null;
+            this.FilteredCovidDataCollection = null;
             this.AllCovidData = null;
             this.mergeController = null;
         }
@@ -96,9 +106,26 @@ namespace Covid19Analysis.OutputFormatter
             textContent = textContent ?? throw new ArgumentNullException(nameof(textContent));
             var parser = new CovidCsvParser(textContent);
             this.covidErrorLogger = parser.CovidErrorLogger;
-            this.filteredCovidDataCollection = parser.GenerateCovidDataCollection();
-            this.AllCovidData = this.filteredCovidDataCollection.Clone();
+            this.FilteredCovidDataCollection = parser.GenerateCovidDataCollection();
+            this.AllCovidData = this.FilteredCovidDataCollection.Clone();
             this.IsCovidDataLoaded = true;
+            this.buildCovidSummary();
+        }
+        public void UpdateCollectionFromViewModel(CovidAnalysisViewModel viewModel)
+        {
+            viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
+            if (viewModel.CovidData == null)
+            {
+                return;
+            }
+
+            if (!viewModel.CovidData.Any())
+            {
+                this.Reset();
+                return;
+            }
+
+            this.FilteredCovidDataCollection.ReplaceAllWithNewCovidCollection(viewModel.CovidData.ToList());
             this.buildCovidSummary();
         }
 
@@ -117,10 +144,10 @@ namespace Covid19Analysis.OutputFormatter
             this.covidErrorLogger = parser.CovidErrorLogger;
             if (mergeAllStates)
             {
-                this.filteredCovidDataCollection = this.AllCovidData.Clone();
+                this.FilteredCovidDataCollection = this.AllCovidData.Clone();
             }
 
-            this.mergeController = new CovidDataMergeController(this.filteredCovidDataCollection,
+            this.mergeController = new CovidDataMergeController(this.FilteredCovidDataCollection,
                 newCovidDataCollection);
             this.mergeController.AddAllNonDuplicates();
             this.mergeAndRebuildAllCovidData();
@@ -132,14 +159,14 @@ namespace Covid19Analysis.OutputFormatter
         {
             if (this.mergeController == null)
             {
-                this.filteredCovidDataCollection.ReplaceDuplicateRecords(covidRecord);
+                this.FilteredCovidDataCollection.ReplaceDuplicateRecords(covidRecord);
                 this.AllCovidData.ReplaceDuplicateRecords(covidRecord);
                 this.buildCovidSummary();
                 return;
             }
 
             this.mergeController.ReplaceDuplicate(covidRecord);
-            this.filteredCovidDataCollection = this.mergeController.MergedCovidDataCollection;
+            this.FilteredCovidDataCollection = this.mergeController.MergedCovidDataCollection;
             this.IsCovidDataLoaded = true;
             this.mergeAndRebuildAllCovidData();
         }
@@ -171,7 +198,7 @@ namespace Covid19Analysis.OutputFormatter
                 this.createAndAddToTheCovidDataCollection(record);
             }
 
-            if (this.filteredCovidDataCollection != null)
+            if (this.FilteredCovidDataCollection != null)
             {
                 this.buildCovidSummary();
             }
@@ -209,36 +236,46 @@ namespace Covid19Analysis.OutputFormatter
         {
             this.buildCovidSummary();
         }
+        #endregion
+
+        #region Private Methods
 
         private void buildCovidSummary()
         {
-            const string genericHeader = Assets.StateCovidDataHeadingLabel;
-            this.filteredCovidDataCollection = this.AllCovidData.Clone();
-            var stateSummary = new CovidDataSummary(this.filteredCovidDataCollection, this.StateFilter);
-            var isStateNotNull = this.StateFilter != null;
-            var stateSpecificHeader = $"{this.StateFilter} {Assets.StateCovidDataHeadingLabel}";
+            try
+            {
+                const string genericHeader = Assets.StateCovidDataHeadingLabel;
+                this.FilteredCovidDataCollection = this.AllCovidData.Clone();
+                var stateSummary = new CovidDataSummary(this.FilteredCovidDataCollection, this.StateFilter);
+                var isStateNotNull = this.StateFilter != null;
+                var stateSpecificHeader = $"{this.StateFilter} {Assets.StateCovidDataHeadingLabel}";
 
-            this.Summary = string.Empty;
-            this.Summary += isStateNotNull ? stateSpecificHeader : genericHeader;
+                this.Summary = string.Empty;
+                this.Summary += isStateNotNull ? stateSpecificHeader : genericHeader;
 
-            this.Summary += stateSummary.GetFirstDayOfPositiveTest();
-            this.Summary += stateSummary.GetHighestPositiveWithDate();
-            this.Summary += stateSummary.GetHighestNegativeWithDate();
+                this.Summary += stateSummary.GetFirstDayOfPositiveTest();
+                this.Summary += stateSummary.GetHighestPositiveWithDate();
+                this.Summary += stateSummary.GetHighestNegativeWithDate();
 
-            this.Summary += stateSummary.GetHighestTotalTestsWithDate();
-            this.Summary += stateSummary.GetHighestDeathsWithDate();
-            this.Summary += stateSummary.GetHighestHospitalizationsWithDate();
-            this.Summary += stateSummary.GetHighestCurrentHospitalizationsWithDate();
+                this.Summary += stateSummary.GetHighestTotalTestsWithDate();
+                this.Summary += stateSummary.GetHighestDeathsWithDate();
+                this.Summary += stateSummary.GetHighestHospitalizationsWithDate();
+                this.Summary += stateSummary.GetHighestCurrentHospitalizationsWithDate();
 
-            this.Summary += stateSummary.GetHighestPercentageOfTestsPerDayWithDate();
-            this.Summary += stateSummary.GetAveragePositiveTestsSinceFirstPositiveTest();
-            this.Summary += stateSummary.GetOverallPositivityRateSinceFirstPositiveTest();
+                this.Summary += stateSummary.GetHighestPercentageOfTestsPerDayWithDate();
+                this.Summary += stateSummary.GetAveragePositiveTestsSinceFirstPositiveTest();
+                this.Summary += stateSummary.GetOverallPositivityRateSinceFirstPositiveTest();
 
-            this.Summary += this.getPositiveThresholds(stateSummary);
-            this.Summary += this.getHistogram(stateSummary);
-            this.Summary += stateSummary.GetMonthlySummary();
+                this.Summary += this.getPositiveThresholds(stateSummary);
+                this.Summary += this.getHistogram(stateSummary);
+                this.Summary += stateSummary.GetMonthlySummary();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                this.Reset();
+            }
         }
-
         private string getPositiveThresholds(CovidDataSummary stateSummary)
         {
             var upperPositiveCaseThreshold = Format.FormatStringToInteger(this.UpperPositiveThreshold);
@@ -267,7 +304,7 @@ namespace Covid19Analysis.OutputFormatter
         {
             if (record.State.Equals(this.StateFilter))
             {
-                this.filteredCovidDataCollection.Add(record);
+                this.FilteredCovidDataCollection.Add(record);
                 this.AllCovidData.Add(record);
             }
             else
@@ -280,26 +317,18 @@ namespace Covid19Analysis.OutputFormatter
         {
             if (record.State.Equals(this.StateFilter))
             {
-                this.filteredCovidDataCollection = new CovidDataCollection {record};
-                this.AllCovidData = this.filteredCovidDataCollection.Clone();
+                this.FilteredCovidDataCollection = new CovidDataCollection { record };
+                this.AllCovidData = this.FilteredCovidDataCollection.Clone();
                 this.IsCovidDataLoaded = true;
             }
             else
             {
-                this.AllCovidData = new CovidDataCollection {record};
+                this.AllCovidData = new CovidDataCollection { record };
             }
         }
 
         #endregion
 
-        #region Private Members
 
-        private CovidDataErrorLogger covidErrorLogger;
-
-        private CovidDataCollection filteredCovidDataCollection;
-
-        private CovidDataMergeController mergeController;
-
-        #endregion
     }
 }
