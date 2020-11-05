@@ -2,12 +2,12 @@
 
 namespace Covid19Analysis.Resources
 {
-
     /// <summary>
-    /// This class arranges covid data into output values to be used by summary classes
+    ///     This class arranges covid data into output values to be used by summary classes
     /// </summary>
     public class CovidDataLines
     {
+        #region Methods
 
         /// <summary>Gets the covid line for value and date.</summary>
         /// <param name="label">The label.</param>
@@ -48,5 +48,6 @@ namespace Covid19Analysis.Resources
             return $"{label} {threshold}: {value}{Environment.NewLine}";
         }
 
+        #endregion
     }
 }

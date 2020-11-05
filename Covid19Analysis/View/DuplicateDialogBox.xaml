@@ -13,19 +13,20 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" HorizontalAlignment="Left" Margin="0,10,0,0" Text="Choose to keep or replace the duplicate day" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        
+        <TextBlock Grid.Row="0" HorizontalAlignment="Left" Margin="0,10,0,0"
+                   Text="Choose to keep or replace the duplicate day" TextWrapping="Wrap" VerticalAlignment="Top" />
+
         <Grid Grid.Row="1" Margin="0,24,0,0">
-            <TextBlock Text="Covid Record: " Grid.ColumnSpan="2"></TextBlock>
-            <TextBlock x:Name="covidRecordTextBlock" Text="" Margin="90,0,4,9"/>
+            <TextBlock Text="Covid Record: " Grid.ColumnSpan="2" />
+            <TextBlock x:Name="covidRecordTextBlock" Text="" Margin="90,0,4,9" />
         </Grid>
 
         <Grid Grid.Row="2" Margin="0,16,0,0">
-            <CheckBox x:Name="performActionForAll" Content="Do this for all items" Grid.ColumnSpan="2" Width="273"/>
+            <CheckBox x:Name="performActionForAll" Content="Do this for all items" Grid.ColumnSpan="2" Width="273" />
         </Grid>
     </Grid>
 

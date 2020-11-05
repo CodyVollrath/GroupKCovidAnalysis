@@ -8,8 +8,10 @@ using Covid19Analysis.Resources;
 
 namespace Covid19Analysis.View
 {
-
-    /// <summary>This class is responsible for the logic behind the addition of a CovidRecord to the data set within the application</summary>
+    /// <summary>
+    ///     This class is responsible for the logic behind the addition of a CovidRecord to the data set within the
+    ///     application
+    /// </summary>
     public sealed partial class CovidRecordAdder
     {
         #region Properties
@@ -26,7 +28,7 @@ namespace Covid19Analysis.View
         public CovidRecordAdder()
         {
             this.InitializeComponent();
-            this.IsPrimaryButtonEnabled = false;
+            IsPrimaryButtonEnabled = false;
         }
 
         #endregion
@@ -36,28 +38,20 @@ namespace Covid19Analysis.View
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             var date = this.covidRecordDate.Date.Date;
-            var state = this.stateTextBox.Text;
+            var state = this.determineStateComboBoxSelectedItem();
             var positiveCases = Format.FormatStringToInteger(this.positiveCasesTextBox.Text);
             var negativeCases = Format.FormatStringToInteger(this.negativeCasesTextBox.Text);
             var currentlyHospitalized = Format.FormatStringToInteger(this.hospitalizedCurrentlyTextBox.Text);
             var hospitalizations = Format.FormatStringToInteger(this.hospitalizationsTextBox.Text);
             var deaths = Format.FormatStringToInteger(this.deathsTextBox.Text);
 
-            this.CreatedRecord = new CovidRecord(date, state)
-            {
+            this.CreatedRecord = new CovidRecord(date, state) {
                 PositiveTests = positiveCases,
                 NegativeTests = negativeCases,
                 HospitalizedCurrently = currentlyHospitalized,
                 Hospitalizations = hospitalizations,
                 Deaths = deaths
             };
-        }
-
-        private void stateTextBox_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
-        {
-            args.Cancel = args.NewText.Any(char.IsDigit);
-            sender.Text = args.NewText.ToUpper();
-            sender.Select(sender.Text.Length, 0);
         }
 
         private void positiveCasesTextBox_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
@@ -80,7 +74,8 @@ namespace Covid19Analysis.View
             args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
         }
 
-        private void hospitalizedCurrentlyTextBox_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
+        private void hospitalizedCurrentlyTextBox_BeforeTextChanging(TextBox sender,
+            TextBoxBeforeTextChangingEventArgs args)
         {
             args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
         }
@@ -92,6 +87,7 @@ namespace Covid19Analysis.View
                 this.positiveCasesTextBox.Text = "0";
             }
         }
+
         private void negativeCasesTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             if (this.negativeCasesTextBox.Text.Equals(string.Empty))
@@ -102,12 +98,12 @@ namespace Covid19Analysis.View
 
         private void deathsTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-
             if (this.deathsTextBox.Text.Equals(string.Empty))
             {
                 this.deathsTextBox.Text = "0";
             }
         }
+
         private void hospitalizationsTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             if (this.hospitalizationsTextBox.Text.Equals(string.Empty))
@@ -124,21 +120,29 @@ namespace Covid19Analysis.View
             }
         }
 
-        private void stateTextBox_LostFocus(object sender, RoutedEventArgs e)
+        private void statesComboBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (this.stateTextBox.Text.Equals(string.Empty) || this.stateTextBox.Text.Length != 2)
-            {
-                this.stateTextBox.Text = Assets.GeorgiaFilterValue;
-            }
+            this.enablePrimaryButton();
         }
 
         private void covidRecordDate_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
-            if (this.covidRecordDate.SelectedDate != null)
+            this.enablePrimaryButton();
+        }
+
+        private void enablePrimaryButton()
+        {
+            if (this.covidRecordDate.SelectedDate != null && this.statesComboBox.SelectedItem != null)
             {
-                this.IsPrimaryButtonEnabled = true;
+                IsPrimaryButtonEnabled = true;
             }
         }
+
+        private string determineStateComboBoxSelectedItem()
+        {
+            return this.statesComboBox.SelectedValue != null ? this.statesComboBox.SelectedValue.ToString() : MainPage.State.ToString();
+        }
+
         #endregion
     }
 }

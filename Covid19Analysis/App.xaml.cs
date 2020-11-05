@@ -9,23 +9,29 @@ using Covid19Analysis.View;
 namespace Covid19Analysis
 {
     /// <Summary>
-    /// Provides application-specific behavior to supplement the default Application class.
+    ///     Provides application-specific behavior to supplement the default Application class.
     /// </Summary>
-    sealed partial class App
+    public sealed partial class App
     {
+        #region Constructors
+
         /// <Summary>
-        /// Initializes the singleton application object.  This is the first line of authored code
-        /// executed, and as such is the logical equivalent of main() or WinMain().
+        ///     Initializes the singleton application object.  This is the first line of authored code
+        ///     executed, and as such is the logical equivalent of main() or WinMain().
         /// </Summary>
         public App()
         {
             this.InitializeComponent();
-            this.Suspending += OnSuspending;
+            Suspending += this.OnSuspending;
         }
 
+        #endregion
+
+        #region Methods
+
         /// <Summary>
-        /// Invoked when the application is launched normally by the end user.  Other entry points
-        /// will be used such as when the application is launched to open a specific file.
+        ///     Invoked when the application is launched normally by the end user.  Other entry points
+        ///     will be used such as when the application is launched to open a specific file.
         /// </Summary>
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
@@ -37,11 +43,10 @@ namespace Covid19Analysis
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
 
-                rootFrame.NavigationFailed += OnNavigationFailed;
+                rootFrame.NavigationFailed += this.OnNavigationFailed;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
-
                 }
 
                 // Place the frame in the current Window
@@ -57,25 +62,26 @@ namespace Covid19Analysis
                     // parameter
                     rootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
+
                 // Ensure the current window is active
                 Window.Current.Activate();
             }
         }
 
         /// <Summary>
-        /// Invoked when Navigation to a certain page fails
+        ///     Invoked when Navigation to a certain page fails
         /// </Summary>
         /// <param name="sender">The Frame which failed navigation</param>
         /// <param name="e">Details about the navigation failure</param>
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }
 
         /// <Summary>
-        /// Invoked when application execution is being suspended.  Application state is saved
-        /// without knowing whether the application will be terminated or resumed with the contents
-        /// of memory still intact.
+        ///     Invoked when application execution is being suspended.  Application state is saved
+        ///     without knowing whether the application will be terminated or resumed with the contents
+        ///     of memory still intact.
         /// </Summary>
         /// <param name="sender">The source of the suspend request.</param>
         /// <param name="e">Details about the suspend request.</param>
@@ -84,5 +90,7 @@ namespace Covid19Analysis
             var deferral = e.SuspendingOperation.GetDeferral();
             deferral.Complete();
         }
+
+        #endregion
     }
 }

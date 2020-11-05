@@ -7,7 +7,6 @@ using Covid19Analysis.Resources;
 
 namespace Covid19Analysis.OutputFormatter
 {
-
     /// <summary>This class assembles COVID data output from all summaries and accumulates them together.</summary>
     public class CovidDataAssembler
     {
@@ -15,64 +14,59 @@ namespace Covid19Analysis.OutputFormatter
 
         /// <summary>Gets a value indicating whether this instance is covid data loaded.</summary>
         /// <value>
-        ///   <c>true</c> if this instance is covid data loaded; otherwise, <c>false</c>.</value>
+        ///     <c>true</c> if this instance is covid data loaded; otherwise, <c>false</c>.
+        /// </value>
         public bool IsCovidDataLoaded { get; private set; }
 
-
-        /// <summary>Gets the state filter.</summary>
+        /// <summary>Gets or sets the state filter.</summary>
         /// <value>The state filter.</value>
-        public string StateFilter { get; }
-
+        public string StateFilter { get; set; }
 
         /// <summary>Gets or sets the upper positive threshold.</summary>
         /// <value>The upper positive threshold.</value>
         public string UpperPositiveThreshold { get; set; }
 
-
         /// <summary>Gets or sets the lower positive threshold.</summary>
         /// <value>The lower positive threshold.</value>
         public string LowerPositiveThreshold { get; set; }
-
 
         /// <summary>Gets or sets the size of the bin for the histogram.</summary>
         /// <value>The size of the bin.</value>
         public string BinSize { get; set; }
 
-
         /// <summary>Gets the covid data summary.</summary>
         /// <value>The summary.</value>
         public string Summary { get; private set; }
 
-        #endregion
+        /// <summary>
+        ///     Gets all covid data.
+        /// </summary>
+        /// <value>
+        ///     All covid data.
+        /// </value>
+        public CovidDataCollection AllCovidData { get; private set; }
 
-        #region Private Members
-        private CovidDataErrorLogger covidErrorLogger;
-
-        private CovidDataCollection filteredCovidDataCollection;
-
-        private CovidDataCollection allCovidData;
-
-        private CovidDataMergeController mergeController;
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <a onclick="return false;" href="CovidDataAssembler" originaltag="see">CovidDataAssembler</a> class.
-        /// <para>By default the filter is set to GA</para>
-        /// <para>If stateFilter is empty then all states represented in the table will be represented</para>
-        /// <code>Postcondition: StateFilter == stateFilter AND Summary == null AND IsCovidDataLoaded == false</code>
+        ///     Initializes a new instance of the
+        ///     <a onclick="return false;" href="CovidDataAssembler" originaltag="see">CovidDataAssembler</a> class.
+        ///     <para>By default the filter is set to GA</para>
+        ///     <para>If stateFilter is empty then all states represented in the table will be represented</para>
+        ///     <code>Postcondition: StateFilter == stateFilter AND Summary == null AND IsCovidDataLoaded == false</code>
         /// </summary>
         /// <param name="stateFilter">The state filter.</param>
-        public CovidDataAssembler(string stateFilter = Assets.GeorgiaFilterValue)
+        public CovidDataAssembler(StateAbbreviations stateFilter)
         {
-            this.StateFilter = stateFilter ?? throw new ArgumentNullException(nameof(stateFilter));
+            this.StateFilter = Enum.GetName(typeof(StateAbbreviations), stateFilter);
             this.Reset();
         }
 
         #endregion
 
-        #region Public Methods
+        #region Methods
 
         /// <summary>Resets this instance to the start value.</summary>
         public void Reset()
@@ -81,13 +75,13 @@ namespace Covid19Analysis.OutputFormatter
             this.IsCovidDataLoaded = false;
             this.covidErrorLogger = null;
             this.filteredCovidDataCollection = null;
-            this.allCovidData = null;
+            this.AllCovidData = null;
             this.mergeController = null;
         }
 
         /// <Summary>Gets the covid data errors.</Summary>
         /// <returns>
-        ///   <para>the string that represents the covid data errors</para>
+        ///     <para>the string that represents the covid data errors</para>
         /// </returns>
         public string GetCovidDataErrors()
         {
@@ -103,22 +97,31 @@ namespace Covid19Analysis.OutputFormatter
             var parser = new CovidCsvParser(textContent);
             this.covidErrorLogger = parser.CovidErrorLogger;
             this.filteredCovidDataCollection = parser.GenerateCovidDataCollection();
-            this.allCovidData = this.filteredCovidDataCollection.Clone();
+            this.AllCovidData = this.filteredCovidDataCollection.Clone();
             this.IsCovidDataLoaded = true;
             this.buildCovidSummary();
         }
 
-        /// <summary>Merges the and loads the covid data.</summary>
+        /// <summary>
+        ///     Merges the and loads the covid data.
+        /// </summary>
         /// <param name="textContent">Content of the text.</param>
+        /// <param name="mergeAllStates">if set to <c>true</c> [merge all states].</param>
         /// <exception cref="ArgumentNullException">textContent</exception>
-        public void MergeAndLoadCovidData(string textContent)
+        public void MergeAndLoadCovidData(string textContent, bool mergeAllStates)
         {
             textContent = textContent ?? throw new ArgumentNullException(nameof(textContent));
 
             var parser = new CovidCsvParser(textContent);
             var newCovidDataCollection = parser.GenerateCovidDataCollection();
             this.covidErrorLogger = parser.CovidErrorLogger;
-            this.mergeController = new CovidDataMergeController(this.filteredCovidDataCollection, newCovidDataCollection, this.StateFilter);
+            if (mergeAllStates)
+            {
+                this.filteredCovidDataCollection = this.AllCovidData.Clone();
+            }
+
+            this.mergeController = new CovidDataMergeController(this.filteredCovidDataCollection,
+                newCovidDataCollection);
             this.mergeController.AddAllNonDuplicates();
             this.mergeAndRebuildAllCovidData();
         }
@@ -130,7 +133,7 @@ namespace Covid19Analysis.OutputFormatter
             if (this.mergeController == null)
             {
                 this.filteredCovidDataCollection.ReplaceDuplicateRecords(covidRecord);
-                this.allCovidData.ReplaceDuplicateRecords(covidRecord);
+                this.AllCovidData.ReplaceDuplicateRecords(covidRecord);
                 this.buildCovidSummary();
                 return;
             }
@@ -141,7 +144,6 @@ namespace Covid19Analysis.OutputFormatter
             this.mergeAndRebuildAllCovidData();
         }
 
-
         /// <summary>Does the covid record exist.</summary>
         /// <param name="record">The record.</param>
         /// <returns>True if record is present in the CovidDataCollection, false otherwise.</returns>
@@ -150,12 +152,11 @@ namespace Covid19Analysis.OutputFormatter
             var doesCovidRecordExist = false;
             if (this.IsCovidDataLoaded)
             {
-                doesCovidRecordExist = this.allCovidData.Contains(record);
+                doesCovidRecordExist = this.AllCovidData.Contains(record);
             }
 
             return doesCovidRecordExist;
         }
-
 
         /// <summary>Adds the covid record to collection or creates a new collection if there is not a collection present.</summary>
         /// <param name="record">The record.</param>
@@ -184,7 +185,6 @@ namespace Covid19Analysis.OutputFormatter
             return duplicates;
         }
 
-
         /// <summary>Writes the covid data to file.</summary>
         /// <param name="file">The file.</param>
         /// <returns>True if the file was saved properly, otherwise false</returns>
@@ -193,13 +193,14 @@ namespace Covid19Analysis.OutputFormatter
             var isSaved = true;
             try
             {
-                var covidDataWriter = new CovidDataSaver(file, this.allCovidData);
+                var covidDataWriter = new CovidDataSaver(file, this.AllCovidData);
                 covidDataWriter.WriteCovidDataToFile();
             }
             catch (Exception)
             {
-                isSaved = false; 
+                isSaved = false;
             }
+
             return isSaved;
         }
 
@@ -209,17 +210,14 @@ namespace Covid19Analysis.OutputFormatter
             this.buildCovidSummary();
         }
 
-        #endregion
-
-        #region Private Methods
-
         private void buildCovidSummary()
         {
             const string genericHeader = Assets.StateCovidDataHeadingLabel;
+            this.filteredCovidDataCollection = this.AllCovidData.Clone();
             var stateSummary = new CovidDataSummary(this.filteredCovidDataCollection, this.StateFilter);
             var isStateNotNull = this.StateFilter != null;
             var stateSpecificHeader = $"{this.StateFilter} {Assets.StateCovidDataHeadingLabel}";
-            
+
             this.Summary = string.Empty;
             this.Summary += isStateNotNull ? stateSpecificHeader : genericHeader;
 
@@ -261,7 +259,7 @@ namespace Covid19Analysis.OutputFormatter
 
         private void mergeAndRebuildAllCovidData()
         {
-            this.allCovidData.AddAll(this.mergeController.MergedCovidDataCollection);
+            this.AllCovidData.AddAll(this.mergeController.MergedCovidDataCollection);
             this.buildCovidSummary();
         }
 
@@ -270,29 +268,38 @@ namespace Covid19Analysis.OutputFormatter
             if (record.State.Equals(this.StateFilter))
             {
                 this.filteredCovidDataCollection.Add(record);
-                this.allCovidData.Add(record);
+                this.AllCovidData.Add(record);
             }
             else
             {
-                this.allCovidData.Add(record);
+                this.AllCovidData.Add(record);
             }
         }
+
         private void createAndAddToTheCovidDataCollection(CovidRecord record)
         {
             if (record.State.Equals(this.StateFilter))
             {
-                this.filteredCovidDataCollection = new CovidDataCollection { record };
-                this.allCovidData = this.filteredCovidDataCollection.Clone();
+                this.filteredCovidDataCollection = new CovidDataCollection {record};
+                this.AllCovidData = this.filteredCovidDataCollection.Clone();
                 this.IsCovidDataLoaded = true;
             }
             else
             {
-                this.allCovidData = new CovidDataCollection(){record};
+                this.AllCovidData = new CovidDataCollection {record};
             }
-
-            
         }
+
         #endregion
 
+        #region Private Members
+
+        private CovidDataErrorLogger covidErrorLogger;
+
+        private CovidDataCollection filteredCovidDataCollection;
+
+        private CovidDataMergeController mergeController;
+
+        #endregion
     }
 }

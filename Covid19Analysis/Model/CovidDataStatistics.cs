@@ -5,7 +5,6 @@ using Covid19Analysis.Resources;
 
 namespace Covid19Analysis.Model
 {
-
     /// <summary>This class finds particular data points out of a CovidDataCollection</summary>
     public class CovidDataStatistics
     {
@@ -14,13 +13,15 @@ namespace Covid19Analysis.Model
         /// <summary>Gets the covid records.</summary>
         /// <value>The covid records.</value>
         public IEnumerable<CovidRecord> CovidRecords { get; }
+
         #endregion
 
         #region Constructors
 
-        /// <summary>Initializes a new instance of the <see cref="CovidDataStatistics" /> class.
-        ///<code>Precondition: covidRecords != null</code>
-        /// <code>Postcondition: CovidRecords == covidRecords</code>
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="CovidDataStatistics" /> class.
+        ///     <code>Precondition: covidRecords != null</code>
+        ///     <code>Postcondition: CovidRecords == covidRecords</code>
         /// </summary>
         /// <param name="covidRecords">The covid records.</param>
         /// <exception cref="ArgumentNullException">covidRecords</exception>
@@ -28,42 +29,44 @@ namespace Covid19Analysis.Model
         {
             this.CovidRecords = covidRecords ?? throw new ArgumentNullException(nameof(covidRecords));
         }
+
         #endregion
 
-        #region Public Methods
+        #region Methods
 
         /// <summary>Finds the day of first positive test.</summary>
         /// <returns>
-        ///   <para>the date of the first positive test</para>
+        ///     <para>the date of the first positive test</para>
         /// </returns>
         public DateTime FindDayOfFirstPositiveTest()
         {
-            var dayOfFirstPositive = this.CovidRecords.OrderBy(record => record.Date).First(record => record.PositiveTests > 0).Date;
+            var dayOfFirstPositive = this.CovidRecords.OrderBy(record => record.Date)
+                                         .First(record => record.PositiveTests > 0).Date;
             return dayOfFirstPositive;
         }
-
 
         /// <summary>Finds the record with highest positive cases.</summary>
         /// <returns>The CovidRecord with the highest positive test</returns>
         public CovidRecord FindRecordWithHighestPositiveCases()
         {
-            var highestPositiveTestCaseRecord = this.CovidRecords.OrderByDescending(record => record.PositiveTests).First();
+            var highestPositiveTestCaseRecord =
+                this.CovidRecords.OrderByDescending(record => record.PositiveTests).First();
             return highestPositiveTestCaseRecord;
         }
-
 
         /// <summary>Finds the record with lowest positive cases.</summary>
         /// <param name="sinceDate">The date indicator to not count the lowest.</param>
         /// <returns>The record with the lowest positive cases</returns>
         public CovidRecord FindRecordWithLowestPositiveCases(DateTime sinceDate)
         {
-            var lowestPositiveTestCaseRecord = this.CovidRecords.Where(record => record.Date >= sinceDate).OrderBy(record => record.PositiveTests).First();
+            var lowestPositiveTestCaseRecord = this.CovidRecords.Where(record => record.Date >= sinceDate)
+                                                   .OrderBy(record => record.PositiveTests).First();
             return lowestPositiveTestCaseRecord;
         }
 
         /// <summary>Finds the record with highest negative tests.</summary>
         /// <returns>
-        ///   <para>The CovidRecord with the highest negative tests.</para>
+        ///     <para>The CovidRecord with the highest negative tests.</para>
         /// </returns>
         public CovidRecord FindRecordWithHighestNegativeTests()
         {
@@ -71,10 +74,9 @@ namespace Covid19Analysis.Model
             return highestNegativeTestRecord;
         }
 
-
         /// <summary>Finds the record with highest total tests.</summary>
         /// <returns>
-        ///   <para>The CovidRecord with the highest total tests</para>
+        ///     <para>The CovidRecord with the highest total tests</para>
         /// </returns>
         public CovidRecord FindRecordWithHighestTotalTests()
         {
@@ -82,14 +84,13 @@ namespace Covid19Analysis.Model
             return highestTotalTestRecord;
         }
 
-
-
         /// <summary>Finds the record with lowest total tests.</summary>
         /// <param name="sinceDate">The date indicator to not count the lowest.</param>
         /// <returns>The record with the lowest total cases</returns>
         public CovidRecord FindRecordWithLowestTotalTests(DateTime sinceDate)
         {
-            var lowestTotalTestRecord = this.CovidRecords.Where(record => record.Date >= sinceDate).OrderBy(record => record.TotalTests).First();
+            var lowestTotalTestRecord = this.CovidRecords.Where(record => record.Date >= sinceDate)
+                                            .OrderBy(record => record.TotalTests).First();
             return lowestTotalTestRecord;
         }
 
@@ -101,7 +102,6 @@ namespace Covid19Analysis.Model
             return highestDeathRecord;
         }
 
-
         /// <summary>Finds the record with highest hospitalizations.</summary>
         /// <returns>The CovidRecord with the highest hospitalizations</returns>
         public CovidRecord FindRecordWithHighestHospitalizations()
@@ -110,7 +110,6 @@ namespace Covid19Analysis.Model
                 this.CovidRecords.OrderByDescending(record => record.Hospitalizations).First();
             return highestHospitalizationsRecord;
         }
-
 
         /// <summary>Finds the record with highest current hospitalizations.</summary>
         /// <returns>The CovidRecord with the highest number of current hospitalizations</returns>
@@ -121,13 +120,13 @@ namespace Covid19Analysis.Model
             return highestCurrentHospitalizationsRecord;
         }
 
-
         /// <summary>Finds the record with lowest current hospitalizations since a date.</summary>
         /// <param name="sinceDate">The since date.</param>
         /// <returns>The CovidRecord with the current lowest hospitalizations since a date entered</returns>
         public CovidRecord FindRecordWithLowestCurrentHospitalizations(DateTime sinceDate)
         {
-            var lowestHospitalizationsCurrently = this.CovidRecords.Where(record => record.Date >= sinceDate).OrderBy(record => record.HospitalizedCurrently).First();
+            var lowestHospitalizationsCurrently = this.CovidRecords.Where(record => record.Date >= sinceDate)
+                                                      .OrderBy(record => record.HospitalizedCurrently).First();
             return lowestHospitalizationsCurrently;
         }
 
@@ -141,18 +140,16 @@ namespace Covid19Analysis.Model
             return recordWithHighestPercentage;
         }
 
-
         /// <summary>Finds the average positive tests since first positive test.</summary>
         /// <returns>The average positive tests since first positive test date</returns>
         public double FindAveragePositiveTestsSinceFirstPositiveTest()
         {
             var firstDateWithPositive = this.FindDayOfFirstPositiveTest();
             var averagePositiveTests = this.CovidRecords
-                              .Where(record => record.Date >= firstDateWithPositive)
-                              .Select(record => record.PositiveTests).Average();
+                                           .Where(record => record.Date >= firstDateWithPositive)
+                                           .Select(record => record.PositiveTests).Average();
             return averagePositiveTests;
         }
-
 
         /// <summary>Finds the average positive tests since a specified date.</summary>
         /// <param name="sinceDate">The date indicator to not count the lowest.</param>
@@ -166,7 +163,6 @@ namespace Covid19Analysis.Model
             return averagePositiveTests;
         }
 
-
         /// <summary>Finds the average total tests since a specified date.</summary>
         /// <param name="sinceDate">The date indicator to not count the lowest.</param>
         /// <returns>The average total tests since the date specified</returns>
@@ -174,8 +170,8 @@ namespace Covid19Analysis.Model
         {
             var firstDateWithPositive = this.FindDayOfFirstPositiveTest();
             var averageTotalTests = this.CovidRecords
-                                           .Where(record => record.Date >= firstDateWithPositive)
-                                           .Select(record => record.TotalTests).Average();
+                                        .Where(record => record.Date >= firstDateWithPositive)
+                                        .Select(record => record.TotalTests).Average();
             return averageTotalTests;
         }
 
@@ -187,16 +183,16 @@ namespace Covid19Analysis.Model
             var averagePositiveTests = this.FindAveragePositiveTestsSinceFirstPositiveTest();
 
             var averageOfTotalTests = this.CovidRecords
-                                      .Where(record => record.Date.Date >= firstDateWithPositive)
-                                      .Select(record => record.TotalTests).Average();
+                                          .Where(record => record.Date.Date >= firstDateWithPositive)
+                                          .Select(record => record.TotalTests).Average();
 
             var positivityRate = averagePositiveTests / averageOfTotalTests;
             return positivityRate;
         }
 
-
-        /// <summary>Finds the number of days since first positive test greater than threshold.
-        /// <code>Precondition: threshold >= 0</code>
+        /// <summary>
+        ///     Finds the number of days since first positive test greater than threshold.
+        ///     <code>Precondition: threshold >= 0</code>
         /// </summary>
         /// <param name="threshold">The threshold.</param>
         /// <returns>The number of days greater than a threshold since first positive test date</returns>
@@ -208,14 +204,14 @@ namespace Covid19Analysis.Model
             }
 
             var firstDateWithPositive = this.FindDayOfFirstPositiveTest();
-            var daysGreaterThanThreshold = this.CovidRecords.Count(record => record.Date.Date >= firstDateWithPositive && record.PositiveTests > threshold);
+            var daysGreaterThanThreshold = this.CovidRecords.Count(record =>
+                record.Date.Date >= firstDateWithPositive && record.PositiveTests > threshold);
             return daysGreaterThanThreshold;
         }
 
-
         /// <summary>
-        /// Finds the number of days since first positive test less than threshold.
-        /// <code>Precondition: threshold >= 0</code>
+        ///     Finds the number of days since first positive test less than threshold.
+        ///     <code>Precondition: threshold >= 0</code>
         /// </summary>
         /// <param name="threshold">The threshold.</param>
         /// <returns>The number of days less than a threshold since first positive test date</returns>
@@ -225,14 +221,16 @@ namespace Covid19Analysis.Model
             {
                 throw new ArgumentException($"{nameof(threshold)} can not be less than 0");
             }
+
             var firstDateWithPositive = this.FindDayOfFirstPositiveTest();
-            var daysGreaterThanThreshold = this.CovidRecords.Count(record => record.Date.Date >= firstDateWithPositive && record.PositiveTests < threshold);
+            var daysGreaterThanThreshold = this.CovidRecords.Count(record =>
+                record.Date.Date >= firstDateWithPositive && record.PositiveTests < threshold);
             return daysGreaterThanThreshold;
         }
 
-
-        /// <summary>Finds the positive percentage for record.
-        ///<code>Precondition: record != null</code>
+        /// <summary>
+        ///     Finds the positive percentage for record.
+        ///     <code>Precondition: record != null</code>
         /// </summary>
         /// <param name="record">The record.</param>
         /// <returns>The positive percentage of a record</returns>
@@ -247,6 +245,7 @@ namespace Covid19Analysis.Model
 
             return double.NaN;
         }
+
         #endregion
     }
 }

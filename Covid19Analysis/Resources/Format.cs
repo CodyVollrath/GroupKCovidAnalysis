@@ -11,8 +11,8 @@ namespace Covid19Analysis.Resources
         #region Date Formatters
 
         /// <Summary>
-        /// Formats as date time.
-        /// <code>Precondition: dateString != null</code>
+        ///     Formats as date time.
+        ///     <code>Precondition: dateString != null</code>
         /// </Summary>
         /// <param name="dateString">The date string.</param>
         /// <returns>The date time object</returns>
@@ -40,16 +40,15 @@ namespace Covid19Analysis.Resources
             return $"{dayOfMonth}{determineOrdinalIndicator(dayOfMonth)}";
         }
 
-
         /// <Summary>Gets the month name from month number.</Summary>
         /// <param name="monthNumber">The month number</param>
         /// <returns>The name of the month for the month number passed in</returns>
         public static string GetMonthNameFromNumber(int monthNumber)
         {
-            var monthName = new DateTime(Assets.DefaultYear, monthNumber, Assets.DefaultDay).ToString(Assets.MonthNameIdentifier);
+            var monthName =
+                new DateTime(Assets.DefaultYear, monthNumber, Assets.DefaultDay).ToString(Assets.MonthNameIdentifier);
             return monthName;
         }
-
 
         /// <summary>Gets the list of days with ordinals.</summary>
         /// <param name="dates">The dates.</param>
@@ -57,7 +56,8 @@ namespace Covid19Analysis.Resources
         public static string GetListOfDaysWithOrdinals(IEnumerable<DateTime> dates)
         {
             var listOfDays = (from date in dates select GetDayOfMonthWithOrdinalIndicator(date)).ToList();
-            return listOfDays.Aggregate(string.Empty, (current, day) => determineDayListOutput(day, listOfDays, current));
+            return listOfDays.Aggregate(string.Empty,
+                (current, day) => determineDayListOutput(day, listOfDays, current));
         }
 
         #endregion
@@ -65,8 +65,8 @@ namespace Covid19Analysis.Resources
         #region Number Formatters
 
         /// <Summary>
-        /// Formats the string to integer.
-        /// <code>Precondition: numericValue != null AND is a valid number</code>
+        ///     Formats the string to integer.
+        ///     <code>Precondition: numericValue != null AND is a valid number</code>
         /// </Summary>
         /// <param name="numericValue">The numeric value.</param>
         /// <returns>The integer representation of that string</returns>
@@ -127,9 +127,11 @@ namespace Covid19Analysis.Resources
         {
             return $"{numericValue:P}";
         }
+
         #endregion
 
         #region Private Helpers
+
         private static string determineDayListOutput(string day, IReadOnlyList<string> listOfDays, string daysString)
         {
             var isListOfDaysGreaterThanOne = listOfDays.Count > 1;
@@ -153,6 +155,7 @@ namespace Covid19Analysis.Resources
 
             return daysString;
         }
+
         private static string determineOrdinalIndicator(string numericValue)
         {
             var ordinal = "th";
@@ -170,9 +173,15 @@ namespace Covid19Analysis.Resources
                     ordinal = "rd";
                     break;
             }
-            if (remainder >= 11 && remainder <= 13) { ordinal = "th"; }
+
+            if (remainder >= 11 && remainder <= 13)
+            {
+                ordinal = "th";
+            }
+
             return ordinal;
         }
+
         #endregion
     }
 }

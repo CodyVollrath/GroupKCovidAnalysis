@@ -123,6 +123,7 @@
     <Compile Include="DataTier\CovidDataMergeController.cs" />
     <Compile Include="DataTier\CovidDataSaver.cs" />
     <Compile Include="Model\CovidDataStatistics.cs" />
+    <Compile Include="Model\StateAbbreviations.cs" />
     <Compile Include="OutputFormatter\CovidDataHistogramGenerator.cs" />
     <Compile Include="OutputFormatter\CovidDataSummary.cs" />
     <Compile Include="OutputFormatter\CovidDataMonthlySummary.cs" />
@@ -147,6 +148,9 @@
     <Compile Include="Resources\Format.cs" />
     <Compile Include="View\DuplicateDialogBox.xaml.cs">
       <DependentUpon>DuplicateDialogBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MergeOrReplaceDialog.xaml.cs">
+      <DependentUpon>MergeOrReplaceDialog.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -182,6 +186,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\DuplicateDialogBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MergeOrReplaceDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Windows.Foundation;
+using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -16,21 +17,50 @@ using Covid19Analysis.Resources;
 namespace Covid19Analysis.View
 {
     /// <Summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    ///     An empty page that can be used on its own or navigated to within a Frame.
     /// </Summary>
     public sealed partial class MainPage
     {
-        #region Properties
+        #region Data members
 
         /// <Summary>
         ///     The application height
         /// </Summary>
-        public const int ApplicationHeight = 500;
+        public const int ApplicationHeight = 530;
 
         /// <Summary>
         ///     The application width
         /// </Summary>
         public const int ApplicationWidth = 620;
+
+        #region Static Members
+
+        /// <summary>
+        ///     The state
+        /// </summary>
+        public static StateAbbreviations State;
+
+        #endregion
+
+        #endregion
+
+        #region Constructors
+
+        /// <Summary>
+        ///     Initializes a new instance of the <see cref="MainPage" /> class.
+        /// </Summary>
+        public MainPage()
+        {
+            this.InitializeComponent();
+            ApplicationView.PreferredLaunchViewSize = new Size {Width = ApplicationWidth, Height = ApplicationHeight};
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(ApplicationWidth, ApplicationHeight));
+            this.covidDataAssembler = new CovidDataAssembler(StateAbbreviations.GA);
+            this.statesComboBox.ItemsSource = Enum.GetNames(typeof(StateAbbreviations));
+            State = StateAbbreviations.GA;
+            this.statesComboBox.SelectedValue = Enum.GetName(typeof(StateAbbreviations), StateAbbreviations.GA);
+            this.mergeOrReplaceDialog = new MergeOrReplaceDialog();
+        }
 
         #endregion
 
@@ -42,29 +72,6 @@ namespace Covid19Analysis.View
 
         #endregion
 
-        #region Constructors
-        /// <Summary>
-        ///     Initializes a new instance of the <see cref="MainPage" /> class.
-        /// </Summary>
-        public MainPage()
-        {
-            this.InitializeComponent();
-            ApplicationView.PreferredLaunchViewSize = new Size { Width = ApplicationWidth, Height = ApplicationHeight };
-            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
-            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(ApplicationWidth, ApplicationHeight));
-            this.covidDataAssembler = new CovidDataAssembler();
-            this.mergeOrReplaceDialog = new ContentDialog
-            {
-                Title = Assets.MergeFilesTitle,
-                Content = Assets.MergeFilesContent,
-                PrimaryButtonText = Assets.MergeFilesPrimaryButtonText,
-                SecondaryButtonText = Assets.MergeFilesSecondaryButtonText
-            };
-
-        }
-
-        #endregion
-
         #region Action Events
 
         #region AppButtonEvents
@@ -73,13 +80,17 @@ namespace Covid19Analysis.View
         {
             string fileContent;
 
-            var openPicker = new FileOpenPicker { ViewMode = PickerViewMode.Thumbnail, SuggestedStartLocation = PickerLocationId.DocumentsLibrary };
+            var openPicker = new FileOpenPicker
+                {ViewMode = PickerViewMode.Thumbnail, SuggestedStartLocation = PickerLocationId.DocumentsLibrary};
             openPicker.FileTypeFilter.Add(".csv");
             openPicker.FileTypeFilter.Add(".txt");
             var file = await openPicker.PickSingleFileAsync();
-            if (file == null) return;
+            if (file == null)
+            {
+                return;
+            }
 
-            var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
+            var stream = await file.OpenAsync(FileAccessMode.Read);
             using (var fileReader = new StreamReader(stream.AsStream()))
             {
                 fileContent = await fileReader.ReadToEndAsync();
@@ -100,12 +111,11 @@ namespace Covid19Analysis.View
                 return;
             }
 
-            var savePicker = new FileSavePicker
-            {
+            var savePicker = new FileSavePicker {
                 SuggestedStartLocation = PickerLocationId.DocumentsLibrary,
                 SuggestedFileName = $"Covid19Analysis_{DateTime.Now.ToString(Assets.TimeStamp)}"
             };
-            savePicker.FileTypeChoices.Add("Plain Text", new List<string>() { ".csv", ".txt" });
+            savePicker.FileTypeChoices.Add("Plain Text", new List<string> {".csv", ".txt"});
 
             var file = await savePicker.PickSaveFileAsync();
             if (file == null)
@@ -128,6 +138,7 @@ namespace Covid19Analysis.View
         #endregion
 
         #region Elements on UI Events
+
         private void clearData_Click(object sender, RoutedEventArgs e)
         {
             this.covidDataAssembler.Reset();
@@ -139,12 +150,14 @@ namespace Covid19Analysis.View
             this.addCovidRecord();
         }
 
-        private void upperPositiveCaseTextBox_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
+        private void upperPositiveCaseTextBox_BeforeTextChanging(TextBox sender,
+            TextBoxBeforeTextChangingEventArgs args)
         {
             args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
         }
 
-        private void lowerPositiveCaseTextBox_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
+        private void lowerPositiveCaseTextBox_BeforeTextChanging(TextBox sender,
+            TextBoxBeforeTextChangingEventArgs args)
         {
             args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
         }
@@ -161,6 +174,7 @@ namespace Covid19Analysis.View
             {
                 this.upperPositiveCaseTextBox.Text = Assets.DefaultGreaterThanThreshHold.ToString();
             }
+
             this.updateCovidData();
         }
 
@@ -171,6 +185,7 @@ namespace Covid19Analysis.View
             {
                 this.lowerPositiveCaseTextBox.Text = Assets.DefaultLessThanThreshold.ToString();
             }
+
             this.updateCovidData();
         }
 
@@ -186,10 +201,24 @@ namespace Covid19Analysis.View
 
             this.updateCovidData();
         }
-        
+
+        private void statesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedState = this.statesComboBox.SelectedValue;
+
+            if (selectedState != null && this.covidDataAssembler != null)
+            {
+                var selectedStateConverted = Enum.Parse<StateAbbreviations>(selectedState.ToString());
+                State = selectedStateConverted;
+                this.covidDataAssembler.StateFilter = selectedState.ToString();
+                this.updateCovidData();
+                this.noRecordsForThatState();
+            }
+        }
+
         private void listViewToggle_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(CovidListViewPage));
+            Frame.Navigate(typeof(CovidListViewPage));
         }
 
         #endregion
@@ -223,25 +252,30 @@ namespace Covid19Analysis.View
         private async void promptMergeOrReplaceDialog(string textContent)
         {
             var answer = await this.mergeOrReplaceDialog.ShowAsync();
-            if (answer == ContentDialogResult.Primary)
+            switch (answer)
             {
-                this.mergeAndLoadCovidData(textContent);
-            }
-            else
-            {
-                this.loadCovidData(textContent);
+                case ContentDialogResult.Primary:
+                    this.mergeAndLoadCovidData(textContent, false);
+                    break;
+                case ContentDialogResult.Secondary:
+                    this.loadCovidData(textContent);
+                    break;
+                default:
+                    this.mergeAndLoadCovidData(textContent, true);
+                    break;
             }
         }
 
-        private void mergeAndLoadCovidData(string textContent)
+        private void mergeAndLoadCovidData(string textContent, bool mergeAllStates)
         {
-            this.covidDataAssembler.MergeAndLoadCovidData(textContent);
+            this.covidDataAssembler.MergeAndLoadCovidData(textContent, mergeAllStates);
             var duplicates = this.covidDataAssembler.GetDuplicatesFromMergedData();
             var covidRecords = duplicates as CovidRecord[] ?? duplicates.ToArray();
             if (covidRecords.Any())
             {
                 this.keepOrReplaceDialog(covidRecords);
             }
+
             this.summaryTextBox.Text = this.covidDataAssembler.Summary;
         }
 
@@ -267,6 +301,7 @@ namespace Covid19Analysis.View
                     }
                 }
             }
+
             this.summaryTextBox.Text = this.covidDataAssembler.Summary;
         }
 
@@ -276,6 +311,7 @@ namespace Covid19Analysis.View
             {
                 return;
             }
+
             this.applyThresholds();
             this.applyBinSize();
             this.covidDataAssembler.UpdateSummary();
@@ -301,7 +337,7 @@ namespace Covid19Analysis.View
 
         private async void addCovidRecord()
         {
-            var covidRecordAdder = new CovidRecordAdder();
+            var covidRecordAdder = new CovidRecordAdder {statesComboBox = {ItemsSource = new[] {State}}};
             var result = await covidRecordAdder.ShowAsync();
             this.applyThresholds();
             this.applyBinSize();
@@ -314,7 +350,7 @@ namespace Covid19Analysis.View
             var isRecordDuplicate = this.covidDataAssembler.DoesCovidRecordExist(newRecord);
             if (isRecordDuplicate)
             {
-                var duplicates = new List<CovidRecord>() { newRecord };
+                var duplicates = new List<CovidRecord> {newRecord};
                 this.keepOrReplaceDialog(duplicates);
             }
             else
@@ -335,12 +371,28 @@ namespace Covid19Analysis.View
                 content = Assets.SaveSuccessfulContent;
             }
 
-            var isFileSavedDialog = new ContentDialog() {
+            var isFileSavedDialog = new ContentDialog {
                 Title = title,
                 Content = content,
                 CloseButtonText = Assets.OkPrompt
             };
             await isFileSavedDialog.ShowAsync();
+        }
+
+        private void noRecordsForThatState()
+        {
+            if (this.covidDataAssembler.AllCovidData == null)
+            {
+                return;
+            }
+
+            var stateCovidRecords = this.covidDataAssembler.AllCovidData.ToList()
+                                        .FindAll(record => record.State == State.ToString());
+
+            if (!stateCovidRecords.Any())
+            {
+                this.summaryTextBox.Text = Assets.NoCovidDataText;
+            }
         }
 
         #endregion

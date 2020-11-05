@@ -1,0 +1,27 @@
+﻿<ContentDialog
+    x:Class="Covid19Analysis.View.MergeOrReplaceDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Merge Files?"
+    Content="Would you like to merge files or replace the current loaded content?"
+    PrimaryButtonText="Merge Selected State"
+    SecondaryButtonText="Replace"
+    CloseButtonText="Merge All States">
+
+    <ContentDialog.PrimaryButtonStyle>
+        <Style TargetType="Button">
+            <Setter Property="ToolTipService.ToolTip"
+                    Value="Only the selected state's duplicate records will be handled. Other state's data will be replaced with the new data." />
+        </Style>
+    </ContentDialog.PrimaryButtonStyle>
+
+    <ContentDialog.CloseButtonStyle>
+        <Style TargetType="Button">
+            <Setter Property="ToolTipService.ToolTip"
+                    Value="All duplicate records will be handled regardless of state." />
+        </Style>
+    </ContentDialog.CloseButtonStyle>
+</ContentDialog>

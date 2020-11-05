@@ -10,31 +10,53 @@
     <Grid RenderTransformOrigin="0.512,0.602">
         <CommandBar>
             <CommandBar.Content>
-                <Grid/>
+                <Grid />
             </CommandBar.Content>
-            <AppBarButton x:Name="saveFile" Icon ="Save" Label="Save File" Click="saveFile_ClickAsync"/>
-            <AppBarButton x:Name="errorLog" Icon = "Page"  Label = "Read Errors" Click="errorLog_Click"/>
-            <AppBarButton Icon="Page" Label="Display Summary" Click="displaySummary_ClickAsync"/>
-            <AppBarButton Icon="OpenFile" Label="Load File" Click="loadFile_ClickAsync"/>
+            <AppBarButton x:Name="saveFile" Icon="Save" Label="Save File" Click="saveFile_ClickAsync" />
+            <AppBarButton x:Name="errorLog" Icon="Page" Label="Read Errors" Click="errorLog_Click" />
+            <AppBarButton Icon="Page" Label="Display Summary" Click="displaySummary_ClickAsync" />
+            <AppBarButton Icon="OpenFile" Label="Load File" Click="loadFile_ClickAsync" />
         </CommandBar>
 
-        <TextBlock HorizontalAlignment="Left" Margin="12,46,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="COVID-19 Analysis"/>
-        <TextBox x:Name="summaryTextBox" HorizontalAlignment="Left" Margin="12,67,0,0" VerticalAlignment="Top" TextWrapping="Wrap" Text="" Height="276" Width="600" IsReadOnly="True" AutomationProperties.Name="summaryTextBlock" FontFamily="Consolas"/>
+        <TextBlock HorizontalAlignment="Left" Margin="12,46,0,0" TextWrapping="Wrap" VerticalAlignment="Top"
+                   Text="COVID-19 Analysis" />
+        <TextBox x:Name="summaryTextBox" HorizontalAlignment="Left" Margin="12,67,0,0" VerticalAlignment="Top"
+                 TextWrapping="Wrap" Text="" Height="276" Width="600" IsReadOnly="True"
+                 AutomationProperties.Name="summaryTextBlock" FontFamily="Consolas" />
 
-        <TextBlock Text="Upper Positive Case Threshold:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="12,376,0,0" Height="18" Width="196"/>
-        <TextBox x:Name="upperPositiveCaseTextBox" Text="2500" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="229,369,0,0"  MaxLength="9" LostFocus="upperPositiveCaseTextBox_LostFocus" BeforeTextChanging="upperPositiveCaseTextBox_BeforeTextChanging" ToolTipService.ToolTip="Applies a threshold to positive values that are GREATER than it. Default is 2500"/>
-        <Button x:Name="clearData" Content="Clear Data" Margin="340,369,0,0" VerticalAlignment="Top" Click="clearData_Click"/>
+        <TextBlock Text="Upper Positive Case Threshold:" VerticalAlignment="Top" HorizontalAlignment="Left"
+                   Margin="12,376,0,0" Height="18" Width="196" />
+        <TextBox x:Name="upperPositiveCaseTextBox" Text="2500" VerticalAlignment="Top" HorizontalAlignment="Left"
+                 Margin="229,369,0,0" MaxLength="9" LostFocus="upperPositiveCaseTextBox_LostFocus"
+                 BeforeTextChanging="upperPositiveCaseTextBox_BeforeTextChanging"
+                 ToolTipService.ToolTip="Applies a threshold to positive values that are GREATER than it. Default is 2500" />
+        <Button x:Name="clearData" Content="Clear Data" Height="30" Margin="12,489,0,0" VerticalAlignment="Top"
+                Click="clearData_Click" />
 
-        <TextBlock Text="Lower Positive Case Threshold:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="12,431,0,0" Width="200" Height="18"/>
-        <TextBox x:Name="lowerPositiveCaseTextBox" Text="1000"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="229,424,0,0" MaxLength="9"  LostFocus="lowerPositiveCaseTextBox_LostFocus" BeforeTextChanging="lowerPositiveCaseTextBox_BeforeTextChanging" ToolTipService.ToolTip="Applies a threshold to positive values that are LESS than it. Default is 1000" />
-        <TextBox x:Name="binSizeTextBox" HorizontalAlignment="Left" Margin="414,424,0,0" Text="500" TextWrapping="Wrap" VerticalAlignment="Top" Width="71" MaxLength="9" LostFocus="binSizeTextBox_LostFocus" BeforeTextChanging="binSizeTextBox_BeforeTextChanging" ToolTipService.ToolTip="Applies a bin size to the histogram. Default is 500"/>
-        <TextBlock HorizontalAlignment="Left" Margin="340,431,0,0" Text="Bin Size:" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <Button x:Name="addCovidRecordButton" Margin="480,359,0,0" VerticalAlignment="Top" Click="addCovidRecordButton_Click">
+        <TextBlock Text="Lower Positive Case Threshold:" VerticalAlignment="Top" HorizontalAlignment="Left"
+                   Margin="12,431,0,0" Width="200" Height="18" />
+        <TextBox x:Name="lowerPositiveCaseTextBox" Text="1000" VerticalAlignment="Top" HorizontalAlignment="Left"
+                 Margin="229,424,0,0" MaxLength="9" LostFocus="lowerPositiveCaseTextBox_LostFocus"
+                 BeforeTextChanging="lowerPositiveCaseTextBox_BeforeTextChanging"
+                 ToolTipService.ToolTip="Applies a threshold to positive values that are LESS than it. Default is 1000" />
+        <TextBox x:Name="binSizeTextBox" HorizontalAlignment="Left" Margin="397,369,0,0" Text="500" TextWrapping="Wrap"
+                 VerticalAlignment="Top" Width="71" MaxLength="9" LostFocus="binSizeTextBox_LostFocus"
+                 BeforeTextChanging="binSizeTextBox_BeforeTextChanging"
+                 ToolTipService.ToolTip="Applies a bin size to the histogram. Default is 500" />
+        <TextBlock HorizontalAlignment="Left" Margin="318,375,0,0" Text="Bin Size:" TextWrapping="Wrap"
+                   VerticalAlignment="Top" />
+        <TextBlock HorizontalAlignment="Left" Margin="335,431,0,0" Text="State:" TextWrapping="Wrap"
+                   VerticalAlignment="Top" />
+        <Button x:Name="addCovidRecordButton" Margin="481,367,0,0" Click="addCovidRecordButton_Click"
+                VerticalAlignment="Top" Height="89">
             <StackPanel>
-                <SymbolIcon Symbol="Add"/>
-                <TextBlock Text="Add Covid Record"></TextBlock>
+                <SymbolIcon Symbol="Add" />
+                <TextBlock Text="Add Covid Record" />
             </StackPanel>
         </Button>
-        <Button x:Name="listViewToggle" Content="List View" Margin="525,424,0,0" VerticalAlignment="Top" Width="83" Click="listViewToggle_Click"/>
+        <Button x:Name="listViewToggle" Content="List View" Height="30" Margin="481,489,0,0" VerticalAlignment="Top"
+                Width="132" Click="listViewToggle_Click" />
+        <ComboBox x:Name="statesComboBox" SelectionChanged="statesComboBox_SelectionChanged" Margin="397,424,0,0"
+                  Width="71" />
     </Grid>
 </Page>

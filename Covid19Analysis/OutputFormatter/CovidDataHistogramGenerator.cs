@@ -5,7 +5,6 @@ using Covid19Analysis.Resources;
 
 namespace Covid19Analysis.OutputFormatter
 {
-
     /// <Summary>This class creates a histogram Summary of a passed in collection of numeric Covid data</Summary>
     public class CovidDataHistogramGenerator
     {
@@ -19,42 +18,19 @@ namespace Covid19Analysis.OutputFormatter
         /// <value>The numeric covid data as a list of numeric values.</value>
         public List<int> CollectionOfNumericValues { get; }
 
-        #endregion
-
-        #region Inner Classes
-
-        /// <summary>This Inner class keeps track of the range values for individual ranges in the histogram</summary>
-        private class Range : IComparable<Range>
-        {
-            public int Min { get; }
-            public int Max { get; }
-
-            public Range(int min, int max)
-            {
-                this.Min = min;
-                this.Max = max;
-            }
-
-            public int CompareTo(Range other)
-            {
-                return other == null ? 1 : Comparer<int>.Default.Compare(this.Min, other.Min);
-            }
-        }
+        /// <summary>Gets the highest value in the frequency histogram table.</summary>
+        /// <value>The highest value in the table.</value>
+        public int HighestValueInHistogram { get; }
 
         #endregion
 
         #region Constructors
-        /// <summary>Gets the highest value in the frequency histogram table.</summary>
-        /// <value>The highest value in the table.</value>
-        public int HighestValueInHistogram { get; }
-        #endregion
-
-        #region Public Methods
 
         /// <Summary>
-        /// Initializes a new instance of the <a onclick="return false;" href="CovidDataHistogram" originaltag="see">CovidDataHistogram</a> class.
-        /// <code>Precondition: collection != null</code>
-        /// <code>Postcondition: CollectionOfCovidRecords == collection AND BinSize == binSize</code>
+        ///     Initializes a new instance of the
+        ///     <a onclick="return false;" href="CovidDataHistogram" originaltag="see">CovidDataHistogram</a> class.
+        ///     <code>Precondition: collection != null</code>
+        ///     <code>Postcondition: CollectionOfCovidRecords == collection AND BinSize == binSize</code>
         /// </Summary>
         /// <param name="collection">The collection.</param>
         /// <param name="binSize">The size of the bin</param>
@@ -65,9 +41,13 @@ namespace Covid19Analysis.OutputFormatter
             this.HighestValueInHistogram = this.convertHighestValueToMultipleOfRangeWidth();
         }
 
+        #endregion
+
+        #region Methods
+
         /// <Summary>Generates the histogram.</Summary>
         /// <returns>
-        ///   <para>the histogram</para>
+        ///     <para>the histogram</para>
         /// </returns>
         public string GenerateHistogram()
         {
@@ -75,9 +55,45 @@ namespace Covid19Analysis.OutputFormatter
             var histogram = this.createAlignedHistogram(collectionOfRanges);
             return $"{Environment.NewLine}{histogram}";
         }
+
+        #region Inner Classes
+
+        /// <summary>This Inner class keeps track of the range values for individual ranges in the histogram</summary>
+        private class Range : IComparable<Range>
+        {
+            #region Properties
+
+            public int Min { get; }
+            public int Max { get; }
+
+            #endregion
+
+            #region Constructors
+
+            public Range(int min, int max)
+            {
+                this.Min = min;
+                this.Max = max;
+            }
+
+            #endregion
+
+            #region Methods
+
+            public int CompareTo(Range other)
+            {
+                return other == null ? 1 : Comparer<int>.Default.Compare(this.Min, other.Min);
+            }
+
+            #endregion
+        }
+
+        #endregion
+
         #endregion
 
         #region Private Helpers
+
         private int convertHighestValueToMultipleOfRangeWidth()
         {
             this.CollectionOfNumericValues.Sort();
@@ -86,6 +102,7 @@ namespace Covid19Analysis.OutputFormatter
             {
                 highestCombinedTest++;
             }
+
             return highestCombinedTest;
         }
 
@@ -93,7 +110,7 @@ namespace Covid19Analysis.OutputFormatter
         {
             var maxRange = this.HighestValueInHistogram;
             var minRange = maxRange - (this.BinSize - 1);
-            var collectionOfRanges = new List<Range>() { new Range(minRange, maxRange) };
+            var collectionOfRanges = new List<Range> {new Range(minRange, maxRange)};
             while (minRange > 0 && maxRange > this.BinSize)
             {
                 if (minRange == this.BinSize + 1)
@@ -104,10 +121,12 @@ namespace Covid19Analysis.OutputFormatter
                 {
                     minRange -= this.BinSize;
                 }
+
                 maxRange -= this.BinSize;
                 var range = new Range(minRange, maxRange);
                 collectionOfRanges.Add(range);
             }
+
             collectionOfRanges.Sort();
             return collectionOfRanges;
         }
@@ -131,8 +150,8 @@ namespace Covid19Analysis.OutputFormatter
             var min = Format.FormatIntegerAsFormattedString(range.Min);
             var max = Format.FormatIntegerAsFormattedString(range.Max);
 
-            var histogramLine = $"{min, 5} - {max, 5}: {countOfValuesInRange, 2}{Environment.NewLine}";
-            
+            var histogramLine = $"{min,5} - {max,5}: {countOfValuesInRange,2}{Environment.NewLine}";
+
             return histogramLine;
         }
 
@@ -140,7 +159,7 @@ namespace Covid19Analysis.OutputFormatter
         {
             return this.CollectionOfNumericValues.Count(testCase => testCase >= range.Min && testCase <= range.Max);
         }
-        #endregion
 
+        #endregion
     }
 }

@@ -8,8 +8,18 @@ namespace Covid19Analysis.OutputFormatter
     /// <summary>This class provides functions for all Covid data Summaries</summary>
     public class CovidDataSummary
     {
+        #region Data members
+
+        #region Private Members
+
+        private readonly CovidDataStatistics covidStatistics;
+
+        #endregion
+
+        #endregion
 
         #region Properties
+
         /// <Summary>Gets the covid records.</Summary>
         /// <value>The covid records.</value>
         public CovidDataCollection CovidRecords { get; }
@@ -17,19 +27,17 @@ namespace Covid19Analysis.OutputFormatter
         /// <summary>Gets the state filter of the covid data collection.</summary>
         /// <value>The state filter.</value>
         public string StateFilter { get; }
-        #endregion
 
-        #region Private Members
-        private readonly CovidDataStatistics covidStatistics;
         #endregion
 
         #region Constructors
 
         /// <Summary>
-        /// Initializes a new instance of the <a onclick="return false;" href="CovidDataStateSummary" originaltag="see">CovidDataStateSummary</a> class.
-        /// <para>If the stateFilter is empty, then the collection will not be filtered</para>
-        /// <code>Precondition: collection != null</code>
-        /// <code>Postcondition: CovidRecords == collection AND StateFilter == stateFilter </code>
+        ///     Initializes a new instance of the
+        ///     <a onclick="return false;" href="CovidDataStateSummary" originaltag="see">CovidDataStateSummary</a> class.
+        ///     <para>If the stateFilter is empty, then the collection will not be filtered</para>
+        ///     <code>Precondition: collection != null</code>
+        ///     <code>Postcondition: CovidRecords == collection AND StateFilter == stateFilter </code>
         /// </Summary>
         /// <param name="collection">The collection.</param>
         /// <param name="stateFilter">The state filter for the collection</param>
@@ -45,7 +53,7 @@ namespace Covid19Analysis.OutputFormatter
 
         #endregion
 
-        #region Public Methods
+        #region Methods
 
         /// <Summary>Gets the first day of positive test.</Summary>
         /// <returns>The formatted string of the first day of the positive test</returns>
@@ -56,9 +64,9 @@ namespace Covid19Analysis.OutputFormatter
             {
                 var firstDayOfPositiveTest = this.covidStatistics.FindDayOfFirstPositiveTest();
 
-                 dayOfFirstPositiveTest = $"{Assets.FirstDayOfPositiveTestLabel} " +
-                                             $"{firstDayOfPositiveTest.ToString(Assets.DateStringFormatted)}" +
-                                             $"{Environment.NewLine}";
+                dayOfFirstPositiveTest = $"{Assets.FirstDayOfPositiveTestLabel} " +
+                                         $"{firstDayOfPositiveTest.ToString(Assets.DateStringFormatted)}" +
+                                         $"{Environment.NewLine}";
             }
             catch (Exception)
             {
@@ -68,7 +76,23 @@ namespace Covid19Analysis.OutputFormatter
             return dayOfFirstPositiveTest;
         }
 
+        #region Private Helpers
+
+        private DateTime getDateOfFirstPositiveTest()
+        {
+            var firstDateOfPositiveTestRecord = (from record in this.CovidRecords
+                                                 orderby record.Date
+                                                 where record.PositiveTests > 0
+                                                 select record).First();
+            return firstDateOfPositiveTestRecord.Date;
+        }
+
+        #endregion
+
+        #endregion
+
         #region Highest Metrics
+
         /// <Summary>Gets the highest positive with date.</Summary>
         /// <returns>A formatted string with the highest positive test and date</returns>
         public string GetHighestPositiveWithDate()
@@ -99,7 +123,8 @@ namespace Covid19Analysis.OutputFormatter
             var highestTotalTestsFormatted = Format.FormatIntegerAsFormattedString(highestTotalTests.TotalTests);
             var date = highestTotalTests.Date.ToString(Assets.DateStringFormatted);
 
-            return CovidDataLines.GetCovidLineForValueAndDate(Assets.HighestTotalTestsLabel, highestTotalTestsFormatted, date);
+            return CovidDataLines.GetCovidLineForValueAndDate(Assets.HighestTotalTestsLabel, highestTotalTestsFormatted,
+                date);
         }
 
         /// <Summary>Gets the highest deaths with date.</Summary>
@@ -117,12 +142,13 @@ namespace Covid19Analysis.OutputFormatter
         public string GetHighestHospitalizationsWithDate()
         {
             var highestHospitalizationsRecord = this.covidStatistics.FindRecordWithHighestHospitalizations();
-            var highestHospitalizations = Format.FormatIntegerAsFormattedString(highestHospitalizationsRecord.Hospitalizations);
+            var highestHospitalizations =
+                Format.FormatIntegerAsFormattedString(highestHospitalizationsRecord.Hospitalizations);
             var date = highestHospitalizationsRecord.Date.ToString(Assets.DateStringFormatted);
 
-            return CovidDataLines.GetCovidLineForValueAndDate(Assets.HighestHospitalizationsLabel, highestHospitalizations, date);
+            return CovidDataLines.GetCovidLineForValueAndDate(Assets.HighestHospitalizationsLabel,
+                highestHospitalizations, date);
         }
-
 
         /// <summary>Gets the highest current hospitalizations with date.</summary>
         /// <returns>A formatted string with the highest current hospitalizations</returns>
@@ -155,10 +181,10 @@ namespace Covid19Analysis.OutputFormatter
                 highestPercentage = Assets.NoPositiveData;
             }
 
-
-            return CovidDataLines.GetCovidLineForValueAndDate(Assets.HighestPercentageOfPositiveCasesLabel, highestPercentage, date);
-            
+            return CovidDataLines.GetCovidLineForValueAndDate(Assets.HighestPercentageOfPositiveCasesLabel,
+                highestPercentage, date);
         }
+
         #endregion
 
         #region Average Metrics
@@ -202,6 +228,7 @@ namespace Covid19Analysis.OutputFormatter
         #endregion
 
         #region Threshold Metrics
+
         /// <Summary>Gets the Days greater than a threshold.</Summary>
         /// <returns>A formatted string with the days greater than a threshold.</returns>
         public string GetTheDaysFromTheFirstPositiveTestGreaterThanThreshold(int threshold)
@@ -220,7 +247,9 @@ namespace Covid19Analysis.OutputFormatter
             {
                 thresholdFormatted = Assets.NoPositiveData;
             }
-            return CovidDataLines.GetCovidLineForValueWithThreshold(Assets.DaysGreaterThanValueLabel, days, thresholdFormatted);
+
+            return CovidDataLines.GetCovidLineForValueWithThreshold(Assets.DaysGreaterThanValueLabel, days,
+                thresholdFormatted);
         }
 
         /// <Summary>Gets the Days less than a threshold.</Summary>
@@ -241,9 +270,10 @@ namespace Covid19Analysis.OutputFormatter
             {
                 thresholdFormatted = Assets.NoPositiveData;
             }
-            return CovidDataLines.GetCovidLineForValueWithThreshold(Assets.DaysLessThanValueLabel, days, thresholdFormatted);
-        }
 
+            return CovidDataLines.GetCovidLineForValueWithThreshold(Assets.DaysLessThanValueLabel, days,
+                thresholdFormatted);
+        }
 
         #endregion
 
@@ -268,6 +298,7 @@ namespace Covid19Analysis.OutputFormatter
             {
                 histogram += Assets.NoPositiveData;
             }
+
             return histogram;
         }
 
@@ -278,20 +309,7 @@ namespace Covid19Analysis.OutputFormatter
             var monthlySummaryBuilder = new CovidDataMonthlySummary(this.CovidRecords);
             return monthlySummaryBuilder.GenerateMonthlySummary();
         }
-        #endregion
 
         #endregion
-
-        #region Private Helpers
-        private DateTime getDateOfFirstPositiveTest()
-        {
-            var firstDateOfPositiveTestRecord = (from record in this.CovidRecords
-                                                 orderby record.Date
-                                                 where record.PositiveTests > 0
-                                                 select record).First();
-            return firstDateOfPositiveTestRecord.Date;
-        }
-        #endregion
-
     }
 }

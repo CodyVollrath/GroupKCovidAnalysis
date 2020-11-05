@@ -6,10 +6,22 @@ using Covid19Analysis.Resources;
 
 namespace Covid19Analysis.DataTier
 {
-
-    /// <Summary>This class is responsible for taking string data and formatting the values to be representative of a table in memory.</Summary>
+    /// <Summary>
+    ///     This class is responsible for taking string data and formatting the values to be representative of a table in
+    ///     memory.
+    /// </Summary>
     public class CovidCsvParser
     {
+        #region Data members
+
+        #region Private Fields
+
+        private readonly CovidDataCollection covidDataCollection;
+
+        #endregion
+
+        #endregion
+
         #region Properties
 
         /// <Summary>Gets the content of the text.</Summary>
@@ -22,15 +34,12 @@ namespace Covid19Analysis.DataTier
 
         #endregion
 
-        #region Private Fields
-        private readonly CovidDataCollection covidDataCollection;
-        #endregion
-
         #region Constructors
 
-        /// <Summary>Initializes a new instance of the <see cref="CovidCsvParser" /> class.
-        /// <code>Precondition: textContent != null</code>
-        /// <code>Postcondition: TextContent == textContent</code>
+        /// <Summary>
+        ///     Initializes a new instance of the <see cref="CovidCsvParser" /> class.
+        ///     <code>Precondition: textContent != null</code>
+        ///     <code>Postcondition: TextContent == textContent</code>
         /// </Summary>
         /// <param name="textContent">Content of the text.</param>
         /// <exception cref="ArgumentNullException">textContent</exception>
@@ -40,14 +49,16 @@ namespace Covid19Analysis.DataTier
             this.covidDataCollection = new CovidDataCollection();
             this.CovidErrorLogger = new CovidDataErrorLogger();
         }
+
         #endregion
 
-        #region Public Methods
+        #region Methods
 
         /// <Summary>
-        /// Generates the covid data collection by the state filter
-        /// if one was specified; otherwise it generates the entire
-        /// collection represented from the content passed.</Summary>
+        ///     Generates the covid data collection by the state filter
+        ///     if one was specified; otherwise it generates the entire
+        ///     collection represented from the content passed.
+        /// </Summary>
         /// <returns>The collection of Covid Records</returns>
         public CovidDataCollection GenerateCovidDataCollection()
         {
@@ -89,11 +100,12 @@ namespace Covid19Analysis.DataTier
                 return null;
             }
 
-            var covidRecord = new CovidRecord(Format.FormatAsDateTime(fields[Assets.ColumnNumberForDate]), fields[Assets.ColumnNumberForState])
-            {
+            var covidRecord = new CovidRecord(Format.FormatAsDateTime(fields[Assets.ColumnNumberForDate]),
+                fields[Assets.ColumnNumberForState]) {
                 PositiveTests = Format.FormatStringToInteger(fields[Assets.ColumnNumberForPositives]),
                 NegativeTests = Format.FormatStringToInteger(fields[Assets.ColumnNumberForNegatives]),
-                HospitalizedCurrently = Format.FormatStringToInteger(fields[Assets.ColumnNumberForHospitalizedCurrently]),
+                HospitalizedCurrently =
+                    Format.FormatStringToInteger(fields[Assets.ColumnNumberForHospitalizedCurrently]),
                 Hospitalizations = Format.FormatStringToInteger(fields[Assets.ColumnNumberForHospitalizations]),
                 Deaths = Format.FormatStringToInteger(fields[Assets.ColumnNumberForDeaths])
             };
@@ -106,6 +118,7 @@ namespace Covid19Analysis.DataTier
             {
                 return false;
             }
+
             var isDateValid = FormatValidator.IsDateStringValid(fields[Assets.ColumnNumberForDate]);
             var isStateValid = FormatValidator.IsStateLabelValid(fields[Assets.ColumnNumberForState]);
             var areNumericFieldsValid = true;
@@ -117,6 +130,7 @@ namespace Covid19Analysis.DataTier
                     break;
                 }
             }
+
             return isDateValid && isStateValid && areNumericFieldsValid;
         }
 
@@ -128,6 +142,7 @@ namespace Covid19Analysis.DataTier
             {
                 covidData.RemoveAt(lastItemIndex);
             }
+
             covidData.RemoveAt(0);
             return covidData.ToArray();
         }
@@ -136,7 +151,7 @@ namespace Covid19Analysis.DataTier
         {
             return this.covidDataCollection.Contains(record);
         }
-        #endregion
 
+        #endregion
     }
 }

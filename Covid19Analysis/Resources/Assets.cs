@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 
 namespace Covid19Analysis.Resources
 {
@@ -7,14 +6,14 @@ namespace Covid19Analysis.Resources
     public class Assets
     {
         #region Misc
-        public const string CsvDelimiter = ",";
 
+        public const string CsvDelimiter = ",";
 
         /// <summary>The date string unformatted - M/d/yyyy</summary>
         public const string DateStringUnformatted = "M/d/yyyy";
 
         /// <Summary>
-        /// The date string formatted - MM/dd/yyyy
+        ///     The date string formatted - MM/dd/yyyy
         /// </Summary>
         public const string DateStringFormatted = "MM/dd/yyyy";
 
@@ -23,23 +22,27 @@ namespace Covid19Analysis.Resources
 
         public const string NoCovidDataText = "No CovidData in the dataset";
 
-        public static readonly string NoPositiveData = $"No Positive Tests are present in the data set {Environment.NewLine}";
+        public static readonly string NoPositiveData =
+            $"No Positive Tests are present in the data set {Environment.NewLine}";
 
         #endregion
 
         #region Prompt Labels
+
         public const string StateCovidDataHeadingLabel = "Statistics for Covid-19" +
-                                                           "\n-------------------------------------------------------------\n";
+                                                         "\n-------------------------------------------------------------\n";
 
         public const string HistogramLabel = "Positive Case Histogram: ";
         public const string FirstDayOfPositiveTestLabel = "First positive case " + DateOfOccurrenceLabel;
-        
+
         public const string AveragePositiveTestsLabel = "Average # positive tests:";
         public const string AverageTotalTestsLabel = "Average # total tests:";
-        
+
         public const string OverallPositivityRateLabel = "The Overall Positivity Rate:";
 
-        public const string DaysGreaterThanValueLabel = "Days Since First Positive Test for Cases That are Greater Than";
+        public const string DaysGreaterThanValueLabel =
+            "Days Since First Positive Test for Cases That are Greater Than";
+
         public const string DaysLessThanValueLabel = "Days Since First Positive Test for Cases That are Less Than";
         public const string DateOfOccurrenceLabel = "occurred on";
         public const string DayOfOccurrenceMonthlyLabel = "occurred on the";
@@ -55,15 +58,14 @@ namespace Covid19Analysis.Resources
         public const string LowestPositiveTestsLabel = "Lowest  # positive tests:";
         public const string LowestTotalTestsLabel = "Lowest  # total tests:";
         public const string LowestCurrentHospitalizationsLabel = "Lowest # Current Hospitalizations:";
-        public static readonly string[] HeadersForData = new string[] {"date", "state", "positiveIncrease", "negativeIncrease", "deathIncrease", "hospitalizedIncrease" };
 
-        #endregion
+        public static readonly string[] HeadersForData =
+            {"date", "state", "positiveIncrease", "negativeIncrease", "deathIncrease", "hospitalizedIncrease"};
 
-        #region Filter Specifiers
-        public const string GeorgiaFilterValue = "GA";
         #endregion
 
         #region Column Numbers
+
         public const int ColumnNumberForDate = 0;
         public const int ColumnNumberForState = 1;
         public const int ColumnNumberForPositives = 2;
@@ -71,10 +73,11 @@ namespace Covid19Analysis.Resources
         public const int ColumnNumberForHospitalizedCurrently = 4;
         public const int ColumnNumberForHospitalizations = 5;
         public const int ColumnNumberForDeaths = 6;
-        
+
         #endregion
 
         #region Numeric Constants
+
         public const int DefaultGreaterThanThreshHold = 2500;
         public const int DefaultLessThanThreshold = 1000;
         public const int NumberOfFields = 7;
@@ -84,22 +87,20 @@ namespace Covid19Analysis.Resources
         public const int DefaultYear = 2020;
         public const int DefaultDay = 1;
         public const int NumberOfMonthsInOneYear = 12;
+
         #endregion
 
         #region Dialog Box Prompts
-        public const string MergeFilesContent = "Would you like to merge files or replace the current loaded content?";
-        public const string MergeFilesTitle = "Merge Files?";
-        public const string MergeFilesPrimaryButtonText = "Merge";
-        public const string MergeFilesSecondaryButtonText = "Replace";
 
         public const string SaveFailedTitle = "File Not Saved!";
-        public const string SaveFailedContent = "The file that was attempted to be saved to could not be opened or failed to be created.";
+
+        public const string SaveFailedContent =
+            "The file that was attempted to be saved to could not be opened or failed to be created.";
 
         public const string SaveSuccessfulTitle = "Success!";
         public const string SaveSuccessfulContent = "File has been saved";
         public const string OkPrompt = "Ok";
 
         #endregion
-
     }
 }
