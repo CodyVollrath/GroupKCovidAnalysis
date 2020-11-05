@@ -17,7 +17,7 @@ namespace Covid19Analysis.View
     /// </summary>
     public sealed partial class CovidListViewPage : Page
     {
-        private CovidAnalysisViewModel covidAnalysisViewModel;
+        private readonly CovidAnalysisViewModel covidAnalysisViewModel;
         public CovidListViewPage()
         {
             this.InitializeComponent();
