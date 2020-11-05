@@ -240,30 +240,38 @@ namespace Covid19Analysis.OutputFormatter
 
         private void buildCovidSummary()
         {
-            const string genericHeader = Assets.StateCovidDataHeadingLabel;
-            var stateSummary = new CovidDataSummary(this.FilteredCovidDataCollection, this.StateFilter);
-            var isStateNotNull = this.StateFilter != null;
-            var stateSpecificHeader = $"{this.StateFilter} {Assets.StateCovidDataHeadingLabel}";
-            
-            this.Summary = string.Empty;
-            this.Summary += isStateNotNull ? stateSpecificHeader : genericHeader;
+            try
+            {
+                const string genericHeader = Assets.StateCovidDataHeadingLabel;
+                var stateSummary = new CovidDataSummary(this.FilteredCovidDataCollection, this.StateFilter);
+                var isStateNotNull = this.StateFilter != null;
+                var stateSpecificHeader = $"{this.StateFilter} {Assets.StateCovidDataHeadingLabel}";
 
-            this.Summary += stateSummary.GetFirstDayOfPositiveTest();
-            this.Summary += stateSummary.GetHighestPositiveWithDate();
-            this.Summary += stateSummary.GetHighestNegativeWithDate();
+                this.Summary = string.Empty;
+                this.Summary += isStateNotNull ? stateSpecificHeader : genericHeader;
 
-            this.Summary += stateSummary.GetHighestTotalTestsWithDate();
-            this.Summary += stateSummary.GetHighestDeathsWithDate();
-            this.Summary += stateSummary.GetHighestHospitalizationsWithDate();
-            this.Summary += stateSummary.GetHighestCurrentHospitalizationsWithDate();
+                this.Summary += stateSummary.GetFirstDayOfPositiveTest();
+                this.Summary += stateSummary.GetHighestPositiveWithDate();
+                this.Summary += stateSummary.GetHighestNegativeWithDate();
 
-            this.Summary += stateSummary.GetHighestPercentageOfTestsPerDayWithDate();
-            this.Summary += stateSummary.GetAveragePositiveTestsSinceFirstPositiveTest();
-            this.Summary += stateSummary.GetOverallPositivityRateSinceFirstPositiveTest();
+                this.Summary += stateSummary.GetHighestTotalTestsWithDate();
+                this.Summary += stateSummary.GetHighestDeathsWithDate();
+                this.Summary += stateSummary.GetHighestHospitalizationsWithDate();
+                this.Summary += stateSummary.GetHighestCurrentHospitalizationsWithDate();
 
-            this.Summary += this.getPositiveThresholds(stateSummary);
-            this.Summary += this.getHistogram(stateSummary);
-            this.Summary += stateSummary.GetMonthlySummary();
+                this.Summary += stateSummary.GetHighestPercentageOfTestsPerDayWithDate();
+                this.Summary += stateSummary.GetAveragePositiveTestsSinceFirstPositiveTest();
+                this.Summary += stateSummary.GetOverallPositivityRateSinceFirstPositiveTest();
+
+                this.Summary += this.getPositiveThresholds(stateSummary);
+                this.Summary += this.getHistogram(stateSummary);
+                this.Summary += stateSummary.GetMonthlySummary();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                this.Reset();
+            }
         }
 
         private string getPositiveThresholds(CovidDataSummary stateSummary)

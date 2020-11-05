@@ -97,7 +97,16 @@ namespace Covid19Analysis.View
 
         private void applyFilteredCollectionToViewModel()
         {
-            this.covidViewModel.CovidData = this.covidDataAssembler.FilteredCovidDataCollection.ToObservableCollection();
+            try
+            {
+                this.covidViewModel.CovidData = this.covidDataAssembler.FilteredCovidDataCollection.ToObservableCollection();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                this.covidViewModel.CovidData = null;
+            }
+
         }
 
         private void errorLog_Click(object sender, RoutedEventArgs e)
@@ -262,29 +271,32 @@ namespace Covid19Analysis.View
 
         private async void keepOrReplaceDialog(IEnumerable<CovidRecord> duplicates)
         {
+
             var duplicateDialogBox = new DuplicateDialogBox();
-            foreach (var record in duplicates)
-            {
-                duplicateDialogBox.SetDuplicateRecord(record);
-                if (duplicateDialogBox.DoAll)
+                foreach (var record in duplicates)
                 {
-                    if (duplicateDialogBox.Replace)
+                    duplicateDialogBox.SetDuplicateRecord(record);
+                    if (duplicateDialogBox.DoAll)
                     {
-                        this.covidDataAssembler.ReplaceRecord(record);
+                        if (duplicateDialogBox.Replace)
+                        {
+                            this.covidDataAssembler.ReplaceRecord(record);
+                        }
+                    }
+                    else
+                    {
+                        var results = await duplicateDialogBox.ShowAsync();
+                        if (results == ContentDialogResult.Primary)
+                        {
+                            this.covidDataAssembler.ReplaceRecord(record);
+                        }
                     }
                 }
-                else
-                {
-                    var results = await duplicateDialogBox.ShowAsync();
-                    if (results == ContentDialogResult.Primary)
-                    {
-                        this.covidDataAssembler.ReplaceRecord(record);
-                    }
-                }
+
+                this.applyFilteredCollectionToViewModel();
+                this.summaryTextBox.Text = this.covidDataAssembler.Summary;
+
             }
-            this.applyFilteredCollectionToViewModel();
-            this.summaryTextBox.Text = this.covidDataAssembler.Summary;
-        }
 
         private void updateCovidData()
         {
