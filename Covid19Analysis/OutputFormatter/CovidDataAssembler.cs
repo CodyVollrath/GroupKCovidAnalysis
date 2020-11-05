@@ -51,6 +51,7 @@ namespace Covid19Analysis.OutputFormatter
         /// <value>The filtered covid data collection.</value>
         public CovidDataCollection FilteredCovidDataCollection { get; private set; }
         #endregion
+
         #region Private Members
 
         private CovidDataErrorLogger covidErrorLogger;
