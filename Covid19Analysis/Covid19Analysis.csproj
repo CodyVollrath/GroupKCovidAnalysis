@@ -131,6 +131,7 @@
     <Compile Include="OutputFormatter\CovidDataMonthlySummary.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Resources\CovidDataLines.cs" />
+    <Compile Include="Utility\RelayCommand.cs" />
     <Compile Include="ViewModel\CovidAnalysisViewModel.cs" />
     <Compile Include="View\CovidListViewPage.xaml.cs">
       <DependentUpon>CovidListViewPage.xaml</DependentUpon>

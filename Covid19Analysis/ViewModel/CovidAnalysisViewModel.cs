@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using Covid19Analysis.Annotations;
-using Covid19Analysis.DataTier;
-using Covid19Analysis.Extension;
 using Covid19Analysis.Model;
+using Covid19Analysis.Utility;
 
 namespace Covid19Analysis.ViewModel
 {
     public class CovidAnalysisViewModel : INotifyPropertyChanged
     {
-        private CovidDataCollection covidDataCollection;
+
+        public RelayCommand RemoveCommand { get; set; }
 
         private ObservableCollection<CovidRecord> covidData;
 
@@ -21,7 +19,6 @@ namespace Covid19Analysis.ViewModel
             get => this.covidData;
             set
             {
-                value = value ?? throw new ArgumentNullException(nameof(value));
                 this.covidData = value;
                 this.OnPropertyChanged();
             }
@@ -34,22 +31,30 @@ namespace Covid19Analysis.ViewModel
             get => this.selectedCovidRecord;
             set
             {
-                value = value ?? throw new ArgumentNullException(nameof(value));
                 this.selectedCovidRecord = value;
                 this.OnPropertyChanged();
+                this.RemoveCommand.OnCanExecuteChanged();
             }
         }
 
         public CovidAnalysisViewModel()
         {
-            this.covidDataCollection = new CovidDataCollection();
+            this.loadCommands();
         }
 
-        public void LoadCovidCsvListData(string textContent)
+        private void loadCommands()
         {
-            var covidCsvParser = new CovidCsvParser(textContent);
-            this.covidDataCollection = covidCsvParser.GenerateCovidDataCollection();
-            this.CovidData = this.covidDataCollection.ToObservableCollection();
+            this.RemoveCommand = new RelayCommand(this.deleteCovidRecord, this.canDeleteCovidRecord);
+        }
+
+        private void deleteCovidRecord(object obj)
+        {
+            this.CovidData.Remove(this.selectedCovidRecord);
+        }
+
+        private bool canDeleteCovidRecord(object obj)
+        {
+            return this.SelectedCovidRecord != null;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

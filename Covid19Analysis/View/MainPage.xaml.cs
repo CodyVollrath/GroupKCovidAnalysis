@@ -7,6 +7,8 @@ using Windows.Storage.Pickers;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
+using Covid19Analysis.Extension;
 using Covid19Analysis.Model;
 using Covid19Analysis.OutputFormatter;
 using Covid19Analysis.Resources;
@@ -41,6 +43,8 @@ namespace Covid19Analysis.View
 
         private readonly ContentDialog mergeOrReplaceDialog;
 
+        private readonly CovidAnalysisViewModel covidViewModel;
+
         #endregion
 
         #region Constructors
@@ -54,6 +58,7 @@ namespace Covid19Analysis.View
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(ApplicationWidth, ApplicationHeight));
             this.covidDataAssembler = new CovidDataAssembler();
+            this.covidViewModel = new CovidAnalysisViewModel();
             this.mergeOrReplaceDialog = new ContentDialog
             {
                 Title = Assets.MergeFilesTitle,
@@ -87,6 +92,12 @@ namespace Covid19Analysis.View
             }
 
             this.displayCovidData(fileContent);
+            this.applyFilteredCollectionToViewModel();
+        }
+
+        private void applyFilteredCollectionToViewModel()
+        {
+            this.covidViewModel.CovidData = this.covidDataAssembler.FilteredCovidDataCollection.ToObservableCollection();
         }
 
         private void errorLog_Click(object sender, RoutedEventArgs e)
@@ -132,6 +143,7 @@ namespace Covid19Analysis.View
         private void clearData_Click(object sender, RoutedEventArgs e)
         {
             this.covidDataAssembler.Reset();
+            this.covidViewModel.CovidData = null;
             this.summaryTextBox.Text = string.Empty;
         }
 
@@ -190,7 +202,7 @@ namespace Covid19Analysis.View
         
         private void listViewToggle_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(CovidListViewPage));
+            this.Frame.Navigate(typeof(CovidListViewPage), this.covidViewModel);
         }
 
         #endregion
@@ -232,6 +244,7 @@ namespace Covid19Analysis.View
             {
                 this.loadCovidData(textContent);
             }
+            this.applyFilteredCollectionToViewModel();
         }
 
         private void mergeAndLoadCovidData(string textContent)
@@ -243,6 +256,7 @@ namespace Covid19Analysis.View
             {
                 this.keepOrReplaceDialog(covidRecords);
             }
+            this.applyFilteredCollectionToViewModel();
             this.summaryTextBox.Text = this.covidDataAssembler.Summary;
         }
 
@@ -268,6 +282,7 @@ namespace Covid19Analysis.View
                     }
                 }
             }
+            this.applyFilteredCollectionToViewModel();
             this.summaryTextBox.Text = this.covidDataAssembler.Summary;
         }
 
@@ -321,6 +336,7 @@ namespace Covid19Analysis.View
             else
             {
                 this.covidDataAssembler.AddCovidRecordToCollection(newRecord);
+                this.applyFilteredCollectionToViewModel();
             }
 
             this.summaryTextBox.Text = this.covidDataAssembler.Summary;
@@ -342,6 +358,23 @@ namespace Covid19Analysis.View
                 CloseButtonText = Assets.OkPrompt
             };
             await isFileSavedDialog.ShowAsync();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            var parameter = e.Parameter;
+            
+            if (parameter != null && !parameter.ToString().Equals(string.Empty))
+            {
+                var covidViewModel = (CovidAnalysisViewModel)parameter;
+                this.covidDataAssembler.UpdateCollectionFromViewModel(covidViewModel);
+                this.summaryTextBox.Text = this.covidDataAssembler.Summary;
+            }
+            else
+            {
+                this.summaryTextBox.Text = string.Empty;
+            }
         }
 
         #endregion

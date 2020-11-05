@@ -4,6 +4,7 @@ using System.Linq;
 using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 using Covid19Analysis.Resources;
 using Covid19Analysis.ViewModel;
 
@@ -16,7 +17,7 @@ namespace Covid19Analysis.View
     /// </summary>
     public sealed partial class CovidListViewPage : Page
     {
-        private readonly CovidAnalysisViewModel covidAnalysisViewModel;
+        private CovidAnalysisViewModel covidAnalysisViewModel;
         public CovidListViewPage()
         {
             this.InitializeComponent();
@@ -26,37 +27,18 @@ namespace Covid19Analysis.View
 
         private void backButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.GoBack();
+            this.Frame.Navigate(typeof(MainPage), this.covidAnalysisViewModel);
         }
 
-        private async void loadFile_ClickAsync(object sender, RoutedEventArgs e)
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            string fileContent;
-
-            var openPicker = new FileOpenPicker { ViewMode = PickerViewMode.Thumbnail, SuggestedStartLocation = PickerLocationId.DocumentsLibrary };
-            openPicker.FileTypeFilter.Add(".csv");
-            openPicker.FileTypeFilter.Add(".xml");
-            openPicker.FileTypeFilter.Add(".txt");
-            var file = await openPicker.PickSingleFileAsync();
-            if (file == null) return;
-
-            var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
-            using (var fileReader = new StreamReader(stream.AsStream()))
+            base.OnNavigatedTo(e);
+            var parameter = e.Parameter;
+            if (parameter != null && !parameter.ToString().Equals(string.Empty))
             {
-                fileContent = await fileReader.ReadToEndAsync();
+                var covidViewModel = (CovidAnalysisViewModel) parameter;
+                this.covidAnalysisViewModel.CovidData = covidViewModel.CovidData;
             }
-
-            this.covidAnalysisViewModel.LoadCovidCsvListData(fileContent);
-        }
-
-        private void deleteCovidRecord_Click(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void editCovidRecord_Click(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
         private void positiveCasesTextBox_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)

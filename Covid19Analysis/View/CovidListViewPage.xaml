@@ -22,7 +22,6 @@
                 <Grid/>
             </CommandBar.Content>
             <AppBarButton x:Name="backButton" Icon ="back" Label="Back To Summary View" Click="backButton_Click"/>
-            <AppBarButton x:Name="loadFile" Icon="OpenFile" Label="Load File" Click="loadFile_ClickAsync"/>
         </CommandBar>
 
         <TextBlock HorizontalAlignment="Left" Margin="12,46,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="COVID-19 Analysis List View"/>
@@ -61,17 +60,10 @@
         <TextBlock Text="Deaths:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="285,317,0,0"></TextBlock>
         <TextBox x:Name="deathsTextBox" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="430,310,0,0" Text="{Binding SelectedCovidRecord.Deaths, Mode=TwoWay}" MaxLength="9" BeforeTextChanging="deathsTextBox_BeforeTextChanging" LostFocus="deathsTextBox_LostFocus"></TextBox>
 
-        <Button x:Name="deleteCovidRecord" Margin="464,359,0,0" VerticalAlignment="Top" Click="deleteCovidRecord_Click">
+        <Button Command ="{Binding RemoveCommand}" x:Name="deleteCovidRecord" Margin="10,376,0,0" VerticalAlignment="Top">
             <StackPanel>
                 <SymbolIcon Symbol="Delete"/>
                 <TextBlock Text="Delete Covid Record"></TextBlock>
-            </StackPanel>
-        </Button>
-
-        <Button x:Name="editCovidRecord" Margin="464,448,0,0" Click="editCovidRecord_Click" VerticalAlignment="Top">
-            <StackPanel>
-                <SymbolIcon Symbol="Edit"/>
-                <TextBlock Text="Edit Covid Record"></TextBlock>
             </StackPanel>
         </Button>
 

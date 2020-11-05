@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Windows.Storage;
 using Covid19Analysis.DataTier;
 using Covid19Analysis.Model;
@@ -45,12 +46,16 @@ namespace Covid19Analysis.OutputFormatter
         /// <value>The summary.</value>
         public string Summary { get; private set; }
 
+
+        /// <summary>Gets the filtered covid data collection.</summary>
+        /// <value>The filtered covid data collection.</value>
+        public CovidDataCollection FilteredCovidDataCollection { get; private set; }
+
         #endregion
 
         #region Private Members
         private CovidDataErrorLogger covidErrorLogger;
 
-        private CovidDataCollection filteredCovidDataCollection;
 
         private CovidDataCollection allCovidData;
 
@@ -82,7 +87,7 @@ namespace Covid19Analysis.OutputFormatter
             this.Summary = string.Empty;
             this.IsCovidDataLoaded = false;
             this.covidErrorLogger = null;
-            this.filteredCovidDataCollection = null;
+            this.FilteredCovidDataCollection = null;
             this.allCovidData = null;
             this.mergeController = null;
         }
@@ -104,9 +109,27 @@ namespace Covid19Analysis.OutputFormatter
             textContent = textContent ?? throw new ArgumentNullException(nameof(textContent));
             var parser = new CovidCsvParser(textContent);
             this.covidErrorLogger = parser.CovidErrorLogger;
-            this.filteredCovidDataCollection = parser.GenerateCovidDataCollection();
-            this.allCovidData = this.filteredCovidDataCollection.Clone();
+            this.FilteredCovidDataCollection = parser.GenerateCovidDataCollection();
+            this.allCovidData = this.FilteredCovidDataCollection.Clone();
             this.IsCovidDataLoaded = true;
+            this.buildCovidSummary();
+        }
+
+        public void UpdateCollectionFromViewModel(CovidAnalysisViewModel viewModel)
+        {
+            viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
+            if (viewModel.CovidData == null)
+            {
+                return;
+            }
+
+            if (!viewModel.CovidData.Any())
+            {
+                this.Reset();
+                return;
+            }
+
+            this.FilteredCovidDataCollection.ReplaceAllWithNewCovidCollection(viewModel.CovidData.ToList());
             this.buildCovidSummary();
         }
 
@@ -120,7 +143,7 @@ namespace Covid19Analysis.OutputFormatter
             var parser = new CovidCsvParser(textContent);
             var newCovidDataCollection = parser.GenerateCovidDataCollection();
             this.covidErrorLogger = parser.CovidErrorLogger;
-            this.mergeController = new CovidDataMergeController(this.filteredCovidDataCollection, newCovidDataCollection, this.StateFilter);
+            this.mergeController = new CovidDataMergeController(this.FilteredCovidDataCollection, newCovidDataCollection, this.StateFilter);
             this.mergeController.AddAllNonDuplicates();
             this.mergeAndRebuildAllCovidData();
         }
@@ -131,14 +154,14 @@ namespace Covid19Analysis.OutputFormatter
         {
             if (this.mergeController == null)
             {
-                this.filteredCovidDataCollection.ReplaceDuplicateRecords(covidRecord);
+                this.FilteredCovidDataCollection.ReplaceDuplicateRecords(covidRecord);
                 this.allCovidData.ReplaceDuplicateRecords(covidRecord);
                 this.buildCovidSummary();
                 return;
             }
 
             this.mergeController.ReplaceDuplicate(covidRecord);
-            this.filteredCovidDataCollection = this.mergeController.MergedCovidDataCollection;
+            this.FilteredCovidDataCollection = this.mergeController.MergedCovidDataCollection;
             this.IsCovidDataLoaded = true;
             this.mergeAndRebuildAllCovidData();
         }
@@ -172,7 +195,7 @@ namespace Covid19Analysis.OutputFormatter
                 this.createAndAddToTheCovidDataCollection(record);
             }
 
-            if (this.filteredCovidDataCollection != null)
+            if (this.FilteredCovidDataCollection != null)
             {
                 this.buildCovidSummary();
             }
@@ -218,7 +241,7 @@ namespace Covid19Analysis.OutputFormatter
         private void buildCovidSummary()
         {
             const string genericHeader = Assets.StateCovidDataHeadingLabel;
-            var stateSummary = new CovidDataSummary(this.filteredCovidDataCollection, this.StateFilter);
+            var stateSummary = new CovidDataSummary(this.FilteredCovidDataCollection, this.StateFilter);
             var isStateNotNull = this.StateFilter != null;
             var stateSpecificHeader = $"{this.StateFilter} {Assets.StateCovidDataHeadingLabel}";
             
@@ -271,7 +294,7 @@ namespace Covid19Analysis.OutputFormatter
         {
             if (record.State.Equals(this.StateFilter))
             {
-                this.filteredCovidDataCollection.Add(record);
+                this.FilteredCovidDataCollection.Add(record);
                 this.allCovidData.Add(record);
             }
             else
@@ -283,8 +306,8 @@ namespace Covid19Analysis.OutputFormatter
         {
             if (record.State.Equals(this.StateFilter))
             {
-                this.filteredCovidDataCollection = new CovidDataCollection { record };
-                this.allCovidData = this.filteredCovidDataCollection.Clone();
+                this.FilteredCovidDataCollection = new CovidDataCollection { record };
+                this.allCovidData = this.FilteredCovidDataCollection.Clone();
                 this.IsCovidDataLoaded = true;
             }
             else
