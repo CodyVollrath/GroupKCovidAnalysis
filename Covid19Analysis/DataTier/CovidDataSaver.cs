@@ -69,7 +69,7 @@ namespace Covid19Analysis.DataTier
             foreach (var record in this.CovidData)
             {
                 var date = record.Date.ToString(Assets.DateStringUnformatted);
-                covidDataRecords += $"{date},{record.State},{record.PositiveTests},{record.NegativeTests},{record.Deaths},{record.Hospitalizations}{Environment.NewLine}";
+                covidDataRecords += $"{date},{record.State},{record.PositiveTests},{record.NegativeTests},{record.HospitalizedCurrently},{record.Hospitalizations},{record.Deaths}{Environment.NewLine}";
             }
             return covidDataRecords;
         }

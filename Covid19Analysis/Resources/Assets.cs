@@ -55,7 +55,7 @@ namespace Covid19Analysis.Resources
         public const string LowestPositiveTestsLabel = "Lowest  # positive tests:";
         public const string LowestTotalTestsLabel = "Lowest  # total tests:";
         public const string LowestCurrentHospitalizationsLabel = "Lowest # Current Hospitalizations:";
-        public static readonly string[] HeadersForData = new string[] {"date", "state", "positiveIncrease", "negativeIncrease", "deathIncrease", "hospitalizedIncrease" };
+        public static readonly string[] HeadersForData = new string[] {"date", "state", "positiveIncrease", "negativeIncrease", "hospitalizedCurrently", "hospitalizedIncrease", "deathIncrease" };
 
         #endregion
 
