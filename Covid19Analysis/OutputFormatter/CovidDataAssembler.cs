@@ -54,6 +54,14 @@ namespace Covid19Analysis.OutputFormatter
 
         #endregion
 
+        #region Private Members
+
+        private CovidDataErrorLogger covidErrorLogger;
+
+        private CovidDataMergeController mergeController;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -374,14 +382,6 @@ namespace Covid19Analysis.OutputFormatter
                 this.AllCovidData = new CovidDataCollection {record};
             }
         }
-
-        #endregion
-
-        #region Private Members
-
-        private CovidDataErrorLogger covidErrorLogger;
-
-        private CovidDataMergeController mergeController;
 
         #endregion
     }
