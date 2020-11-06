@@ -1,10 +1,13 @@
 ﻿using System;
 using Windows.UI.Xaml.Data;
 using Covid19Analysis.Resources;
+
 namespace Covid19Analysis.Converter
 {
     public class DateFormatConverter : IValueConverter
     {
+        #region Methods
+
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             var date = (DateTime) value;
@@ -20,5 +23,7 @@ namespace Covid19Analysis.Converter
             var date = Format.FormatAsDateTime(parsedDate, Assets.DateStringFormatted);
             return date;
         }
+
+        #endregion
     }
 }

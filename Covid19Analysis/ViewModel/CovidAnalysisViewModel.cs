@@ -9,10 +9,17 @@ namespace Covid19Analysis.ViewModel
 {
     public class CovidAnalysisViewModel : INotifyPropertyChanged
     {
-
-        public RelayCommand RemoveCommand { get; set; }
+        #region Data members
 
         private ObservableCollection<CovidRecord> covidData;
+
+        private CovidRecord selectedCovidRecord;
+
+        #endregion
+
+        #region Properties
+
+        public RelayCommand RemoveCommand { get; set; }
 
         public ObservableCollection<CovidRecord> CovidData
         {
@@ -23,8 +30,6 @@ namespace Covid19Analysis.ViewModel
                 this.OnPropertyChanged();
             }
         }
-
-        private CovidRecord selectedCovidRecord;
 
         public CovidRecord SelectedCovidRecord
         {
@@ -37,10 +42,20 @@ namespace Covid19Analysis.ViewModel
             }
         }
 
+        #endregion
+
+        #region Constructors
+
         public CovidAnalysisViewModel()
         {
             this.loadCommands();
         }
+
+        #endregion
+
+        #region Methods
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private void loadCommands()
         {
@@ -57,12 +72,12 @@ namespace Covid19Analysis.ViewModel
             return this.SelectedCovidRecord != null;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        #endregion
     }
 }

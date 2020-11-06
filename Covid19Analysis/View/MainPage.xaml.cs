@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml.Serialization;
 using Windows.Foundation;
 using Windows.Storage;
 using Windows.Storage.Pickers;
@@ -36,8 +37,6 @@ namespace Covid19Analysis.View
         /// </Summary>
         public const int ApplicationWidth = 620;
 
-        #endregion
-
         #region Static Members
 
         /// <summary>
@@ -46,13 +45,7 @@ namespace Covid19Analysis.View
         public static StateAbbreviations State;
 
         #endregion
-        #region Private Members
 
-        private readonly CovidDataAssembler covidDataAssembler;
-
-        private readonly ContentDialog mergeOrReplaceDialog;
-
-        private readonly CovidAnalysisViewModel covidViewModel;
         #endregion
 
         #region Constructors
@@ -63,7 +56,7 @@ namespace Covid19Analysis.View
         public MainPage()
         {
             this.InitializeComponent();
-            ApplicationView.PreferredLaunchViewSize = new Size { Width = ApplicationWidth, Height = ApplicationHeight };
+            ApplicationView.PreferredLaunchViewSize = new Size {Width = ApplicationWidth, Height = ApplicationHeight};
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(ApplicationWidth, ApplicationHeight));
             this.covidDataAssembler = new CovidDataAssembler(StateAbbreviations.GA);
@@ -76,31 +69,56 @@ namespace Covid19Analysis.View
 
         #endregion
 
+        #region Private Members
+
+        private readonly CovidDataAssembler covidDataAssembler;
+
+        private readonly ContentDialog mergeOrReplaceDialog;
+
+        private readonly CovidAnalysisViewModel covidViewModel;
+
+        #endregion
+
         #region Action Events
 
         #region AppButtonEvents
 
         private async void loadFile_ClickAsync(object sender, RoutedEventArgs e)
         {
-            string fileContent;
-
             var openPicker = new FileOpenPicker
-            { ViewMode = PickerViewMode.Thumbnail, SuggestedStartLocation = PickerLocationId.DocumentsLibrary };
+                {ViewMode = PickerViewMode.Thumbnail, SuggestedStartLocation = PickerLocationId.DocumentsLibrary};
             openPicker.FileTypeFilter.Add(".csv");
             openPicker.FileTypeFilter.Add(".txt");
+            openPicker.FileTypeFilter.Add(".xml");
             var file = await openPicker.PickSingleFileAsync();
             if (file == null)
             {
                 return;
             }
 
-            var stream = await file.OpenAsync(FileAccessMode.Read);
-            using (var fileReader = new StreamReader(stream.AsStream()))
+            if (file.FileType == ".xml")
             {
-                fileContent = await fileReader.ReadToEndAsync();
+                CovidDataCollection xmlContent;
+                var deserializer = new XmlSerializer(typeof(CovidDataCollection));
+                using (var inStream = await file.OpenStreamForReadAsync())
+                {
+                    xmlContent = (CovidDataCollection) deserializer.Deserialize(inStream);
+                }
+
+                this.displayCovidData(xmlContent);
+            }
+            else
+            {
+                string fileContent;
+                var stream = await file.OpenAsync(FileAccessMode.Read);
+                using (var fileReader = new StreamReader(stream.AsStream()))
+                {
+                    fileContent = await fileReader.ReadToEndAsync();
+                }
+
+                this.displayCovidData(fileContent);
             }
 
-            this.displayCovidData(fileContent);
             this.applyFilteredCollectionToViewModel();
         }
 
@@ -108,14 +126,14 @@ namespace Covid19Analysis.View
         {
             try
             {
-                this.covidViewModel.CovidData = this.covidDataAssembler.FilteredCovidDataCollection.ToObservableCollection();
+                this.covidViewModel.CovidData =
+                    this.covidDataAssembler.FilteredCovidDataCollection.ToObservableCollection();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 this.covidViewModel.CovidData = null;
             }
-
         }
 
         private void errorLog_Click(object sender, RoutedEventArgs e)
@@ -130,20 +148,31 @@ namespace Covid19Analysis.View
                 return;
             }
 
-            var savePicker = new FileSavePicker
-            {
+            var savePicker = new FileSavePicker {
                 SuggestedStartLocation = PickerLocationId.DocumentsLibrary,
                 SuggestedFileName = $"Covid19Analysis_{DateTime.Now.ToString(Assets.TimeStamp)}"
             };
-            savePicker.FileTypeChoices.Add("Plain Text", new List<string>() { ".csv", ".txt" });
+            savePicker.FileTypeChoices.Add("Plain Text", new List<string>{".txt"});
+            savePicker.FileTypeChoices.Add("Csv Comma Delimited", new List<string> { ".csv" });
+            savePicker.FileTypeChoices.Add("Xml Data", new List<string> { ".xml" });
 
             var file = await savePicker.PickSaveFileAsync();
+            bool isFileSaved;
+
             if (file == null)
             {
                 return;
             }
 
-            var isFileSaved = this.covidDataAssembler.WriteCovidDataToFile(file);
+            if (file.FileType == ".xml")
+            {
+                isFileSaved = this.covidDataAssembler.WriteCovidDataToXmlFile(file);
+            }
+            else
+            {
+                isFileSaved = this.covidDataAssembler.WriteCovidDataToCsvFile(file);
+            }
+
             showSaveSuccessfulPrompt(isFileSaved);
         }
 
@@ -270,6 +299,28 @@ namespace Covid19Analysis.View
             }
         }
 
+        private void displayCovidData(CovidDataCollection xmlContent)
+        {
+            try
+            {
+                this.applyThresholds();
+                this.applyBinSize();
+                if (this.covidDataAssembler.IsCovidDataLoaded)
+                {
+                    this.promptMergeOrReplaceDialog(xmlContent);
+                }
+                else
+                {
+                    this.loadCovidData(xmlContent);
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                this.summaryTextBox.Text = Assets.NoCovidDataText;
+            }
+        }
+
         private async void promptMergeOrReplaceDialog(string textContent)
         {
             var answer = await this.mergeOrReplaceDialog.ShowAsync();
@@ -285,6 +336,26 @@ namespace Covid19Analysis.View
                     this.mergeAndLoadCovidData(textContent, true);
                     break;
             }
+
+            this.applyFilteredCollectionToViewModel();
+        }
+
+        private async void promptMergeOrReplaceDialog(CovidDataCollection xmlContent)
+        {
+            var answer = await this.mergeOrReplaceDialog.ShowAsync();
+            switch (answer)
+            {
+                case ContentDialogResult.Primary:
+                    this.mergeAndLoadCovidData(xmlContent, false);
+                    break;
+                case ContentDialogResult.Secondary:
+                    this.loadCovidData(xmlContent);
+                    break;
+                default:
+                    this.mergeAndLoadCovidData(xmlContent, true);
+                    break;
+            }
+
             this.applyFilteredCollectionToViewModel();
         }
 
@@ -297,6 +368,21 @@ namespace Covid19Analysis.View
             {
                 this.keepOrReplaceDialog(covidRecords);
             }
+
+            this.applyFilteredCollectionToViewModel();
+            this.summaryTextBox.Text = this.covidDataAssembler.Summary;
+        }
+
+        private void mergeAndLoadCovidData(CovidDataCollection xmlContent, bool mergeAllStates)
+        {
+            this.covidDataAssembler.MergeAndLoadCovidData(xmlContent, mergeAllStates);
+            var duplicates = this.covidDataAssembler.GetDuplicatesFromMergedData();
+            var covidRecords = duplicates as CovidRecord[] ?? duplicates.ToArray();
+            if (covidRecords.Any())
+            {
+                this.keepOrReplaceDialog(covidRecords);
+            }
+
             this.applyFilteredCollectionToViewModel();
             this.summaryTextBox.Text = this.covidDataAssembler.Summary;
         }
@@ -323,6 +409,7 @@ namespace Covid19Analysis.View
                     }
                 }
             }
+
             this.applyFilteredCollectionToViewModel();
             this.summaryTextBox.Text = this.covidDataAssembler.Summary;
         }
@@ -357,9 +444,15 @@ namespace Covid19Analysis.View
             this.summaryTextBox.Text = this.covidDataAssembler.Summary;
         }
 
+        private void loadCovidData(CovidDataCollection xmlContent)
+        {
+            this.covidDataAssembler.LoadCovidData(xmlContent);
+            this.summaryTextBox.Text = this.covidDataAssembler.Summary;
+        }
+
         private async void addCovidRecord()
         {
-            var covidRecordAdder = new CovidRecordAdder { statesComboBox = { ItemsSource = new[] { State } } };
+            var covidRecordAdder = new CovidRecordAdder {statesComboBox = {ItemsSource = new[] {State}}};
             var result = await covidRecordAdder.ShowAsync();
             this.applyThresholds();
             this.applyBinSize();
@@ -372,7 +465,7 @@ namespace Covid19Analysis.View
             var isRecordDuplicate = this.covidDataAssembler.DoesCovidRecordExist(newRecord);
             if (isRecordDuplicate)
             {
-                var duplicates = new List<CovidRecord>() { newRecord };
+                var duplicates = new List<CovidRecord> {newRecord};
                 this.keepOrReplaceDialog(duplicates);
             }
             else
@@ -394,8 +487,7 @@ namespace Covid19Analysis.View
                 content = Assets.SaveSuccessfulContent;
             }
 
-            var isFileSavedDialog = new ContentDialog()
-            {
+            var isFileSavedDialog = new ContentDialog {
                 Title = title,
                 Content = content,
                 CloseButtonText = Assets.OkPrompt
@@ -410,7 +502,7 @@ namespace Covid19Analysis.View
 
             if (parameter != null && !parameter.ToString().Equals(string.Empty))
             {
-                var covidViewModel = (CovidAnalysisViewModel)parameter;
+                var covidViewModel = (CovidAnalysisViewModel) parameter;
                 this.covidDataAssembler.UpdateCollectionFromViewModel(covidViewModel);
                 this.summaryTextBox.Text = this.covidDataAssembler.Summary;
             }

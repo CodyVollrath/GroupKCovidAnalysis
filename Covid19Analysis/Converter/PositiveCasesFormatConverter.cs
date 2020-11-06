@@ -5,6 +5,8 @@ namespace Covid19Analysis.Converter
 {
     public class PositiveCasesFormatConverter : IValueConverter
     {
+        #region Methods
+
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             var positiveCases = (int) value;
@@ -24,5 +26,7 @@ namespace Covid19Analysis.Converter
             var positives = int.Parse(parsedPositives);
             return positives;
         }
+
+        #endregion
     }
 }

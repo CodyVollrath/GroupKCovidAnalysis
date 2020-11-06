@@ -5,8 +5,24 @@ namespace Covid19Analysis.Utility
 {
     public class RelayCommand : ICommand
     {
+        #region Data members
+
         private readonly Action<object> execute;
         private readonly Predicate<object> canExecute;
+
+        #endregion
+
+        #region Constructors
+
+        public RelayCommand(Action<object> execute, Predicate<object> canExecute)
+        {
+            this.execute = execute;
+            this.canExecute = canExecute;
+        }
+
+        #endregion
+
+        #region Methods
 
         public bool CanExecute(object parameter)
         {
@@ -24,16 +40,11 @@ namespace Covid19Analysis.Utility
 
         public event EventHandler CanExecuteChanged;
 
-        public RelayCommand(Action<object> execute, Predicate<object> canExecute)
-        {
-            this.execute = execute;
-            this.canExecute = canExecute;
-
-        }
-
         public virtual void OnCanExecuteChanged()
         {
-            this.CanExecuteChanged?.Invoke(this,EventArgs.Empty);
+            this.CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
+
+        #endregion
     }
 }

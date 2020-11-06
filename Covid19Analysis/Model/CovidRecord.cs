@@ -1,4 +1,5 @@
 ﻿using System;
+using Covid19Analysis.Annotations;
 using Covid19Analysis.Resources;
 
 namespace Covid19Analysis.Model
@@ -60,6 +61,11 @@ namespace Covid19Analysis.Model
             this.Date = dateTime;
             state = state ?? throw new ArgumentNullException(nameof(state));
             this.State = state.ToUpper();
+        }
+
+        [UsedImplicitly]
+        private CovidRecord()
+        {
         }
 
         #endregion

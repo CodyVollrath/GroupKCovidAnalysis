@@ -140,7 +140,9 @@ namespace Covid19Analysis.View
 
         private string determineStateComboBoxSelectedItem()
         {
-            return this.statesComboBox.SelectedValue != null ? this.statesComboBox.SelectedValue.ToString() : MainPage.State.ToString();
+            return this.statesComboBox.SelectedValue != null
+                ? this.statesComboBox.SelectedValue.ToString()
+                : MainPage.State.ToString();
         }
 
         #endregion

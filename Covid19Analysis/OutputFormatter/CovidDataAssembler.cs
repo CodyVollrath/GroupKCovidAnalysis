@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.Storage;
 using Covid19Analysis.DataTier;
 using Covid19Analysis.Model;
 using Covid19Analysis.Resources;
 using Covid19Analysis.ViewModel;
+
 namespace Covid19Analysis.OutputFormatter
 {
     /// <summary>This class assembles COVID data output from all summaries and accumulates them together.</summary>
@@ -47,15 +47,11 @@ namespace Covid19Analysis.OutputFormatter
         ///     All covid data.
         /// </value>
         public CovidDataCollection AllCovidData { get; private set; }
+
         /// <summary>Gets the filtered covid data collection.</summary>
         /// <value>The filtered covid data collection.</value>
         public CovidDataCollection FilteredCovidDataCollection { get; private set; }
-        #endregion
-        #region Private Members
 
-        private CovidDataErrorLogger covidErrorLogger;
-
-        private CovidDataMergeController mergeController;
         #endregion
 
         #region Constructors
@@ -98,7 +94,7 @@ namespace Covid19Analysis.OutputFormatter
             return this.covidErrorLogger == null ? string.Empty : this.covidErrorLogger.ErrorString;
         }
 
-        /// <summary>Loads the covid data.</summary>
+        /// <summary>Loads the covid data from text.</summary>
         /// <param name="textContent">Content of the text.</param>
         /// <exception cref="ArgumentNullException">textContent</exception>
         public void LoadCovidData(string textContent)
@@ -111,6 +107,20 @@ namespace Covid19Analysis.OutputFormatter
             this.IsCovidDataLoaded = true;
             this.buildCovidSummary();
         }
+
+        /// <summary>Loads the covid data from xml.</summary>
+        /// <param name="xmlContent">Content of the xml.</param>
+        /// <exception cref="ArgumentNullException">xmlContent</exception>
+        public void LoadCovidData(CovidDataCollection xmlContent)
+        {
+            xmlContent = xmlContent ?? throw new ArgumentNullException(nameof(xmlContent));
+
+            this.FilteredCovidDataCollection = xmlContent;
+            this.AllCovidData = this.FilteredCovidDataCollection.Clone();
+            this.IsCovidDataLoaded = true;
+            this.buildCovidSummary();
+        }
+
         public void UpdateCollectionFromViewModel(CovidAnalysisViewModel viewModel)
         {
             viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
@@ -130,7 +140,7 @@ namespace Covid19Analysis.OutputFormatter
         }
 
         /// <summary>
-        ///     Merges the and loads the covid data.
+        ///     Merges the and loads the covid data using csv content.
         /// </summary>
         /// <param name="textContent">Content of the text.</param>
         /// <param name="mergeAllStates">if set to <c>true</c> [merge all states].</param>
@@ -138,10 +148,31 @@ namespace Covid19Analysis.OutputFormatter
         public void MergeAndLoadCovidData(string textContent, bool mergeAllStates)
         {
             textContent = textContent ?? throw new ArgumentNullException(nameof(textContent));
-
             var parser = new CovidCsvParser(textContent);
             var newCovidDataCollection = parser.GenerateCovidDataCollection();
             this.covidErrorLogger = parser.CovidErrorLogger;
+            if (mergeAllStates)
+            {
+                this.FilteredCovidDataCollection = this.AllCovidData.Clone();
+            }
+
+            this.mergeController = new CovidDataMergeController(this.FilteredCovidDataCollection,
+                newCovidDataCollection);
+            this.mergeController.AddAllNonDuplicates();
+            this.mergeAndRebuildAllCovidData();
+        }
+
+        /// <summary>
+        ///     Merges the and loads the covid data using xml content.
+        /// </summary>
+        /// <param name="xmlContent">Content of the XML.</param>
+        /// <param name="mergeAllStates">if set to <c>true</c> [merge all states].</param>
+        /// <exception cref="ArgumentNullException">xmlContent</exception>
+        public void MergeAndLoadCovidData(CovidDataCollection xmlContent, bool mergeAllStates)
+        {
+            xmlContent = xmlContent ?? throw new ArgumentNullException(nameof(xmlContent));
+            var newCovidDataCollection = xmlContent;
+
             if (mergeAllStates)
             {
                 this.FilteredCovidDataCollection = this.AllCovidData.Clone();
@@ -212,15 +243,34 @@ namespace Covid19Analysis.OutputFormatter
             return duplicates;
         }
 
-        /// <summary>Writes the covid data to file.</summary>
+        /// <summary>Writes the covid data to a csv or txt file.</summary>
         /// <param name="file">The file.</param>
         /// <returns>True if the file was saved properly, otherwise false</returns>
-        public bool WriteCovidDataToFile(StorageFile file)
+        public bool WriteCovidDataToCsvFile(StorageFile file)
         {
             var isSaved = true;
             try
             {
-                var covidDataWriter = new CovidDataSaver(file, this.AllCovidData);
+                CovidDataSaver covidDataWriter = new CsvCovidDataSaver(file, this.AllCovidData);
+                covidDataWriter.WriteCovidDataToFile();
+            }
+            catch (Exception)
+            {
+                isSaved = false;
+            }
+
+            return isSaved;
+        }
+
+        /// <summary>Writes the covid data to a xml file.</summary>
+        /// <param name="file">The file.</param>
+        /// <returns>True if the file was saved properly, otherwise false</returns>
+        public bool WriteCovidDataToXmlFile(StorageFile file)
+        {
+            var isSaved = true;
+            try
+            {
+                CovidDataSaver covidDataWriter = new XmlCovidDataSaver(file, this.AllCovidData);
                 covidDataWriter.WriteCovidDataToFile();
             }
             catch (Exception)
@@ -236,9 +286,6 @@ namespace Covid19Analysis.OutputFormatter
         {
             this.buildCovidSummary();
         }
-        #endregion
-
-        #region Private Methods
 
         private void buildCovidSummary()
         {
@@ -276,6 +323,7 @@ namespace Covid19Analysis.OutputFormatter
                 this.Reset();
             }
         }
+
         private string getPositiveThresholds(CovidDataSummary stateSummary)
         {
             var upperPositiveCaseThreshold = Format.FormatStringToInteger(this.UpperPositiveThreshold);
@@ -317,18 +365,24 @@ namespace Covid19Analysis.OutputFormatter
         {
             if (record.State.Equals(this.StateFilter))
             {
-                this.FilteredCovidDataCollection = new CovidDataCollection { record };
+                this.FilteredCovidDataCollection = new CovidDataCollection {record};
                 this.AllCovidData = this.FilteredCovidDataCollection.Clone();
                 this.IsCovidDataLoaded = true;
             }
             else
             {
-                this.AllCovidData = new CovidDataCollection { record };
+                this.AllCovidData = new CovidDataCollection {record};
             }
         }
 
         #endregion
 
+        #region Private Members
 
+        private CovidDataErrorLogger covidErrorLogger;
+
+        private CovidDataMergeController mergeController;
+
+        #endregion
     }
 }

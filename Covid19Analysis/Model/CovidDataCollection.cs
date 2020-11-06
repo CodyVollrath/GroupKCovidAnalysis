@@ -2,12 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 using Covid19Analysis.Resources;
 
 namespace Covid19Analysis.Model
 {
     /// <Summary>This class keeps a collection of covid records</Summary>
-    public class CovidDataCollection : ICollection<CovidRecord>
+    public class CovidDataCollection : ICollection<CovidRecord>, IXmlSerializable
     {
         #region Data members
 
@@ -122,6 +125,61 @@ namespace Covid19Analysis.Model
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.covidRecords.AsEnumerable().GetEnumerator();
+        }
+
+        /// <summary>
+        ///     This method is reserved and should not be used. When implementing the IXmlSerializable interface, you should return
+        ///     null (Nothing in Visual Basic) from this method, and instead, if specifying a custom schema is required, apply the
+        ///     <see cref="T:System.Xml.Serialization.XmlSchemaProviderAttribute"></see> to the class.
+        /// </summary>
+        /// <returns>
+        ///     An <see cref="T:System.Xml.Schema.XmlSchema"></see> that describes the XML representation of the object that is
+        ///     produced by the <see cref="M:System.Xml.Serialization.IXmlSerializable.WriteXml(System.Xml.XmlWriter)"></see>
+        ///     method and consumed by the
+        ///     <see cref="M:System.Xml.Serialization.IXmlSerializable.ReadXml(System.Xml.XmlReader)"></see> method.
+        /// </returns>
+        public XmlSchema GetSchema()
+        {
+            return null;
+        }
+
+        /// <summary>
+        ///     Generates an object from its XML representation.
+        /// </summary>
+        /// <param name="reader">The <see cref="T:System.Xml.XmlReader"></see> stream from which the object is deserialized.</param>
+        public void ReadXml(XmlReader reader)
+        {
+            var deserializer = new XmlSerializer(typeof(CovidRecord));
+            reader.ReadStartElement("CovidDataCollection");
+            reader.ReadStartElement("Count");
+            var count = reader.ReadContentAsInt();
+            reader.ReadEndElement();
+
+            for (var i = 0; i < count; i++)
+            {
+                var record = (CovidRecord) deserializer.Deserialize(reader);
+                this.covidRecords.Add(record);
+            }
+
+            reader.ReadEndElement();
+        }
+
+        /// <summary>
+        ///     Converts an object into its XML representation.
+        /// </summary>
+        /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"></see> stream to which the object is serialized.</param>
+        public void WriteXml(XmlWriter writer)
+        {
+            var serializer = new XmlSerializer(typeof(CovidRecord));
+
+            writer.WriteStartElement("Count");
+            writer.WriteString(this.Count.ToString());
+            writer.WriteEndElement();
+
+            foreach (var record in this.covidRecords)
+            {
+                serializer.Serialize(writer, record);
+            }
         }
 
         /// <Summary>

@@ -123,7 +123,8 @@
     <Compile Include="Converter\PositiveCasesFormatConverter.cs" />
     <Compile Include="DataTier\CovidCsvParser.cs" />
     <Compile Include="DataTier\CovidDataMergeController.cs" />
-    <Compile Include="DataTier\CovidDataSaver.cs" />
+    <Compile Include="DataTier\CsvCovidDataSaver.cs" />
+    <Compile Include="DataTier\XmlCovidDataSaver.cs" />
     <Compile Include="Extension\ListExtension.cs" />
     <Compile Include="Model\CovidDataStatistics.cs" />
     <Compile Include="Model\StateAbbreviations.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="OutputFormatter\CovidDataMonthlySummary.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Resources\CovidDataLines.cs" />
+    <Compile Include="Resources\CovidDataSaver.cs" />
     <Compile Include="Utility\RelayCommand.cs" />
     <Compile Include="ViewModel\CovidAnalysisViewModel.cs" />
     <Compile Include="View\CovidListViewPage.xaml.cs">

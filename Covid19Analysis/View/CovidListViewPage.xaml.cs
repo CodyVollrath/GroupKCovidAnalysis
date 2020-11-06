@@ -1,11 +1,7 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using Windows.Storage.Pickers;
+﻿using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using Covid19Analysis.Resources;
 using Covid19Analysis.ViewModel;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -13,21 +9,32 @@ using Covid19Analysis.ViewModel;
 namespace Covid19Analysis.View
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    ///     An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
     public sealed partial class CovidListViewPage : Page
     {
+        #region Data members
+
         private readonly CovidAnalysisViewModel covidAnalysisViewModel;
+
+        #endregion
+
+        #region Constructors
+
         public CovidListViewPage()
         {
             this.InitializeComponent();
             this.covidAnalysisViewModel = new CovidAnalysisViewModel();
-            this.DataContext = this.covidAnalysisViewModel;
+            DataContext = this.covidAnalysisViewModel;
         }
+
+        #endregion
+
+        #region Methods
 
         private void backButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(MainPage), this.covidAnalysisViewModel);
+            Frame.Navigate(typeof(MainPage), this.covidAnalysisViewModel);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -61,7 +68,8 @@ namespace Covid19Analysis.View
             args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
         }
 
-        private void hospitalizedCurrentlyTextBox_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
+        private void hospitalizedCurrentlyTextBox_BeforeTextChanging(TextBox sender,
+            TextBoxBeforeTextChangingEventArgs args)
         {
             args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
         }
@@ -73,6 +81,7 @@ namespace Covid19Analysis.View
                 this.positiveCasesTextBox.Text = "0";
             }
         }
+
         private void negativeCasesTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             if (this.negativeCasesTextBox.Text.Equals(string.Empty))
@@ -83,12 +92,12 @@ namespace Covid19Analysis.View
 
         private void deathsTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-
             if (this.deathsTextBox.Text.Equals(string.Empty))
             {
                 this.deathsTextBox.Text = "0";
             }
         }
+
         private void hospitalizationsTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             if (this.hospitalizationsTextBox.Text.Equals(string.Empty))
@@ -104,5 +113,7 @@ namespace Covid19Analysis.View
                 this.hospitalizedCurrentlyTextBox.Text = "0";
             }
         }
+
+        #endregion
     }
 }
