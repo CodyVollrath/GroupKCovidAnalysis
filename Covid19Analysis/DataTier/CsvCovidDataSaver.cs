@@ -8,7 +8,7 @@ namespace Covid19Analysis.DataTier
     /// <summary>
     ///     This class writes the contents of a CovidDataCollection to a csv file
     /// </summary>
-    /// <seealso cref="Covid19Analysis.Resources.CovidDataSaver" />
+    /// <seealso cref="Covid19Analysis.DataTier.CovidDataSaver" />
     public class CsvCovidDataSaver : CovidDataSaver
     {
         #region Constructors
@@ -36,7 +36,7 @@ namespace Covid19Analysis.DataTier
         public override async void WriteCovidDataToFile()
         {
             var contents = string.Empty;
-            contents += this.getCovidDataHeaders();
+            contents += getCovidDataHeaders();
             contents += this.getCovidDataRecords();
             await FileIO.WriteTextAsync(File, contents);
         }
@@ -45,7 +45,7 @@ namespace Covid19Analysis.DataTier
 
         #region Private Helpers
 
-        private string getCovidDataHeaders()
+        private static string getCovidDataHeaders()
         {
             var headers = string.Empty;
             foreach (var header in Assets.HeadersForData)

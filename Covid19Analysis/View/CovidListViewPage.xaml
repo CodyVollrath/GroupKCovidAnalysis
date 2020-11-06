@@ -36,9 +36,9 @@
                                 <RowDefinition />
                             </Grid.RowDefinitions>
                             <TextBlock HorizontalAlignment="Stretch" Grid.Row="0"
-                                       Text="{Binding Date, Converter={StaticResource dateConverter}, Mode=TwoWay }" />
+                                       Text="{Binding Date, Converter={StaticResource DateConverter}, Mode=TwoWay }" />
                             <TextBlock Grid.Row="1"
-                                       Text="{Binding PositiveTests, Converter={StaticResource positiveCasesFormatConverter}, Mode=TwoWay}" />
+                                       Text="{Binding PositiveTests, Converter={StaticResource PositiveCasesFormatConverter}, Mode=TwoWay}" />
                         </Grid>
                     </Border>
                 </DataTemplate>
@@ -46,7 +46,7 @@
         </ListView>
 
         <TextBlock x:Name="dateOfRecordTextBlock" HorizontalAlignment="Left" Margin="283,104,0,0"
-                   Text="{Binding SelectedCovidRecord.Date, Converter={StaticResource dateConverter} ,Mode=TwoWay}"
+                   Text="{Binding SelectedCovidRecord.Date, Converter={StaticResource DateConverter} ,Mode=TwoWay}"
                    TextWrapping="Wrap" VerticalAlignment="Top" />
         <TextBlock x:Name="stateOfRecordTextBlock" HorizontalAlignment="Left" Margin="429,104,0,0"
                    Text="{Binding SelectedCovidRecord.State, Mode=TwoWay}" TextWrapping="Wrap" VerticalAlignment="Top" />

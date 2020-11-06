@@ -1,5 +1,5 @@
 ﻿using System;
-using Covid19Analysis.Annotations;
+using Covid19Analysis.Properties;
 using Covid19Analysis.Resources;
 
 namespace Covid19Analysis.Model

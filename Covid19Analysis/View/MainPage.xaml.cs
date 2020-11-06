@@ -260,14 +260,16 @@ namespace Covid19Analysis.View
         {
             var selectedState = this.statesComboBox.SelectedValue;
 
-            if (selectedState != null && this.covidDataAssembler != null)
+            if (selectedState == null || this.covidDataAssembler == null)
             {
-                var selectedStateConverted = Enum.Parse<StateAbbreviations>(selectedState.ToString());
-                State = selectedStateConverted;
-                this.covidDataAssembler.StateFilter = selectedState.ToString();
-                this.updateCovidData();
-                this.noRecordsForThatState();
+                return;
             }
+
+            var selectedStateConverted = Enum.Parse<StateAbbreviations>(selectedState.ToString());
+            State = selectedStateConverted;
+            this.covidDataAssembler.StateFilter = selectedState.ToString();
+            this.updateCovidData();
+            this.noRecordsForThatState();
         }
 
         private void listViewToggle_Click(object sender, RoutedEventArgs e)
@@ -336,6 +338,8 @@ namespace Covid19Analysis.View
                 case ContentDialogResult.Secondary:
                     this.loadCovidData(textContent);
                     break;
+                case ContentDialogResult.None:
+                    break;
                 default:
                     this.mergeAndLoadCovidData(textContent, true);
                     break;
@@ -354,6 +358,8 @@ namespace Covid19Analysis.View
                     break;
                 case ContentDialogResult.Secondary:
                     this.loadCovidData(xmlContent);
+                    break;
+                case ContentDialogResult.None:
                     break;
                 default:
                     this.mergeAndLoadCovidData(xmlContent, true);
@@ -527,11 +533,13 @@ namespace Covid19Analysis.View
             var stateCovidRecords = this.covidDataAssembler.AllCovidData.ToList()
                                         .FindAll(record => record.State == State.ToString());
 
-            if (!stateCovidRecords.Any())
+            if (stateCovidRecords.Any())
             {
-                this.summaryTextBox.Text = Assets.NoCovidDataText;
-                this.setViewModelCovidRecordsToNull();
+                return;
             }
+
+            this.summaryTextBox.Text = Assets.NoCovidDataText;
+            this.setViewModelCovidRecordsToNull();
         }
 
         private void setViewModelCovidRecordsToNull()

@@ -2,7 +2,7 @@
 using Windows.Storage;
 using Covid19Analysis.Model;
 
-namespace Covid19Analysis.Resources
+namespace Covid19Analysis.DataTier
 {
     /// <summary>
     ///     This class writes the contents of a CovidDataCollection to a file.

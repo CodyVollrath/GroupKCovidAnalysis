@@ -5,8 +5,8 @@
     xmlns:converter="using:Covid19Analysis.Converter">
 
     <Application.Resources>
-        <converter:DateFormatConverter x:Key="dateConverter" />
-        <converter:PositiveCasesFormatConverter x:Key="positiveCasesFormatConverter" />
+        <converter:DateFormatConverter x:Key="DateConverter" />
+        <converter:PositiveCasesFormatConverter x:Key="PositiveCasesFormatConverter" />
     </Application.Resources>
 
 </Application>

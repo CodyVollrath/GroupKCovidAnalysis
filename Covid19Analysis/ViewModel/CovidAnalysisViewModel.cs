@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Covid19Analysis.Annotations;
 using Covid19Analysis.Model;
+using Covid19Analysis.Properties;
 using Covid19Analysis.Utility;
 
 namespace Covid19Analysis.ViewModel

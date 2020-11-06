@@ -53,11 +53,13 @@ namespace Covid19Analysis.View
         {
             base.OnNavigatedTo(e);
             var parameter = e.Parameter;
-            if (parameter != null && !parameter.ToString().Equals(string.Empty))
+            if (parameter == null || parameter.ToString().Equals(string.Empty))
             {
-                var covidViewModel = (CovidAnalysisViewModel) parameter;
-                this.covidAnalysisViewModel.CovidDataRecords = covidViewModel.CovidDataRecords;
+                return;
             }
+
+            var covidViewModel = (CovidAnalysisViewModel) parameter;
+            this.covidAnalysisViewModel.CovidDataRecords = covidViewModel.CovidDataRecords;
         }
 
         #endregion

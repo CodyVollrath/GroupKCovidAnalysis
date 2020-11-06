@@ -3,14 +3,13 @@ using System.IO;
 using System.Xml.Serialization;
 using Windows.Storage;
 using Covid19Analysis.Model;
-using Covid19Analysis.Resources;
 
 namespace Covid19Analysis.DataTier
 {
     /// <summary>
     ///     This class writes the contents of a CovidDataCollection to a xml file
     /// </summary>
-    /// <seealso cref="Covid19Analysis.Resources.CovidDataSaver" />
+    /// <seealso cref="Covid19Analysis.DataTier.CovidDataSaver" />
     public class XmlCovidDataSaver : CovidDataSaver
     {
         #region Constructors
