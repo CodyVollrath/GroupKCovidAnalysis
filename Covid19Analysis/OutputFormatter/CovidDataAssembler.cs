@@ -116,6 +116,11 @@ namespace Covid19Analysis.OutputFormatter
             this.buildCovidSummary();
         }
 
+
+
+
+
+
         /// <summary>Loads the covid data from xml.</summary>
         /// <param name="xmlContent">Content of the xml.</param>
         /// <exception cref="ArgumentNullException">xmlContent</exception>
@@ -295,6 +300,9 @@ namespace Covid19Analysis.OutputFormatter
             this.buildCovidSummary();
         }
 
+        #endregion
+
+        #region Private Methods
         private void buildCovidSummary()
         {
             try
