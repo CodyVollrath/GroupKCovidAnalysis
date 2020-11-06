@@ -134,6 +134,9 @@ namespace Covid19Analysis.OutputFormatter
             this.buildCovidSummary();
         }
 
+        /// <summary>Updates the collection from view model.</summary>
+        /// <param name="viewModel">The view model.</param>
+        /// <exception cref="System.ArgumentNullException">viewModel</exception>
         public void UpdateCollectionFromViewModel(CovidAnalysisViewModel viewModel)
         {
             viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
