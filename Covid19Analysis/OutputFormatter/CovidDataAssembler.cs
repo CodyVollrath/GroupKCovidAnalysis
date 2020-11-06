@@ -85,7 +85,7 @@ namespace Covid19Analysis.OutputFormatter
             this.IsCovidDataLoaded = false;
             this.covidErrorLogger = null;
             this.FilteredCovidDataCollection = null;
-            this.AllCovidData = null;
+            this.AllCovidData = new CovidDataCollection();
             this.mergeController = null;
         }
 
