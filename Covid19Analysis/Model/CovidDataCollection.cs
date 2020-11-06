@@ -265,10 +265,10 @@ namespace Covid19Analysis.Model
 
 
         /// <summary>Removes all covid records in a list.</summary>
-        /// <param name="covidRecords">The covid records.</param>
-        public void RemoveAllCovidRecordsInAList(ICollection<CovidRecord> covidRecords)
+        /// <param name="otherCovidRecords">The covid records.</param>
+        public void RemoveAllCovidRecordsInAList(ICollection<CovidRecord> otherCovidRecords)
         {
-            foreach (var record in covidRecords)
+            foreach (var record in otherCovidRecords)
             {
                 this.Remove(record);
             }

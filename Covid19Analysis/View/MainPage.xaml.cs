@@ -37,6 +37,8 @@ namespace Covid19Analysis.View
         /// </Summary>
         public const int ApplicationWidth = 620;
 
+        #endregion
+
         #region Static Members
 
         /// <summary>

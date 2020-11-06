@@ -15,11 +15,11 @@ namespace Covid19Analysis.Model
         ///     </para>
         /// </Summary>
         /// <value>The date.</value>
-        public DateTime Date { get; }
+        public DateTime Date { get; set; }
 
         /// <Summary>Gets the state.</Summary>
         /// <value>The state.</value>
-        public string State { get; }
+        public string State { get; set; }
 
         /// <Summary>Gets the positive tests.</Summary>
         /// <value>The positive tests.</value>
@@ -47,6 +47,14 @@ namespace Covid19Analysis.Model
 
         #endregion
 
+        #region Private Members
+
+        private readonly DateTime date;
+
+        private readonly string state;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -61,11 +69,15 @@ namespace Covid19Analysis.Model
             this.Date = dateTime;
             state = state ?? throw new ArgumentNullException(nameof(state));
             this.State = state.ToUpper();
+            this.date = this.Date;
+            this.state = this.State;
         }
 
         [UsedImplicitly]
         private CovidRecord()
         {
+            this.date = this.Date;
+            this.state = this.State;
         }
 
         #endregion
@@ -86,7 +98,7 @@ namespace Covid19Analysis.Model
         /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.</returns>
         public override int GetHashCode()
         {
-            return Tuple.Create(this.Date, this.State).GetHashCode();
+            return Tuple.Create(this.date, this.state).GetHashCode();
         }
 
         /// <summary>
