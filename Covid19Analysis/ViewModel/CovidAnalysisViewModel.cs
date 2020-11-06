@@ -7,30 +7,37 @@ using Covid19Analysis.Utility;
 
 namespace Covid19Analysis.ViewModel
 {
+
+    /// <summary>
+    ///   <para>The view model class for the covid list view</para>
+    /// </summary>
     public class CovidAnalysisViewModel : INotifyPropertyChanged
     {
-        #region Data members
-
-        private ObservableCollection<CovidRecord> covidData;
-
-        private CovidRecord selectedCovidRecord;
-
-        #endregion
-
         #region Properties
 
-        public RelayCommand RemoveCommand { get; set; }
+        /// <summary>Gets the remove command.</summary>
+        /// <value>The remove command.</value>
+        public RelayCommand RemoveCommand { get; private set; }
 
-        public ObservableCollection<CovidRecord> CovidData
+
+        private ObservableCollection<CovidRecord> covidDataRecordsRecords;
+
+        /// <summary>Gets or sets the covid data records saved in the application.</summary>
+        /// <value>The covid data records.</value>
+        public ObservableCollection<CovidRecord> CovidDataRecords
         {
-            get => this.covidData;
+            get => this.covidDataRecordsRecords;
             set
             {
-                this.covidData = value;
+                this.covidDataRecordsRecords = value;
                 this.OnPropertyChanged();
             }
         }
 
+        private CovidRecord selectedCovidRecord;
+
+        /// <summary>Gets or sets the selected covid record.</summary>
+        /// <value>The selected covid record.</value>
         public CovidRecord SelectedCovidRecord
         {
             get => this.selectedCovidRecord;
@@ -45,18 +52,30 @@ namespace Covid19Analysis.ViewModel
         #endregion
 
         #region Constructors
-
+        /// <summary>Initializes a new instance of the <see cref="CovidAnalysisViewModel" /> class.</summary>
         public CovidAnalysisViewModel()
         {
             this.loadCommands();
         }
+        #endregion
+
+        #region Inherited Methods
+
+        /// <summary>Occurs when a property value changes.</summary>
+        /// <returns>The PropertyChangedEventHandler</returns>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>Called when [property changed].</summary>
+        /// <param name="propertyName">Name of the property.</param>
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         #endregion
 
-        #region Methods
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
+        #region Private Helpers
         private void loadCommands()
         {
             this.RemoveCommand = new RelayCommand(this.deleteCovidRecord, this.canDeleteCovidRecord);
@@ -64,20 +83,13 @@ namespace Covid19Analysis.ViewModel
 
         private void deleteCovidRecord(object obj)
         {
-            this.CovidData.Remove(this.selectedCovidRecord);
+            this.CovidDataRecords.Remove(this.selectedCovidRecord);
         }
 
         private bool canDeleteCovidRecord(object obj)
         {
             return this.SelectedCovidRecord != null;
         }
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         #endregion
     }
 }

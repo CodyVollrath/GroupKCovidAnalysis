@@ -1,4 +1,5 @@
 ﻿<Page
+    NavigationCacheMode="Required"
     x:Class="Covid19Analysis.View.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

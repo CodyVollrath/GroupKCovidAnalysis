@@ -89,7 +89,7 @@ namespace Covid19Analysis.OutputFormatter
             this.IsCovidDataLoaded = false;
             this.covidErrorLogger = null;
             this.FilteredCovidDataCollection = null;
-            this.AllCovidData = null;
+            this.AllCovidData = new CovidDataCollection();
             this.mergeController = null;
         }
 
@@ -140,20 +140,29 @@ namespace Covid19Analysis.OutputFormatter
         public void UpdateCollectionFromViewModel(CovidAnalysisViewModel viewModel)
         {
             viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
-            if (viewModel.CovidData == null)
+            if (viewModel.CovidDataRecords == null)
             {
+                this.setFilteredCovidDataAndNoDataMessage();
                 return;
             }
 
-            if (!viewModel.CovidData.Any())
+            if (!viewModel.CovidDataRecords.Any())
             {
-                this.Reset();
+                this.AllCovidData.RemoveAllCovidRecordsInAList(this.FilteredCovidDataCollection);
+                if (!this.AllCovidData.Any())
+                {
+                    this.Reset();
+                    return;
+                }
+
+                this.setFilteredCovidDataAndNoDataMessage();
                 return;
             }
 
-            this.FilteredCovidDataCollection.ReplaceAllWithNewCovidCollection(viewModel.CovidData.ToList());
+            this.FilteredCovidDataCollection.ReplaceAllWithNewCovidCollection(viewModel.CovidDataRecords.ToList());
             this.buildCovidSummary();
         }
+
 
         /// <summary>
         ///     Merges the and loads the covid data using csv content.
@@ -392,6 +401,12 @@ namespace Covid19Analysis.OutputFormatter
             {
                 this.AllCovidData = new CovidDataCollection {record};
             }
+        }
+
+        private void setFilteredCovidDataAndNoDataMessage()
+        {
+            this.FilteredCovidDataCollection = null;
+            this.Summary = Assets.NoCovidDataText;
         }
 
         #endregion

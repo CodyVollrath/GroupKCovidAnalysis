@@ -29,14 +29,14 @@
                  MaxLength="9" BeforeTextChanging="negativeCasesTextBox_BeforeTextChanging"
                  LostFocus="negativeCasesTextBox_LostFocus" />
 
-        <TextBlock HorizontalAlignment="Left" Margin="4,212,0,0" Text="Currently Hospitalized" TextWrapping="Wrap"
+        <TextBlock HorizontalAlignment="Left" Margin="0,172,0,0" Text="Currently Hospitalized" TextWrapping="Wrap"
                    VerticalAlignment="Top" />
-        <TextBox x:Name="hospitalizedCurrentlyTextBox" Height="32" VerticalAlignment="Top" Margin="157,205,120,0"
+        <TextBox x:Name="hospitalizedCurrentlyTextBox" Height="32" VerticalAlignment="Top" Margin="157,165,120,0"
                  Text="0" MaxLength="9" BeforeTextChanging="hospitalizedCurrentlyTextBox_BeforeTextChanging"
                  LostFocus="hospitalizedCurrentlyTextBox_LostFocus" />
 
-        <TextBlock Text="Hospitalizations:" Margin="4,172,276,103" />
-        <TextBox x:Name="hospitalizationsTextBox" Height="32" VerticalAlignment="Top" Margin="157,165,120,0" Text="0"
+        <TextBlock Text="Hospitalizations:" Margin="4,212,276,63" />
+        <TextBox x:Name="hospitalizationsTextBox" Height="32" VerticalAlignment="Top" Margin="157,205,120,0" Text="0"
                  MaxLength="9" BeforeTextChanging="hospitalizationsTextBox_BeforeTextChanging"
                  LostFocus="hospitalizationsTextBox_LostFocus" />
 

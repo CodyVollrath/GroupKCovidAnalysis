@@ -9,82 +9,57 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Page.DataContext>
-        <viewModel:CovidAnalysisViewModel />
+        <viewModel:CovidAnalysisViewModel/>
     </Page.DataContext>
 
     <Grid RenderTransformOrigin="0.512,0.602">
         <CommandBar>
             <CommandBar.Content>
-                <Grid />
+                <Grid/>
             </CommandBar.Content>
-            <AppBarButton x:Name="backButton" Icon="back" Label="Back To Summary View" Click="backButton_Click" />
+            <AppBarButton x:Name="backButton" Icon ="back" Label="Back To Summary View" Click="backButton_Click"/>
         </CommandBar>
 
-        <TextBlock HorizontalAlignment="Left" Margin="12,46,0,0" TextWrapping="Wrap" VerticalAlignment="Top"
-                   Text="COVID-19 Analysis List View" />
-        <ListView VerticalAlignment="Top" HorizontalAlignment="Left"
-                  SelectedItem="{Binding Path=SelectedCovidRecord, Mode=TwoWay}"
-                  ItemsSource="{Binding Path=CovidData, Mode=TwoWay}" x:Name="CovidRecordsListView" Margin="12,84,0,0"
-                  RequestedTheme="Default" BorderBrush="Gray" BorderThickness="2" TabNavigation="Cycle" Height="248"
-                  Width="266">
+        <TextBlock HorizontalAlignment="Left" Margin="12,46,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="COVID-19 Analysis List View"/>
+        <ListView VerticalAlignment="Top" HorizontalAlignment ="Left" SelectedItem ="{Binding Path=SelectedCovidRecord, Mode=TwoWay}" ItemsSource="{Binding Path=CovidDataRecords, Mode=TwoWay}" x:Name="covidRecordsListView" Margin="12,84,0,0" RequestedTheme="Default" BorderBrush="Gray" BorderThickness="2" TabNavigation="Cycle" Height="248" Width="266">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="Black" BorderThickness="1">
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition />
+                                <RowDefinition/>
+                                <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <TextBlock HorizontalAlignment="Stretch" Grid.Row="0"
+                            <TextBlock HorizontalAlignment="Stretch" Grid.Row="0" 
                                        Text="{Binding Date, Converter={StaticResource dateConverter}, Mode=TwoWay }" />
-                            <TextBlock Grid.Row="1"
-                                       Text="{Binding PositiveTests, Converter={StaticResource positiveCasesFormatConverter}, Mode=TwoWay}" />
+                            <TextBlock Grid.Row="1" Text="{Binding PositiveTests, Converter={StaticResource positiveCasesFormatConverter}, Mode=TwoWay}" />
                         </Grid>
                     </Border>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
 
-        <TextBlock x:Name="dateOfRecordTextBlock" HorizontalAlignment="Left" Margin="283,104,0,0"
-                   Text="{Binding SelectedCovidRecord.Date, Converter={StaticResource dateConverter} ,Mode=TwoWay}"
-                   TextWrapping="Wrap" VerticalAlignment="Top" />
-        <TextBlock x:Name="stateOfRecordTextBlock" HorizontalAlignment="Left" Margin="429,104,0,0"
-                   Text="{Binding SelectedCovidRecord.State, Mode=TwoWay}" TextWrapping="Wrap" VerticalAlignment="Top" />
-        <TextBlock Text="Positive Cases:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="285,139,0,0" />
-        <TextBox x:Name="positiveCasesTextBox" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left"
-                 Margin="430,132,0,0" Text="{Binding SelectedCovidRecord.PositiveTests, Mode=TwoWay}" MaxLength="9"
-                 BeforeTextChanging="positiveCasesTextBox_BeforeTextChanging"
-                 LostFocus="positiveCasesTextBox_LostFocus" />
+        <TextBlock x:Name ="dateOfRecordTextBlock" HorizontalAlignment="Left" Margin="283,104,0,0" Text="{Binding SelectedCovidRecord.Date, Converter={StaticResource dateConverter} ,Mode=TwoWay}" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock x:Name ="stateOfRecordTextBlock" HorizontalAlignment="Left" Margin="429,104,0,0" Text="{Binding SelectedCovidRecord.State, Mode=TwoWay}" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock Text="Positive Cases:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="285,139,0,0"></TextBlock>
+        <TextBox x:Name="positiveCasesTextBox" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="430,132,0,0" Text="{Binding SelectedCovidRecord.PositiveTests, Mode=TwoWay}" MaxLength="9" BeforeTextChanging="positiveCasesTextBox_BeforeTextChanging" LostFocus="positiveCasesTextBox_LostFocus"></TextBox>
 
-        <TextBlock Text="Negative Cases:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="285,183,0,0" />
-        <TextBox x:Name="negativeCasesTextBox" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left"
-                 Margin="430,176,0,0" Text="{Binding SelectedCovidRecord.NegativeTests, Mode=TwoWay}" MaxLength="9"
-                 BeforeTextChanging="negativeCasesTextBox_BeforeTextChanging"
-                 LostFocus="negativeCasesTextBox_LostFocus" />
+        <TextBlock Text="Negative Cases:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="285,183,0,0"></TextBlock>
+        <TextBox x:Name="negativeCasesTextBox" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="430,176,0,0" Text="{Binding SelectedCovidRecord.NegativeTests, Mode=TwoWay}" MaxLength="9" BeforeTextChanging="negativeCasesTextBox_BeforeTextChanging" LostFocus="negativeCasesTextBox_LostFocus"></TextBox>
 
-        <TextBlock Margin="285,272,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"
-                   Text="Currently Hospitalized:" TextWrapping="Wrap" />
-        <TextBox x:Name="hospitalizedCurrentlyTextBox" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left"
-                 Margin="430,266,0,0" Text="{Binding SelectedCovidRecord.HospitalizedCurrently, Mode=TwoWay}"
-                 MaxLength="9" BeforeTextChanging="hospitalizedCurrentlyTextBox_BeforeTextChanging"
-                 LostFocus="hospitalizedCurrentlyTextBox_LostFocus" />
+        <TextBlock Margin="285,228,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Text="Currently Hospitalized:" TextWrapping="Wrap" />
+        <TextBox x:Name="hospitalizedCurrentlyTextBox" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="430,221,0,0" Text="{Binding SelectedCovidRecord.HospitalizedCurrently, Mode=TwoWay}" MaxLength="9" BeforeTextChanging="hospitalizedCurrentlyTextBox_BeforeTextChanging" LostFocus="hospitalizedCurrentlyTextBox_LostFocus"></TextBox>
 
-        <TextBlock Text="Hospitalizations:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="283,228,0,0" />
-        <TextBox x:Name="hospitalizationsTextBox" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left"
-                 Margin="430,221,0,0" Text="{Binding SelectedCovidRecord.Hospitalizations, Mode=TwoWay}" MaxLength="9"
-                 BeforeTextChanging="hospitalizationsTextBox_BeforeTextChanging"
-                 LostFocus="hospitalizationsTextBox_LostFocus" />
+        <TextBlock Text="Hospitalizations:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="285,272,0,0"></TextBlock>
+        <TextBox x:Name="hospitalizationsTextBox" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="430,265,0,0" Text="{Binding SelectedCovidRecord.Hospitalizations, Mode=TwoWay}" MaxLength="9" BeforeTextChanging="hospitalizationsTextBox_BeforeTextChanging" LostFocus="hospitalizationsTextBox_LostFocus"></TextBox>
 
-        <TextBlock Text="Deaths:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="285,317,0,0" />
-        <TextBox x:Name="deathsTextBox" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left"
-                 Margin="430,310,0,0" Text="{Binding SelectedCovidRecord.Deaths, Mode=TwoWay}" MaxLength="9"
-                 BeforeTextChanging="deathsTextBox_BeforeTextChanging" LostFocus="deathsTextBox_LostFocus" />
+        <TextBlock Text="Deaths:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="285,317,0,0"></TextBlock>
+        <TextBox x:Name="deathsTextBox" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="430,310,0,0" Text="{Binding SelectedCovidRecord.Deaths, Mode=TwoWay}" MaxLength="9" BeforeTextChanging="deathsTextBox_BeforeTextChanging" LostFocus="deathsTextBox_LostFocus"></TextBox>
 
-        <Button Command="{Binding RemoveCommand}" x:Name="deleteCovidRecord" Margin="10,376,0,0"
-                VerticalAlignment="Top">
+        <Button Command ="{Binding RemoveCommand}" x:Name="deleteCovidRecord" Margin="10,376,0,0" VerticalAlignment="Top">
             <StackPanel>
-                <SymbolIcon Symbol="Delete" />
-                <TextBlock Text="Delete Covid Record" />
+                <SymbolIcon Symbol="Delete"/>
+                <TextBlock Text="Delete Covid Record"></TextBlock>
             </StackPanel>
         </Button>
 

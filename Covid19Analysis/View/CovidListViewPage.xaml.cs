@@ -4,49 +4,37 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Covid19Analysis.ViewModel;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace Covid19Analysis.View
 {
     /// <summary>
-    ///     An empty page that can be used on its own or navigated to within a Frame.
+    /// A page that displays the list and detail view
     /// </summary>
-    public sealed partial class CovidListViewPage : Page
+    public sealed partial class CovidListViewPage
     {
-        #region Data members
-
+        #region Private Members
         private readonly CovidAnalysisViewModel covidAnalysisViewModel;
-
         #endregion
 
         #region Constructors
 
+        /// <summary>Initializes a new instance of the <see cref="CovidListViewPage" /> class.</summary>
         public CovidListViewPage()
         {
             this.InitializeComponent();
             this.covidAnalysisViewModel = new CovidAnalysisViewModel();
-            DataContext = this.covidAnalysisViewModel;
+            this.DataContext = this.covidAnalysisViewModel;
         }
-
         #endregion
 
-        #region Methods
+        #region Appbar Button Events
 
         private void backButton_Click(object sender, RoutedEventArgs e)
         {
-            Frame.Navigate(typeof(MainPage), this.covidAnalysisViewModel);
+            this.Frame.Navigate(typeof(MainPage), this.covidAnalysisViewModel);
         }
+        #endregion
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-            var parameter = e.Parameter;
-            if (parameter != null && !parameter.ToString().Equals(string.Empty))
-            {
-                var covidViewModel = (CovidAnalysisViewModel) parameter;
-                this.covidAnalysisViewModel.CovidData = covidViewModel.CovidData;
-            }
-        }
+        #region UI Events
 
         private void positiveCasesTextBox_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
@@ -68,8 +56,7 @@ namespace Covid19Analysis.View
             args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
         }
 
-        private void hospitalizedCurrentlyTextBox_BeforeTextChanging(TextBox sender,
-            TextBoxBeforeTextChangingEventArgs args)
+        private void hospitalizedCurrentlyTextBox_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
             args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
         }
@@ -81,7 +68,6 @@ namespace Covid19Analysis.View
                 this.positiveCasesTextBox.Text = "0";
             }
         }
-
         private void negativeCasesTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             if (this.negativeCasesTextBox.Text.Equals(string.Empty))
@@ -92,12 +78,12 @@ namespace Covid19Analysis.View
 
         private void deathsTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
+
             if (this.deathsTextBox.Text.Equals(string.Empty))
             {
                 this.deathsTextBox.Text = "0";
             }
         }
-
         private void hospitalizationsTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             if (this.hospitalizationsTextBox.Text.Equals(string.Empty))
@@ -115,5 +101,24 @@ namespace Covid19Analysis.View
         }
 
         #endregion
+
+        #region Navigation Methods
+
+        /// <summary>Invoked when the Page is loaded and becomes the current source of a parent Frame.</summary>
+        /// <param name="e">
+        /// Event data that can be examined by overriding code. The event data is representative of the pending navigation that will load the current Page. Usually the most relevant property to examine is Parameter.
+        /// </param>
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            var parameter = e.Parameter;
+            if (parameter != null && !parameter.ToString().Equals(string.Empty))
+            {
+                var covidViewModel = (CovidAnalysisViewModel)parameter;
+                this.covidAnalysisViewModel.CovidDataRecords = covidViewModel.CovidDataRecords;
+            }
+        }
+        #endregion
+
     }
 }
