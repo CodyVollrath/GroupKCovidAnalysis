@@ -46,6 +46,7 @@ namespace Covid19Analysis.View
         public static StateAbbreviations State;
 
         #endregion
+
         #region Private Members
 
         private readonly CovidDataAssembler covidDataAssembler;
@@ -108,12 +109,12 @@ namespace Covid19Analysis.View
         {
             try
             {
-                this.covidViewModel.CovidData = this.covidDataAssembler.FilteredCovidDataCollection.ToObservableCollection();
+                this.covidViewModel.CovidDataRecords = this.covidDataAssembler.FilteredCovidDataCollection.ToObservableCollection();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                this.covidViewModel.CovidData = null;
+                this.setViewModelCovidRecordsToNull();
             }
 
         }
@@ -162,7 +163,7 @@ namespace Covid19Analysis.View
         private void clearData_Click(object sender, RoutedEventArgs e)
         {
             this.covidDataAssembler.Reset();
-            this.covidViewModel.CovidData = null;
+            this.setViewModelCovidRecordsToNull();
             this.summaryTextBox.Text = string.Empty;
         }
 
@@ -337,6 +338,7 @@ namespace Covid19Analysis.View
             this.applyThresholds();
             this.applyBinSize();
             this.covidDataAssembler.UpdateSummary();
+            this.applyFilteredCollectionToViewModel();
             this.summaryTextBox.Text = this.covidDataAssembler.Summary;
         }
 
@@ -433,9 +435,14 @@ namespace Covid19Analysis.View
             if (!stateCovidRecords.Any())
             {
                 this.summaryTextBox.Text = Assets.NoCovidDataText;
+                this.setViewModelCovidRecordsToNull();
             }
         }
 
+        private void setViewModelCovidRecordsToNull()
+        {
+            this.covidViewModel.CovidDataRecords = null;
+        }
         #endregion
     }
 }

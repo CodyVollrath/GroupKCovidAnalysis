@@ -2,12 +2,9 @@
     x:Class="Covid19Analysis.View.CovidListViewPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Covid19Analysis.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:interop="using:Windows.UI.Xaml.Interop"
     xmlns:viewModel="using:Covid19Analysis.ViewModel"
-    xmlns:model="using:Covid19Analysis.Model"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -24,7 +21,7 @@
         </CommandBar>
 
         <TextBlock HorizontalAlignment="Left" Margin="12,46,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="COVID-19 Analysis List View"/>
-        <ListView VerticalAlignment="Top" HorizontalAlignment ="Left" SelectedItem ="{Binding Path=SelectedCovidRecord, Mode=TwoWay}" ItemsSource="{Binding Path=CovidData, Mode=TwoWay}" x:Name="CovidRecordsListView" Margin="12,84,0,0" RequestedTheme="Default" BorderBrush="Gray" BorderThickness="2" TabNavigation="Cycle" Height="248" Width="266">
+        <ListView VerticalAlignment="Top" HorizontalAlignment ="Left" SelectedItem ="{Binding Path=SelectedCovidRecord, Mode=TwoWay}" ItemsSource="{Binding Path=CovidDataRecords, Mode=TwoWay}" x:Name="covidRecordsListView" Margin="12,84,0,0" RequestedTheme="Default" BorderBrush="Gray" BorderThickness="2" TabNavigation="Cycle" Height="248" Width="266">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="Black" BorderThickness="1">

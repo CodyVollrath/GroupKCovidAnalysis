@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.Storage;
 using Covid19Analysis.DataTier;
@@ -112,23 +111,37 @@ namespace Covid19Analysis.OutputFormatter
             this.IsCovidDataLoaded = true;
             this.buildCovidSummary();
         }
+
+
+        /// <summary>Updates the collection from view model.</summary>
+        /// <param name="viewModel">The view model.</param>
+        /// <exception cref="System.ArgumentNullException">viewModel</exception>
         public void UpdateCollectionFromViewModel(CovidAnalysisViewModel viewModel)
         {
             viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
-            if (viewModel.CovidData == null)
+            if (viewModel.CovidDataRecords == null)
             {
+                this.setFilteredCovidDataAndNoDataMessage();
                 return;
             }
 
-            if (!viewModel.CovidData.Any())
+            if (!viewModel.CovidDataRecords.Any())
             {
-                this.Reset();
+                this.AllCovidData.RemoveAllCovidRecordsInAList(this.FilteredCovidDataCollection);
+                if (!this.AllCovidData.Any())
+                {
+                    this.Reset();
+                    return;
+                }
+
+                this.setFilteredCovidDataAndNoDataMessage();
                 return;
             }
 
-            this.FilteredCovidDataCollection.ReplaceAllWithNewCovidCollection(viewModel.CovidData.ToList());
+            this.FilteredCovidDataCollection.ReplaceAllWithNewCovidCollection(viewModel.CovidDataRecords.ToList());
             this.buildCovidSummary();
         }
+
 
         /// <summary>
         ///     Merges the and loads the covid data.
@@ -277,6 +290,7 @@ namespace Covid19Analysis.OutputFormatter
                 this.Reset();
             }
         }
+
         private string getPositiveThresholds(CovidDataSummary stateSummary)
         {
             var upperPositiveCaseThreshold = Format.FormatStringToInteger(this.UpperPositiveThreshold);
@@ -326,6 +340,12 @@ namespace Covid19Analysis.OutputFormatter
             {
                 this.AllCovidData = new CovidDataCollection { record };
             }
+        }
+
+        private void setFilteredCovidDataAndNoDataMessage()
+        {
+            this.FilteredCovidDataCollection = null;
+            this.Summary = Assets.NoCovidDataText;
         }
 
         #endregion

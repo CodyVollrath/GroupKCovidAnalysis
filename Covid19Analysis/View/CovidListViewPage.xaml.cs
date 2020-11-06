@@ -1,45 +1,40 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using Windows.Storage.Pickers;
+﻿using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using Covid19Analysis.Resources;
 using Covid19Analysis.ViewModel;
-
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Covid19Analysis.View
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// A page that displays the list and detail view
     /// </summary>
-    public sealed partial class CovidListViewPage : Page
+    public sealed partial class CovidListViewPage
     {
+        #region Private Members
         private readonly CovidAnalysisViewModel covidAnalysisViewModel;
+        #endregion
+
+        #region Constructors
+
+        /// <summary>Initializes a new instance of the <see cref="CovidListViewPage" /> class.</summary>
         public CovidListViewPage()
         {
             this.InitializeComponent();
             this.covidAnalysisViewModel = new CovidAnalysisViewModel();
             this.DataContext = this.covidAnalysisViewModel;
         }
+        #endregion
+
+        #region Appbar Button Events
 
         private void backButton_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(MainPage), this.covidAnalysisViewModel);
         }
+        #endregion
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-            var parameter = e.Parameter;
-            if (parameter != null && !parameter.ToString().Equals(string.Empty))
-            {
-                var covidViewModel = (CovidAnalysisViewModel) parameter;
-                this.covidAnalysisViewModel.CovidData = covidViewModel.CovidData;
-            }
-        }
+        #region UI Events
 
         private void positiveCasesTextBox_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
         {
@@ -104,5 +99,26 @@ namespace Covid19Analysis.View
                 this.hospitalizedCurrentlyTextBox.Text = "0";
             }
         }
+
+        #endregion
+
+        #region Navigation Methods
+
+        /// <summary>Invoked when the Page is loaded and becomes the current source of a parent Frame.</summary>
+        /// <param name="e">
+        /// Event data that can be examined by overriding code. The event data is representative of the pending navigation that will load the current Page. Usually the most relevant property to examine is Parameter.
+        /// </param>
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            var parameter = e.Parameter;
+            if (parameter != null && !parameter.ToString().Equals(string.Empty))
+            {
+                var covidViewModel = (CovidAnalysisViewModel)parameter;
+                this.covidAnalysisViewModel.CovidDataRecords = covidViewModel.CovidDataRecords;
+            }
+        }
+        #endregion
+
     }
 }
