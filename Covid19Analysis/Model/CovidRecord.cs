@@ -47,14 +47,6 @@ namespace Covid19Analysis.Model
 
         #endregion
 
-        #region Private Members
-
-        private readonly DateTime date;
-
-        private readonly string state;
-
-        #endregion
-
         #region Constructors
 
         /// <summary>
@@ -123,6 +115,14 @@ namespace Covid19Analysis.Model
             var otherRecord = (CovidRecord) obj;
             return this.Date.Equals(otherRecord.Date) && this.State.Equals(otherRecord.State);
         }
+
+        #endregion
+
+        #region Private Members
+
+        private readonly DateTime date;
+
+        private readonly string state;
 
         #endregion
     }

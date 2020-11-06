@@ -37,8 +37,6 @@ namespace Covid19Analysis.View
         /// </Summary>
         public const int ApplicationWidth = 620;
 
-        #endregion
-
         #region Static Members
 
         /// <summary>
@@ -47,8 +45,6 @@ namespace Covid19Analysis.View
         public static StateAbbreviations State;
 
         #endregion
-
-        #region Private Members
 
         #endregion
 
@@ -70,6 +66,10 @@ namespace Covid19Analysis.View
             this.statesComboBox.SelectedValue = Enum.GetName(typeof(StateAbbreviations), StateAbbreviations.GA);
             this.mergeOrReplaceDialog = new MergeOrReplaceDialog();
         }
+
+        #endregion
+
+        #region Private Members
 
         #endregion
 
@@ -130,7 +130,8 @@ namespace Covid19Analysis.View
         {
             try
             {
-                this.covidViewModel.CovidDataRecords = this.covidDataAssembler.FilteredCovidDataCollection.ToObservableCollection();
+                this.covidViewModel.CovidDataRecords =
+                    this.covidDataAssembler.FilteredCovidDataCollection.ToObservableCollection();
             }
             catch (Exception e)
             {
@@ -155,9 +156,9 @@ namespace Covid19Analysis.View
                 SuggestedStartLocation = PickerLocationId.DocumentsLibrary,
                 SuggestedFileName = $"Covid19Analysis_{DateTime.Now.ToString(Assets.TimeStamp)}"
             };
-            savePicker.FileTypeChoices.Add("Plain Text", new List<string>{".txt"});
-            savePicker.FileTypeChoices.Add("Csv Comma Delimited", new List<string> { ".csv" });
-            savePicker.FileTypeChoices.Add("Xml Data", new List<string> { ".xml" });
+            savePicker.FileTypeChoices.Add("Plain Text", new List<string> {".txt"});
+            savePicker.FileTypeChoices.Add("Csv Comma Delimited", new List<string> {".csv"});
+            savePicker.FileTypeChoices.Add("Xml Data", new List<string> {".xml"});
 
             var file = await savePicker.PickSaveFileAsync();
             bool isFileSaved;
@@ -537,6 +538,7 @@ namespace Covid19Analysis.View
         {
             this.covidViewModel.CovidDataRecords = null;
         }
+
         #endregion
     }
 }

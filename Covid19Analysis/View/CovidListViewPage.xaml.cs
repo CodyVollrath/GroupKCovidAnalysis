@@ -7,12 +7,18 @@ using Covid19Analysis.ViewModel;
 namespace Covid19Analysis.View
 {
     /// <summary>
-    /// A page that displays the list and detail view
+    ///     A page that displays the list and detail view
     /// </summary>
     public sealed partial class CovidListViewPage
     {
+        #region Data members
+
         #region Private Members
+
         private readonly CovidAnalysisViewModel covidAnalysisViewModel;
+
+        #endregion
+
         #endregion
 
         #region Constructors
@@ -22,16 +28,38 @@ namespace Covid19Analysis.View
         {
             this.InitializeComponent();
             this.covidAnalysisViewModel = new CovidAnalysisViewModel();
-            this.DataContext = this.covidAnalysisViewModel;
+            DataContext = this.covidAnalysisViewModel;
         }
+
         #endregion
+
+        #region Methods
 
         #region Appbar Button Events
 
         private void backButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(MainPage), this.covidAnalysisViewModel);
+            Frame.Navigate(typeof(MainPage), this.covidAnalysisViewModel);
         }
+
+        #endregion
+
+        /// <summary>Invoked when the Page is loaded and becomes the current source of a parent Frame.</summary>
+        /// <param name="e">
+        ///     Event data that can be examined by overriding code. The event data is representative of the pending navigation that
+        ///     will load the current Page. Usually the most relevant property to examine is Parameter.
+        /// </param>
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            var parameter = e.Parameter;
+            if (parameter != null && !parameter.ToString().Equals(string.Empty))
+            {
+                var covidViewModel = (CovidAnalysisViewModel) parameter;
+                this.covidAnalysisViewModel.CovidDataRecords = covidViewModel.CovidDataRecords;
+            }
+        }
+
         #endregion
 
         #region UI Events
@@ -56,7 +84,8 @@ namespace Covid19Analysis.View
             args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
         }
 
-        private void hospitalizedCurrentlyTextBox_BeforeTextChanging(TextBox sender, TextBoxBeforeTextChangingEventArgs args)
+        private void hospitalizedCurrentlyTextBox_BeforeTextChanging(TextBox sender,
+            TextBoxBeforeTextChangingEventArgs args)
         {
             args.Cancel = args.NewText.Any(c => !char.IsDigit(c));
         }
@@ -68,6 +97,7 @@ namespace Covid19Analysis.View
                 this.positiveCasesTextBox.Text = "0";
             }
         }
+
         private void negativeCasesTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             if (this.negativeCasesTextBox.Text.Equals(string.Empty))
@@ -78,12 +108,12 @@ namespace Covid19Analysis.View
 
         private void deathsTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-
             if (this.deathsTextBox.Text.Equals(string.Empty))
             {
                 this.deathsTextBox.Text = "0";
             }
         }
+
         private void hospitalizationsTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             if (this.hospitalizationsTextBox.Text.Equals(string.Empty))
@@ -101,24 +131,5 @@ namespace Covid19Analysis.View
         }
 
         #endregion
-
-        #region Navigation Methods
-
-        /// <summary>Invoked when the Page is loaded and becomes the current source of a parent Frame.</summary>
-        /// <param name="e">
-        /// Event data that can be examined by overriding code. The event data is representative of the pending navigation that will load the current Page. Usually the most relevant property to examine is Parameter.
-        /// </param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            base.OnNavigatedTo(e);
-            var parameter = e.Parameter;
-            if (parameter != null && !parameter.ToString().Equals(string.Empty))
-            {
-                var covidViewModel = (CovidAnalysisViewModel)parameter;
-                this.covidAnalysisViewModel.CovidDataRecords = covidViewModel.CovidDataRecords;
-            }
-        }
-        #endregion
-
     }
 }

@@ -263,7 +263,6 @@ namespace Covid19Analysis.Model
             return filteredList;
         }
 
-
         /// <summary>Removes all covid records in a list.</summary>
         /// <param name="otherCovidRecords">The covid records.</param>
         public void RemoveAllCovidRecordsInAList(ICollection<CovidRecord> otherCovidRecords)

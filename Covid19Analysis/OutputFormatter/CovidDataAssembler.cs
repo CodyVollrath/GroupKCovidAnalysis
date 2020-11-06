@@ -54,14 +54,6 @@ namespace Covid19Analysis.OutputFormatter
 
         #endregion
 
-        #region Private Members
-
-        private CovidDataErrorLogger covidErrorLogger;
-
-        private CovidDataMergeController mergeController;
-
-        #endregion
-
         #region Constructors
 
         /// <summary>
@@ -116,11 +108,6 @@ namespace Covid19Analysis.OutputFormatter
             this.buildCovidSummary();
         }
 
-
-
-
-
-
         /// <summary>Loads the covid data from xml.</summary>
         /// <param name="xmlContent">Content of the xml.</param>
         /// <exception cref="ArgumentNullException">xmlContent</exception>
@@ -162,7 +149,6 @@ namespace Covid19Analysis.OutputFormatter
             this.FilteredCovidDataCollection.ReplaceAllWithNewCovidCollection(viewModel.CovidDataRecords.ToList());
             this.buildCovidSummary();
         }
-
 
         /// <summary>
         ///     Merges the and loads the covid data using csv content.
@@ -312,9 +298,6 @@ namespace Covid19Analysis.OutputFormatter
             this.buildCovidSummary();
         }
 
-        #endregion
-
-        #region Private Methods
         private void buildCovidSummary()
         {
             try
@@ -408,6 +391,14 @@ namespace Covid19Analysis.OutputFormatter
             this.FilteredCovidDataCollection = null;
             this.Summary = Assets.NoCovidDataText;
         }
+
+        #endregion
+
+        #region Private Members
+
+        private CovidDataErrorLogger covidErrorLogger;
+
+        private CovidDataMergeController mergeController;
 
         #endregion
     }
