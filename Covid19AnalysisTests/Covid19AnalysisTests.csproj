@@ -120,7 +120,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CovidDataCollectionTests\TestReplaceDuplicateRecords.cs" />
+    <Compile Include="CovidDataStatisticsTests\TestFindAveragePositiveTestSinceSpecifiedDateTests.cs" />
     <Compile Include="CovidDataStatisticsTests\TestFindAveragePositiveTestsSinceFirstPositiveTest.cs" />
+    <Compile Include="CovidDataStatisticsTests\TestFindAverageTotalTestsSinceSpecifiedDate.cs" />
+    <Compile Include="CovidDataStatisticsTests\TestFindNumberOfDaysForPositiveTestsGreaterThanThreshold.cs" />
+    <Compile Include="CovidDataStatisticsTests\TestFindNumberOfDaysForPositiveTestsLessThanThreshold.cs" />
+    <Compile Include="CovidDataStatisticsTests\TestFindOverallPositivityRateSinceFirstPositiveTest.cs" />
     <Compile Include="CovidDataStatisticsTests\TestFindRecordWithHighestPositveCases.cs" />
     <Compile Include="CovidDataStatisticsTests\TestFindDayOfFirstPositiveTest.cs" />
     <Compile Include="CovidDataStatisticsTests\TestFindPositivePercentageForRecord.cs" />
@@ -154,10 +159,10 @@
       <Version>6.2.10</Version>
     </PackageReference>
     <PackageReference Include="MSTest.TestAdapter">
-      <Version>2.0.0</Version>
+      <Version>2.1.2</Version>
     </PackageReference>
     <PackageReference Include="MSTest.TestFramework">
-      <Version>2.0.0</Version>
+      <Version>2.1.2</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

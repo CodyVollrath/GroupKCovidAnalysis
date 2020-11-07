@@ -75,7 +75,7 @@ namespace Covid19Analysis.Resources
         {
             if (!FormatValidator.IsNumericStringValid(numericValue))
             {
-                throw new ArgumentException($"{nameof(numericValue)} is not a valid number");
+                throw new FormatException($"{nameof(numericValue)} is not a valid number");
             }
 
             if (numericValue == null)

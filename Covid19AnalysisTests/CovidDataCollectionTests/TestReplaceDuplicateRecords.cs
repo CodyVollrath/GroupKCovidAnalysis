@@ -5,31 +5,28 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Covid19AnalysisTests.CovidDataCollectionTests
 {
     /// <summary>
-    /// <para>
-    ///  Testing The functionality of the TestReplaceDuplicateRecords Method in the CovidDataCollection class
-    /// </para>
-    /// <para>TestCase: TestReplaceEmptyCollection</para>
-    ///	<para>Input: record1,{}  ExpectedOutput:False</para>
-    ///
-    /// <para>TestCase: TestReplaceSingleItemCollectionNoMatch</para>
-    /// <para>Input: record3, {record1.PositiveTests = 50}  ExpectedOutput: False</para>
-    ///
-    /// <para>TestCase: TestReplaceSingleItemCollectionWithMatch</para>
-    /// <para>Input: record2, {record1.PositiveTests = 50} ExpectedOutput: True, {record2.PositiveTests = 30} </para>
-    ///
-    /// <para>TestCase: TestReplaceMultipleItemCollection</para>
-    /// <para>Input: record2, {record1.PositiveTests = 50, record3.PositiveTests = 10}  ExpectedOutput: True, {record3.PositiveTests = 10, record1.PositiveTests = 30} </para>
+    ///     <para>
+    ///         Testing The functionality of the TestReplaceDuplicateRecords Method in the CovidDataCollection class
+    ///     </para>
+    ///     <para>TestCase: TestReplaceEmptyCollection</para>
+    ///     <para>Input: record1,{}  ExpectedOutput:False</para>
+    ///     <para>TestCase: TestReplaceSingleItemCollectionNoMatch</para>
+    ///     <para>Input: record3, {record1.PositiveTests = 50}  ExpectedOutput: False</para>
+    ///     <para>TestCase: TestReplaceSingleItemCollectionWithMatch</para>
+    ///     <para>Input: record2, {record1.PositiveTests = 50} ExpectedOutput: True, {record2.PositiveTests = 30} </para>
+    ///     <para>TestCase: TestReplaceMultipleItemCollection</para>
+    ///     <para>
+    ///         Input: record2, {record1.PositiveTests = 50, record3.PositiveTests = 10}  ExpectedOutput: True,
+    ///         {record3.PositiveTests = 10, record1.PositiveTests = 30}
+    ///     </para>
     /// </summary>
     [TestClass]
     public class TestReplaceDuplicateRecords
     {
-        #region Private Members
-        private CovidRecord record1;
-        private CovidRecord record2;
-        private CovidRecord record3;
-        #endregion
+        #region Methods
 
         #region Setup
+
         [TestInitialize]
         public void Setup()
         {
@@ -45,9 +42,9 @@ namespace Covid19AnalysisTests.CovidDataCollectionTests
                 PositiveTests = 10
             };
         }
+
         #endregion
 
-        #region Test Methods
         [TestMethod]
         public void TestReplaceEmptyCollection()
         {
@@ -58,8 +55,8 @@ namespace Covid19AnalysisTests.CovidDataCollectionTests
         [TestMethod]
         public void TestReplaceSingleItemCollectionNoMatch()
         {
-            var covidCollection = new CovidDataCollection() {
-                {this.record1}
+            var covidCollection = new CovidDataCollection {
+                this.record1
             };
             var recordBeforeChange = covidCollection[0];
             var isReplaced = covidCollection.ReplaceDuplicateRecords(this.record3);
@@ -73,9 +70,8 @@ namespace Covid19AnalysisTests.CovidDataCollectionTests
         [TestMethod]
         public void TestReplaceSingleItemCollectionWithMatch()
         {
-
-            var covidCollection = new CovidDataCollection() {
-                {this.record1}
+            var covidCollection = new CovidDataCollection {
+                this.record1
             };
             var recordBeforeChange = covidCollection[0];
             var isReplaced = covidCollection.ReplaceDuplicateRecords(this.record2);
@@ -89,9 +85,9 @@ namespace Covid19AnalysisTests.CovidDataCollectionTests
         [TestMethod]
         public void TestReplaceMultipleItemCollection()
         {
-            var covidCollection = new CovidDataCollection() {
-                {this.record1},
-                {this.record3}
+            var covidCollection = new CovidDataCollection {
+                this.record1,
+                this.record3
             };
             var recordBeforeChange = covidCollection[0];
             var isReplaced = covidCollection.ReplaceDuplicateRecords(this.record2);
@@ -102,8 +98,15 @@ namespace Covid19AnalysisTests.CovidDataCollectionTests
             Assert.IsTrue(isReplaced);
             Assert.AreEqual(this.record2.PositiveTests, recordAfterChange.PositiveTests);
             Assert.AreEqual(this.record3.PositiveTests, unalteredRecord.PositiveTests);
-
         }
+
+        #endregion
+
+        #region Private Members
+
+        private CovidRecord record1;
+        private CovidRecord record2;
+        private CovidRecord record3;
 
         #endregion
     }

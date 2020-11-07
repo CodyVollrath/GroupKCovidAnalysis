@@ -200,7 +200,7 @@ namespace Covid19Analysis.Model
         {
             if (threshold < 0)
             {
-                throw new ArgumentException($"{nameof(threshold)} can not be less than 0");
+                throw new ArgumentOutOfRangeException($"{nameof(threshold)} can not be less than 0");
             }
 
             var firstDateWithPositive = this.FindDayOfFirstPositiveTest();
@@ -219,7 +219,7 @@ namespace Covid19Analysis.Model
         {
             if (threshold < 0)
             {
-                throw new ArgumentException($"{nameof(threshold)} can not be less than 0");
+                throw new ArgumentOutOfRangeException($"{nameof(threshold)} can not be less than 0");
             }
 
             var firstDateWithPositive = this.FindDayOfFirstPositiveTest();

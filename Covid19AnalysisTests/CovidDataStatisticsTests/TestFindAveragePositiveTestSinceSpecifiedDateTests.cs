@@ -6,8 +6,8 @@ namespace Covid19AnalysisTests.CovidDataStatisticsTests
 {
     /// <summary>
     ///     <para>
-    ///         Testing The functionality of the FindAveragePositiveTestsSinceFirstPositiveTest Method in the
-    ///         CovidDataStatistics class
+    ///         Testing The functionality of the FindAveragePositiveTestSinceSpecifiedDate Method in the CovidDataStatistics
+    ///         class
     ///     </para>
     ///     <para>TestCase: TestAverageEmptyCovidDataCollection</para>
     ///     <para>Input: {} ExpectedOutput:InvalidOperationException</para>
@@ -17,7 +17,7 @@ namespace Covid19AnalysisTests.CovidDataStatisticsTests
     ///     <para>Input: {record1.PositiveTests = 30,record2.PositiveTests = 40, record3.PositiveTests = 50} ExpectedOutput: 40</para>
     /// </summary>
     [TestClass]
-    public class TestFindAveragePositiveTestsSinceFirstPositiveTest
+    public class TestFindAveragePositiveTestSinceSpecifiedDate
     {
         #region Methods
 
@@ -26,15 +26,17 @@ namespace Covid19AnalysisTests.CovidDataStatisticsTests
         [TestInitialize]
         public void Setup()
         {
-            this.record1 = new CovidRecord(DateTime.Now, "GA") {
+            this.record1 = new CovidRecord(DateTime.Parse("06/04/2020"), "GA") {
                 PositiveTests = 30
             };
-            this.record2 = new CovidRecord(DateTime.Now, "GA") {
+            this.record2 = new CovidRecord(DateTime.Parse("07/24/2020"), "GA") {
                 PositiveTests = 40
             };
-            this.record3 = new CovidRecord(DateTime.Now, "GA") {
+            this.record3 = new CovidRecord(DateTime.Parse("08/15/2020"), "GA") {
                 PositiveTests = 50
             };
+
+            this.defaultDate = DateTime.Parse("06/04/2020");
         }
 
         #endregion
@@ -46,17 +48,16 @@ namespace Covid19AnalysisTests.CovidDataStatisticsTests
             var covidCollection = new CovidDataCollection();
             var covidStatistics = new CovidDataStatistics(covidCollection);
             Assert.ThrowsException<InvalidOperationException>(() =>
-                covidStatistics.FindAveragePositiveTestsSinceFirstPositiveTest());
+                covidStatistics.FindAveragePositiveTestsSinceSpecifiedDate(this.defaultDate));
         }
 
         [TestMethod]
         public void TestAverageOneItemCovidDataCollection()
         {
-            var covidCollection = new CovidDataCollection {
-                this.record1
-            };
+            var covidCollection = new CovidDataCollection
+                {this.record1};
             var covidStatistics = new CovidDataStatistics(covidCollection);
-            var result = covidStatistics.FindAveragePositiveTestsSinceFirstPositiveTest();
+            var result = covidStatistics.FindAveragePositiveTestsSinceSpecifiedDate(this.defaultDate);
             Assert.AreEqual(30, result);
         }
 
@@ -69,7 +70,7 @@ namespace Covid19AnalysisTests.CovidDataStatisticsTests
                 this.record3
             };
             var covidStatistics = new CovidDataStatistics(covidCollection);
-            var result = covidStatistics.FindAveragePositiveTestsSinceFirstPositiveTest();
+            var result = covidStatistics.FindAveragePositiveTestsSinceSpecifiedDate(this.defaultDate);
             Assert.AreEqual(40, result);
         }
 
@@ -80,6 +81,7 @@ namespace Covid19AnalysisTests.CovidDataStatisticsTests
         private CovidRecord record1;
         private CovidRecord record2;
         private CovidRecord record3;
+        private DateTime defaultDate;
 
         #endregion
     }
