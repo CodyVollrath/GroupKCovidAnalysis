@@ -25,7 +25,7 @@ namespace Covid19Analysis.View
     /// </Summary>
     public sealed partial class MainPage
     {
-        #region Data members
+        #region Public Members
 
         /// <Summary>
         ///     The application height
@@ -43,6 +43,16 @@ namespace Covid19Analysis.View
         ///     The state
         /// </summary>
         public static StateAbbreviations State;
+
+        #endregion
+
+        #region Private Members
+
+        private readonly CovidDataAssembler covidDataAssembler;
+
+        private readonly ContentDialog mergeOrReplaceDialog;
+
+        private readonly CovidAnalysisViewModel covidViewModel;
 
         #endregion
 
@@ -66,20 +76,6 @@ namespace Covid19Analysis.View
             this.statesComboBox.SelectedValue = Enum.GetName(typeof(StateAbbreviations), StateAbbreviations.GA);
             this.mergeOrReplaceDialog = new MergeOrReplaceDialog();
         }
-
-        #endregion
-
-        #region Private Members
-
-        #endregion
-
-        #region Private Members
-
-        private readonly CovidDataAssembler covidDataAssembler;
-
-        private readonly ContentDialog mergeOrReplaceDialog;
-
-        private readonly CovidAnalysisViewModel covidViewModel;
 
         #endregion
 
@@ -174,6 +170,7 @@ namespace Covid19Analysis.View
             if (file.FileType == ".xml")
             {
                 isFileSaved = this.covidDataAssembler.WriteCovidDataToXmlFile(file);
+                
             }
             else
             {
