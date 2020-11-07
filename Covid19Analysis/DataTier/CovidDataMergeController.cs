@@ -5,7 +5,10 @@ using Covid19Analysis.Model;
 
 namespace Covid19Analysis.DataTier
 {
-    /// <summary>This class is responsible for merging CovidDataCollections</summary>
+    /// <summary>
+    /// Author: Cody Vollrath
+    /// This class is responsible for merging CovidDataCollections
+    /// </summary>
     public class CovidDataMergeController
     {
         #region Properties

@@ -120,7 +120,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converter\DateFormatConverter.cs" />
-    <Compile Include="Converter\PositiveCasesFormatConverter.cs" />
+    <Compile Include="Converter\NumericFieldDataConverter.cs" />
     <Compile Include="DataTier\CovidCsvParser.cs" />
     <Compile Include="DataTier\CovidDataMergeController.cs" />
     <Compile Include="DataTier\CsvCovidDataSaver.cs" />

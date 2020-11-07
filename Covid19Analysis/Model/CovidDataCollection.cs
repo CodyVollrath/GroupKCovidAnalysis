@@ -9,7 +9,10 @@ using Covid19Analysis.Resources;
 
 namespace Covid19Analysis.Model
 {
-    /// <Summary>This class keeps a collection of covid records</Summary>
+    /// <Summary>
+    /// Author: Cody Vollrath
+    /// This class keeps a collection of covid records
+    /// </Summary>
     public class CovidDataCollection : ICollection<CovidRecord>, IXmlSerializable
     {
         #region Data members

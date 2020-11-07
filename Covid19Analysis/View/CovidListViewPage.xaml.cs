@@ -133,12 +133,12 @@ namespace Covid19Analysis.View
             }
         }
 
-        #endregion
-
         private void covidRecordsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             this.enableTextBoxes();
         }
+
+        #endregion
 
         #region Private Helpers
 

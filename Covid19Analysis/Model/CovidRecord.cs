@@ -4,7 +4,10 @@ using Covid19Analysis.Resources;
 
 namespace Covid19Analysis.Model
 {
-    /// <Summary>This class keeps track of an individual covid record</Summary>
+    /// <Summary>
+    /// Author: Cody Vollrath
+    /// This class keeps track of an individual covid record
+    /// </Summary>
     public class CovidRecord
     {
         #region Properties

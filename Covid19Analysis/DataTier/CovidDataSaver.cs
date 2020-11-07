@@ -5,6 +5,7 @@ using Covid19Analysis.Model;
 namespace Covid19Analysis.DataTier
 {
     /// <summary>
+    ///     Authors: Eboni Walker
     ///     This class writes the contents of a CovidDataCollection to a file.
     /// </summary>
     public abstract class CovidDataSaver

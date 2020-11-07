@@ -5,7 +5,10 @@ using Covid19Analysis.Resources;
 
 namespace Covid19Analysis.Model
 {
-    /// <summary>This class finds particular data points out of a CovidDataCollection</summary>
+    /// <summary>
+    /// Author: Cody Vollrath
+    /// This class finds particular data points out of a CovidDataCollection
+    /// </summary>
     public class CovidDataStatistics
     {
         #region Properties

@@ -7,7 +7,8 @@ using Covid19Analysis.Model;
 namespace Covid19Analysis.DataTier
 {
     /// <summary>
-    ///     This class writes the contents of a CovidDataCollection to a xml file
+    /// Author: Eboni Walker
+    /// This class writes the contents of a CovidDataCollection to a xml file
     /// </summary>
     /// <seealso cref="Covid19Analysis.DataTier.CovidDataSaver" />
     public class XmlCovidDataSaver : CovidDataSaver
@@ -34,6 +35,7 @@ namespace Covid19Analysis.DataTier
 
         #region Methods
 
+        /// <summary>Writes the covid data to the storage file as XML.</summary>
         public override async void WriteCovidDataToFile()
         {
             var serializer = new XmlSerializer(typeof(CovidDataCollection));

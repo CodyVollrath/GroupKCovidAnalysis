@@ -2,7 +2,10 @@
 
 namespace Covid19Analysis.DataTier
 {
-    /// <summary>This class is responsible logging lines with errors or invalid data</summary>
+    /// <summary>
+    /// Author: Cody Vollrath
+    /// This class is responsible logging lines with errors or invalid data
+    /// </summary>
     public class CovidDataErrorLogger
     {
         #region Properties

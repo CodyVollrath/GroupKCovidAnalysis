@@ -6,6 +6,7 @@ using Covid19Analysis.Resources;
 namespace Covid19Analysis.DataTier
 {
     /// <summary>
+    ///     Authors: Cody Vollrath, Eboni Walker
     ///     This class writes the contents of a CovidDataCollection to a csv file
     /// </summary>
     /// <seealso cref="Covid19Analysis.DataTier.CovidDataSaver" />
@@ -33,6 +34,7 @@ namespace Covid19Analysis.DataTier
 
         #region Methods
 
+        /// <summary>Writes the covid data to the storage file as CSV.</summary>
         public override async void WriteCovidDataToFile()
         {
             var contents = string.Empty;
