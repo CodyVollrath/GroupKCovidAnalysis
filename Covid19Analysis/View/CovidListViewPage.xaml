@@ -26,7 +26,7 @@
                   SelectedItem="{Binding Path=SelectedCovidRecord, Mode=TwoWay}"
                   ItemsSource="{Binding Path=CovidDataRecords, Mode=TwoWay}" x:Name="covidRecordsListView"
                   Margin="12,84,0,0" RequestedTheme="Default" BorderBrush="Gray" BorderThickness="2"
-                  TabNavigation="Cycle" Height="248" Width="266">
+                  TabNavigation="Cycle" Height="248" Width="266" SelectionChanged="covidRecordsListView_SelectionChanged">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="Black" BorderThickness="1">

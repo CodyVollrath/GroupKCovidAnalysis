@@ -29,6 +29,7 @@ namespace Covid19Analysis.View
             this.InitializeComponent();
             this.covidAnalysisViewModel = new CovidAnalysisViewModel();
             DataContext = this.covidAnalysisViewModel;
+            this.disableTextBoxes();
         }
 
         #endregion
@@ -130,6 +131,33 @@ namespace Covid19Analysis.View
             {
                 this.hospitalizedCurrentlyTextBox.Text = "0";
             }
+        }
+
+        #endregion
+
+        private void covidRecordsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.enableTextBoxes();
+        }
+
+        #region Private Helpers
+
+        private void disableTextBoxes()
+        {
+            this.positiveCasesTextBox.IsEnabled = false;
+            this.negativeCasesTextBox.IsEnabled = false;
+            this.deathsTextBox.IsEnabled = false;
+            this.hospitalizationsTextBox.IsEnabled = false;
+            this.hospitalizedCurrentlyTextBox.IsEnabled = false;
+        }
+
+        private void enableTextBoxes()
+        {
+            this.positiveCasesTextBox.IsEnabled = true;
+            this.negativeCasesTextBox.IsEnabled = true;
+            this.deathsTextBox.IsEnabled = true;
+            this.hospitalizationsTextBox.IsEnabled = true;
+            this.hospitalizedCurrentlyTextBox.IsEnabled = true;
         }
 
         #endregion
