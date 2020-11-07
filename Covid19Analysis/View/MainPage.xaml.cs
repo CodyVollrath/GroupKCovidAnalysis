@@ -110,6 +110,7 @@ namespace Covid19Analysis.View
                 }
 
                 this.displayCovidData(xmlContent);
+                this.noRecordsForThatState();
             }
             else
             {
@@ -121,6 +122,7 @@ namespace Covid19Analysis.View
                 }
 
                 this.displayCovidData(fileContent);
+                this.noRecordsForThatState();
             }
 
             this.applyFilteredCollectionToViewModel();
@@ -130,6 +132,7 @@ namespace Covid19Analysis.View
         {
             try
             {
+
                 this.covidViewModel.CovidDataRecords =
                     this.covidDataAssembler.FilteredCovidDataCollection.ToObservableCollection();
             }
