@@ -3,10 +3,9 @@ using System.Collections.ObjectModel;
 
 namespace Covid19Analysis.Extension
 {
-
     /// <summary>
-    /// Author: Cody Vollrath
-    /// This class allows for conversion of an enumerable inherited object to be converted to an observable collection
+    ///     Author: Cody Vollrath
+    ///     This class allows for conversion of an enumerable inherited object to be converted to an observable collection
     /// </summary>
     public static class ListExtensions
     {

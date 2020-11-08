@@ -7,8 +7,8 @@ using Covid19Analysis.Model;
 namespace Covid19Analysis.DataTier
 {
     /// <summary>
-    /// Author: Eboni Walker
-    /// This class writes the contents of a CovidDataCollection to a xml file
+    ///     Author: Eboni Walker
+    ///     This class writes the contents of a CovidDataCollection to a xml file
     /// </summary>
     /// <seealso cref="Covid19Analysis.DataTier.CovidDataSaver" />
     public class XmlCovidDataSaver : CovidDataSaver

@@ -146,7 +146,8 @@ namespace Covid19Analysis.Model
         /// <summary>
         ///     The enumeration of the abbreviation for Northern Mariana Islands
         /// </summary>
-        [Description("Northern Mariana Islands")] MP,
+        [Description("Northern Mariana Islands")]
+        MP,
 
         /// <summary>
         ///     The enumeration of the abbreviation for Mississippi

@@ -7,16 +7,20 @@ using Covid19Analysis.Resources;
 namespace Covid19Analysis.DataTier
 {
     /// <Summary>
-    /// Author: Cody Vollrath
-    /// This class is responsible for taking string data and formatting the values to be representative of a table in
-    /// memory.
-    /// <seealso cref="Covid19Analysis.DataTier.CovidDataSaver" />
+    ///     Author: Cody Vollrath
+    ///     This class is responsible for taking string data and formatting the values to be representative of a table in
+    ///     memory.
+    ///     <seealso cref="Covid19Analysis.DataTier.CovidDataSaver" />
     /// </Summary>
     public class CovidCsvParser
     {
+        #region Data members
+
         #region Private Fields
 
         private readonly CovidDataCollection covidDataCollection;
+
+        #endregion
 
         #endregion
 

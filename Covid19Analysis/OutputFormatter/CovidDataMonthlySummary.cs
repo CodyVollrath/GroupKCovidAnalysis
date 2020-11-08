@@ -9,18 +9,21 @@ namespace Covid19Analysis.OutputFormatter
     /// <Summary>This class generates the Summary for the monthly values</Summary>
     public class CovidDataMonthlySummary
     {
+        #region Data members
+
+        #region Private Members
+
+        private CovidDataStatistics covidStatistics;
+
+        #endregion
+
+        #endregion
 
         #region Properties
 
         /// <Summary>Gets the covid collection.</Summary>
         /// <value>The covid collection.</value>
         public CovidDataCollection CovidRecords { get; }
-
-        #endregion
-
-        #region Private Members
-
-        private CovidDataStatistics covidStatistics;
 
         #endregion
 

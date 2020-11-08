@@ -16,15 +16,36 @@ using Covid19Analysis.OutputFormatter;
 using Covid19Analysis.Resources;
 using Covid19Analysis.ViewModel;
 
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
-
 namespace Covid19Analysis.View
 {
     /// <Summary>
-    ///     An empty page that can be used on its own or navigated to within a Frame.
+    ///     A page that can be used to view and edit Covid statistics.
     /// </Summary>
+    /// <seealso cref="Windows.UI.Xaml.Markup.IComponentConnector" />
+    /// <seealso cref="Windows.UI.Xaml.Markup.IComponentConnector2" />
     public sealed partial class MainPage
     {
+        #region Constructors
+
+        /// <Summary>
+        ///     Initializes a new instance of the <see cref="MainPage" /> class.
+        /// </Summary>
+        public MainPage()
+        {
+            this.InitializeComponent();
+            ApplicationView.PreferredLaunchViewSize = new Size {Width = ApplicationWidth, Height = ApplicationHeight};
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(ApplicationWidth, ApplicationHeight));
+            this.covidDataAssembler = new CovidDataAssembler(StateAbbreviations.GA);
+            this.covidViewModel = new CovidAnalysisViewModel();
+            this.statesComboBox.ItemsSource = Enum.GetNames(typeof(StateAbbreviations));
+            State = StateAbbreviations.GA;
+            this.statesComboBox.SelectedValue = Enum.GetName(typeof(StateAbbreviations), StateAbbreviations.GA);
+            this.mergeOrReplaceDialog = new MergeOrReplaceDialog();
+        }
+
+        #endregion
+
         #region Data Members
 
         #region Public Members
@@ -59,27 +80,6 @@ namespace Covid19Analysis.View
         private readonly CovidAnalysisViewModel covidViewModel;
 
         #endregion
-
-        #endregion
-
-        #region Constructors
-
-        /// <Summary>
-        ///     Initializes a new instance of the <see cref="MainPage" /> class.
-        /// </Summary>
-        public MainPage()
-        {
-            this.InitializeComponent();
-            ApplicationView.PreferredLaunchViewSize = new Size {Width = ApplicationWidth, Height = ApplicationHeight};
-            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
-            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(ApplicationWidth, ApplicationHeight));
-            this.covidDataAssembler = new CovidDataAssembler(StateAbbreviations.GA);
-            this.covidViewModel = new CovidAnalysisViewModel();
-            this.statesComboBox.ItemsSource = Enum.GetNames(typeof(StateAbbreviations));
-            State = StateAbbreviations.GA;
-            this.statesComboBox.SelectedValue = Enum.GetName(typeof(StateAbbreviations), StateAbbreviations.GA);
-            this.mergeOrReplaceDialog = new MergeOrReplaceDialog();
-        }
 
         #endregion
 
@@ -132,7 +132,6 @@ namespace Covid19Analysis.View
         {
             try
             {
-
                 this.covidViewModel.CovidDataRecords =
                     this.covidDataAssembler.FilteredCovidDataCollection.ToObservableCollection();
             }
@@ -174,7 +173,6 @@ namespace Covid19Analysis.View
             if (file.FileType == ".xml")
             {
                 isFileSaved = this.covidDataAssembler.WriteCovidDataToXmlFile(file);
-                
             }
             else
             {

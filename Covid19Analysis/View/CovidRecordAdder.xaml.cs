@@ -4,14 +4,14 @@ using Windows.UI.Xaml.Controls;
 using Covid19Analysis.Model;
 using Covid19Analysis.Resources;
 
-// The Content Dialog item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace Covid19Analysis.View
 {
     /// <summary>
     ///     This class is responsible for the logic behind the addition of a CovidRecord to the data set within the
     ///     application
     /// </summary>
+    /// <seealso cref="Windows.UI.Xaml.Markup.IComponentConnector" />
+    /// <seealso cref="Windows.UI.Xaml.Markup.IComponentConnector2" />
     public sealed partial class CovidRecordAdder
     {
         #region Properties

@@ -8,6 +8,16 @@ namespace Covid19Analysis.OutputFormatter
     /// <summary>This class provides functions for all Covid data Summaries</summary>
     public class CovidDataSummary
     {
+        #region Data members
+
+        #region Private Members
+
+        private readonly CovidDataStatistics covidStatistics;
+
+        #endregion
+
+        #endregion
+
         #region Properties
 
         /// <Summary>Gets the covid records.</Summary>
@@ -17,12 +27,6 @@ namespace Covid19Analysis.OutputFormatter
         /// <summary>Gets the state filter of the covid data collection.</summary>
         /// <value>The state filter.</value>
         public string StateFilter { get; }
-
-        #endregion
-
-        #region Private Members
-
-        private readonly CovidDataStatistics covidStatistics;
 
         #endregion
 

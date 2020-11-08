@@ -12,12 +12,19 @@ namespace Covid19Analysis.ViewModel
     /// </summary>
     public class CovidAnalysisViewModel : INotifyPropertyChanged
     {
+        #region Data members
+
+        private ObservableCollection<CovidRecord> covidDataRecordsRecords;
+
+        private CovidRecord selectedCovidRecord;
+
+        #endregion
+
         #region Properties
+
         /// <summary>Gets the remove command.</summary>
         /// <value>The remove command.</value>
         public RelayCommand RemoveCommand { get; private set; }
-
-        private ObservableCollection<CovidRecord> covidDataRecordsRecords;
 
         /// <summary>Gets or sets the covid data records saved in the application.</summary>
         /// <value>The covid data records.</value>
@@ -30,8 +37,6 @@ namespace Covid19Analysis.ViewModel
                 this.OnPropertyChanged();
             }
         }
-
-        private CovidRecord selectedCovidRecord;
 
         /// <summary>Gets or sets the selected covid record.</summary>
         /// <value>The selected covid record.</value>

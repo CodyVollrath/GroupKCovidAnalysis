@@ -10,11 +10,21 @@ using Covid19Analysis.Resources;
 namespace Covid19Analysis.Model
 {
     /// <Summary>
-    /// Author: Cody Vollrath
-    /// This class keeps a collection of covid records
+    ///     Author: Cody Vollrath, Eboni Walker
+    ///     This class keeps a collection of covid records
     /// </Summary>
     public class CovidDataCollection : ICollection<CovidRecord>, IXmlSerializable
     {
+        #region Data members
+
+        #region Private Members
+
+        private ICollection<CovidRecord> covidRecords;
+
+        #endregion
+
+        #endregion
+
         #region Properties
 
         /// <summary>Gets or sets the <see cref="CovidRecord" /> at the specified index.</summary>
@@ -23,8 +33,8 @@ namespace Covid19Analysis.Model
         /// <returns>The element at the specified index</returns>
         public CovidRecord this[int index]
         {
-            get => ((List<CovidRecord>)this.covidRecords)[index];
-            set => ((List<CovidRecord>)this.covidRecords)[index] = value;
+            get => ((List<CovidRecord>) this.covidRecords)[index];
+            set => ((List<CovidRecord>) this.covidRecords)[index] = value;
         }
 
         /// <Summary>
@@ -39,12 +49,6 @@ namespace Covid19Analysis.Model
         ///     <br />
         /// </exception>
         public bool IsReadOnly => this.covidRecords.IsReadOnly;
-
-        #endregion
-
-        #region Private Members
-
-        private ICollection<CovidRecord> covidRecords;
 
         #endregion
 
@@ -276,13 +280,12 @@ namespace Covid19Analysis.Model
             }
         }
 
-
         /// <summary>
-        /// Removes the state of the covid records by missing records with the same state.
-        /// The Collection passed in must have only one state represented
-        /// Will go by the first record state value.
-        /// <code>Precondition: filteredCovidCollection != null</code>
-        /// <code>Postcondition: CovidRecords removes all missing records from filteredCovidCollection</code>
+        ///     Removes the state of the covid records by missing records with the same state.
+        ///     The Collection passed in must have only one state represented
+        ///     Will go by the first record state value.
+        ///     <code>Precondition: filteredCovidCollection != null</code>
+        ///     <code>Postcondition: CovidRecords removes all missing records from filteredCovidCollection</code>
         /// </summary>
         /// <param name="filteredCovidCollection">The filtered covid collection</param>
         public void RemoveCovidRecordsByMissingRecordsWithTheSameState(ICollection<CovidRecord> filteredCovidCollection)

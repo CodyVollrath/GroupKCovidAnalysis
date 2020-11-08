@@ -6,8 +6,8 @@ using Covid19Analysis.Model;
 namespace Covid19Analysis.DataTier
 {
     /// <summary>
-    /// Author: Cody Vollrath
-    /// This class is responsible for merging CovidDataCollections
+    ///     Author: Cody Vollrath
+    ///     This class is responsible for merging CovidDataCollections
     /// </summary>
     public class CovidDataMergeController
     {
@@ -22,6 +22,8 @@ namespace Covid19Analysis.DataTier
         public CovidDataCollection NewCovidDataCollection { get; }
 
         #endregion
+
+        #region Constructors
 
         #region Construtors
 
@@ -44,6 +46,8 @@ namespace Covid19Analysis.DataTier
                 originalCollection ?? throw new ArgumentNullException(nameof(originalCollection));
             this.NewCovidDataCollection = newCollection ?? throw new ArgumentNullException(nameof(newCollection));
         }
+
+        #endregion
 
         #endregion
 

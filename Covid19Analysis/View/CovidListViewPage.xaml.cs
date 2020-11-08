@@ -9,11 +9,17 @@ namespace Covid19Analysis.View
     /// <summary>
     ///     A page that displays the list and detail view
     /// </summary>
+    /// <seealso cref="Windows.UI.Xaml.Markup.IComponentConnector" />
+    /// <seealso cref="Windows.UI.Xaml.Markup.IComponentConnector2" />
     public sealed partial class CovidListViewPage
     {
+        #region Data members
+
         #region Private Members
 
         private readonly CovidAnalysisViewModel covidAnalysisViewModel;
+
+        #endregion
 
         #endregion
 

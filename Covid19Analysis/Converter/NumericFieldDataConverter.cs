@@ -3,10 +3,9 @@ using Windows.UI.Xaml.Data;
 
 namespace Covid19Analysis.Converter
 {
-
     /// <summary>
-    /// Author: Cody Vollrath
-    /// This class converts PositiveCase data from int to formatted string and vice versa
+    ///     Author: Cody Vollrath
+    ///     This class converts PositiveCase data from int to formatted string and vice versa
     /// </summary>
     public class PositiveCasesFormatConverter : IValueConverter
     {
@@ -18,7 +17,7 @@ namespace Covid19Analysis.Converter
         /// <param name="parameter">The parameter.</param>
         /// <param name="language">The language.</param>
         /// <returns>
-        ///   <br />
+        ///     <br />
         /// </returns>
         public object Convert(object value, Type targetType, object parameter, string language)
         {
@@ -29,14 +28,13 @@ namespace Covid19Analysis.Converter
             return positiveCaseLabel;
         }
 
-
         /// <summary>Converts the back.</summary>
         /// <param name="value">The value.</param>
         /// <param name="targetType">Type of the target.</param>
         /// <param name="parameter">The parameter.</param>
         /// <param name="language">The language.</param>
         /// <returns>
-        ///   <br />
+        ///     <br />
         /// </returns>
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
