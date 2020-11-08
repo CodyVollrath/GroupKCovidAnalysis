@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.Storage;
 using Covid19Analysis.DataTier;
@@ -121,19 +122,18 @@ namespace Covid19Analysis.OutputFormatter
             this.buildCovidSummary();
         }
 
-        /// <summary>Updates the collection from view model.</summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <exception cref="System.ArgumentNullException">viewModel</exception>
-        public void UpdateCollectionFromViewModel(CovidAnalysisViewModel viewModel)
+        /// <summary>
+        /// Updates the collection from view model.
+        /// <code>Precondition: covidRecords != null</code>
+        /// <code>Postcondition: FilteredCollection = covidRecords and AllCovid</code>
+        /// </summary>
+        /// <param name="covidRecords">The Collection of CovidRecords.</param>
+        /// <exception cref="System.ArgumentNullException">covidRecords</exception>
+        public void UpdateCollection(ObservableCollection<CovidRecord> covidRecords)
         {
-            viewModel = viewModel ?? throw new ArgumentNullException(nameof(viewModel));
-            if (viewModel.CovidDataRecords == null)
-            {
-                this.setFilteredCovidDataAndNoDataMessage();
-                return;
-            }
+            covidRecords = covidRecords ?? throw new ArgumentNullException(nameof(covidRecords));
 
-            if (!viewModel.CovidDataRecords.Any())
+            if (!covidRecords.Any())
             {
                 this.AllCovidData.RemoveAllCovidRecordsInAList(this.FilteredCovidDataCollection);
                 if (!this.AllCovidData.Any())
@@ -146,7 +146,9 @@ namespace Covid19Analysis.OutputFormatter
                 return;
             }
 
-            this.FilteredCovidDataCollection.ReplaceAllWithNewCovidCollection(viewModel.CovidDataRecords.ToList());
+            this.FilteredCovidDataCollection.ReplaceAllWithNewCovidCollection(covidRecords.ToList());
+            this.AllCovidData.AddAll(this.FilteredCovidDataCollection);
+            this.AllCovidData.RemoveCovidRecordsByMissingRecordsWithTheSameState(this.FilteredCovidDataCollection);
             this.buildCovidSummary();
         }
 

@@ -518,7 +518,7 @@ namespace Covid19Analysis.View
             if (parameter != null && !parameter.ToString().Equals(string.Empty))
             {
                 var covidViewModel = (CovidAnalysisViewModel) parameter;
-                this.covidDataAssembler.UpdateCollectionFromViewModel(covidViewModel);
+                this.covidDataAssembler.UpdateCollection(covidViewModel.CovidDataRecords);
                 this.summaryTextBox.Text = this.covidDataAssembler.Summary;
             }
             else

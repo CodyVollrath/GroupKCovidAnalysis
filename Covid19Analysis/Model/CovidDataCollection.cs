@@ -228,7 +228,7 @@ namespace Covid19Analysis.Model
         }
 
         /// <summary>
-        ///     Adds all.
+        ///     Adds all records if they do not exist, otherwise it replaces the current record.
         ///     <code>Precondition: newCovidRecords != null</code>
         ///     <code>Postcondition: covidRecords.Count() += newCovidRecords.Count()</code>
         /// </summary>
@@ -273,6 +273,32 @@ namespace Covid19Analysis.Model
             foreach (var record in otherCovidRecords)
             {
                 this.Remove(record);
+            }
+        }
+
+
+        /// <summary>
+        /// Removes the state of the covid records by missing records with the same state.
+        /// The Collection passed in must have only one state represented
+        /// Will go by the first record state value.
+        /// </summary>
+        public void RemoveCovidRecordsByMissingRecordsWithTheSameState(ICollection<CovidRecord> filteredCovidCollection)
+        {
+            filteredCovidCollection = filteredCovidCollection ??
+                                      throw new ArgumentNullException(nameof(filteredCovidCollection));
+            if (!filteredCovidCollection.Any())
+            {
+                return;
+            }
+
+            var stateFilter = filteredCovidCollection.First().State;
+            var recordsByState = this.covidRecords.Where(record => record.State.Equals(stateFilter)).ToList();
+            foreach (var record in recordsByState)
+            {
+                if (!filteredCovidCollection.Contains(record))
+                {
+                    this.Remove(record);
+                }
             }
         }
 
