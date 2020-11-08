@@ -6,7 +6,6 @@ using Windows.Storage;
 using Covid19Analysis.DataTier;
 using Covid19Analysis.Model;
 using Covid19Analysis.Resources;
-using Covid19Analysis.ViewModel;
 
 namespace Covid19Analysis.OutputFormatter
 {
@@ -125,7 +124,7 @@ namespace Covid19Analysis.OutputFormatter
         /// <summary>
         /// Updates the collection from view model.
         /// <code>Precondition: covidRecords != null</code>
-        /// <code>Postcondition: FilteredCollection = covidRecords and AllCovid</code>
+        /// <code>Postcondition: FilteredCollection = covidRecords and AllCovidData updates according to FilteredCollection</code>
         /// </summary>
         /// <param name="covidRecords">The Collection of CovidRecords.</param>
         /// <exception cref="System.ArgumentNullException">covidRecords</exception>

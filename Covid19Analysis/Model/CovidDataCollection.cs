@@ -281,7 +281,10 @@ namespace Covid19Analysis.Model
         /// Removes the state of the covid records by missing records with the same state.
         /// The Collection passed in must have only one state represented
         /// Will go by the first record state value.
+        /// <code>Precondition: filteredCovidCollection != null</code>
+        /// <code>Postcondition: CovidRecords removes all missing records from filteredCovidCollection</code>
         /// </summary>
+        /// <param name="filteredCovidCollection">The filtered covid collection</param>
         public void RemoveCovidRecordsByMissingRecordsWithTheSameState(ICollection<CovidRecord> filteredCovidCollection)
         {
             filteredCovidCollection = filteredCovidCollection ??
@@ -293,12 +296,13 @@ namespace Covid19Analysis.Model
 
             var stateFilter = filteredCovidCollection.First().State;
             var recordsByState = this.covidRecords.Where(record => record.State.Equals(stateFilter)).ToList();
-            foreach (var record in recordsByState)
+
+            var missingRecordsFromFilteredCollection =
+                recordsByState.Where(record => !filteredCovidCollection.Contains(record)).ToList();
+
+            foreach (var record in missingRecordsFromFilteredCollection)
             {
-                if (!filteredCovidCollection.Contains(record))
-                {
-                    this.Remove(record);
-                }
+                this.Remove(record);
             }
         }
 
