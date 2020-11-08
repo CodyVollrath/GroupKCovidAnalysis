@@ -25,6 +25,8 @@ namespace Covid19Analysis.View
     /// </Summary>
     public sealed partial class MainPage
     {
+        #region Data Members
+
         #region Public Members
 
         /// <Summary>
@@ -36,6 +38,8 @@ namespace Covid19Analysis.View
         ///     The application width
         /// </Summary>
         public const int ApplicationWidth = 620;
+
+        #endregion
 
         #region Static Members
 

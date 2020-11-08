@@ -23,8 +23,6 @@ namespace Covid19Analysis.DataTier
 
         #endregion
 
-        #region Constructors
-
         #region Construtors
 
         /// <summary>
@@ -46,8 +44,6 @@ namespace Covid19Analysis.DataTier
                 originalCollection ?? throw new ArgumentNullException(nameof(originalCollection));
             this.NewCovidDataCollection = newCollection ?? throw new ArgumentNullException(nameof(newCollection));
         }
-
-        #endregion
 
         #endregion
 

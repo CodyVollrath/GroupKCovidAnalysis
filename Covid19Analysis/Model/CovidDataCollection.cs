@@ -15,12 +15,6 @@ namespace Covid19Analysis.Model
     /// </Summary>
     public class CovidDataCollection : ICollection<CovidRecord>, IXmlSerializable
     {
-        #region Data members
-
-        private ICollection<CovidRecord> covidRecords;
-
-        #endregion
-
         #region Properties
 
         /// <summary>Gets or sets the <see cref="CovidRecord" /> at the specified index.</summary>
@@ -29,8 +23,8 @@ namespace Covid19Analysis.Model
         /// <returns>The element at the specified index</returns>
         public CovidRecord this[int index]
         {
-            get => ((List<CovidRecord>) this.covidRecords)[index];
-            set => ((List<CovidRecord>) this.covidRecords)[index] = value;
+            get => ((List<CovidRecord>)this.covidRecords)[index];
+            set => ((List<CovidRecord>)this.covidRecords)[index] = value;
         }
 
         /// <Summary>
@@ -45,6 +39,12 @@ namespace Covid19Analysis.Model
         ///     <br />
         /// </exception>
         public bool IsReadOnly => this.covidRecords.IsReadOnly;
+
+        #endregion
+
+        #region Private Members
+
+        private ICollection<CovidRecord> covidRecords;
 
         #endregion
 

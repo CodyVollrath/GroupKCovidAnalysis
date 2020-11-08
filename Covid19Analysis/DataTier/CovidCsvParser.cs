@@ -14,13 +14,9 @@ namespace Covid19Analysis.DataTier
     /// </Summary>
     public class CovidCsvParser
     {
-        #region Data members
-
         #region Private Fields
 
         private readonly CovidDataCollection covidDataCollection;
-
-        #endregion
 
         #endregion
 
@@ -56,6 +52,8 @@ namespace Covid19Analysis.DataTier
 
         #region Methods
 
+        /// <summary>Generates the covid data collection.</summary>
+        /// <returns>The CovidDataCollection</returns>
         public CovidDataCollection GenerateCovidDataCollection()
         {
             var records = this.breakDownTextContent();

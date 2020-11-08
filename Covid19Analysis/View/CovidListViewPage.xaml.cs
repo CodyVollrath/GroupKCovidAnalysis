@@ -11,13 +11,9 @@ namespace Covid19Analysis.View
     /// </summary>
     public sealed partial class CovidListViewPage
     {
-        #region Data members
-
         #region Private Members
 
         private readonly CovidAnalysisViewModel covidAnalysisViewModel;
-
-        #endregion
 
         #endregion
 
